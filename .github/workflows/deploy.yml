@@ -32,11 +32,11 @@ jobs:
       - name: サイトをビルドする
         run: node site/build.mjs
 
-      - name: GitHub Pages を有効にする
+      # Pages の有効化そのものは site/setup-github.mjs が最初の1回だけ行う。
+      # ここで enablement: true を使うと、Actions のトークンには
+      # Pages を新規作成する権限が無いため失敗する。
+      - name: GitHub Pages の設定を読む
         uses: actions/configure-pages@v5
-        with:
-          # リポジトリ側で Pages がまだ有効になっていなければ、自動で有効化する
-          enablement: true
 
       - name: できあがったサイトを渡す
         uses: actions/upload-pages-artifact@v3

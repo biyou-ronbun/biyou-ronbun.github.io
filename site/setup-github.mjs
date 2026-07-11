@@ -74,7 +74,20 @@ if (isOk('gh', ['repo', 'view', `${owner}/${REPO_NAME}`])) {
 }
 
 console.log('');
-console.log('=== 3. 公開URLを設定に書き込みます ===');
+console.log('=== 3. GitHub Pages を有効にします ===');
+
+// これは「最初の1回」だけ必要。
+// GitHub Actions のトークンには Pages を新規作成する権限が無いので、
+// ワークフロー側ではなく、ここ（本人のログイン権限）で有効化する。
+if (isOk('gh', ['api', `repos/${owner}/${REPO_NAME}/pages`])) {
+  console.log('すでに有効です。');
+} else {
+  run('gh', ['api', '-X', 'POST', `repos/${owner}/${REPO_NAME}/pages`, '-f', 'build_type=workflow']);
+  console.log('有効にしました。');
+}
+
+console.log('');
+console.log('=== 4. 公開URLを設定に書き込みます ===');
 
 const pageUrl = `https://${owner}.github.io/${REPO_NAME}`;
 const cfgPath = join(SITE, 'config.json');

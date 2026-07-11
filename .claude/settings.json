@@ -3,7 +3,15 @@
     "allow": [
       "PowerShell($ids = @\\('Git.Git','OpenJS.NodeJS.LTS','GitHub.cli'\\); foreach \\($id in $ids\\) { Write-Output \"=== installing $id ===\"; winget install --id $id -e --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity | Select-Object -Last 3 })",
       "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); foreach \\($c in 'git','node','npm','gh'\\) { $p = Get-Command $c -ErrorAction SilentlyContinue; if \\($p\\) { \"{0,-5} {1,-10} {2}\" -f $c, \\(& $c --version 2>$null | Select-Object -First 1\\), $p.Source } else { \"$c : NOT FOUND\" } })",
-      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); node e:\\\\claude\\\\site\\\\build.mjs)"
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); node e:\\\\claude\\\\site\\\\build.mjs)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd e:\\\\claude; $env:GH_PROMPT_DISABLED=\"\"; \"\" | gh auth login --hostname github.com --git-protocol https --web)",
+      "PowerShell(Start-Process \"https://github.com/login/device\")",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd e:\\\\claude; Get-Content \"C:\\\\Users\\\\Owner\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\e--claude\\\\1d107a12-9117-41e9-94ab-7fbca572ecb4\\\\tasks\\\\bc047mtpl.output\" -Raw; Write-Output \"=== 認証状態 ===\"; gh auth status 2>&1 | Out-String)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd e:\\\\claude; node site\\\\setup-github.mjs)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd e:\\\\claude; \"\" | gh auth refresh -h github.com -s workflow)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd e:\\\\claude; gh run list --limit 3 2>&1 | Out-String)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd e:\\\\claude; gh run watch 29160041726 --exit-status --compact 2>&1 | Out-String; Write-Output \"=== 結果 ===\"; gh run list --limit 1 2>&1 | Out-String)",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd e:\\\\claude; gh run view 29160041726 --log-failed 2>&1 | Select-Object -Last 30 | Out-String)"
     ]
   }
 }
