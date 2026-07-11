@@ -60,20 +60,23 @@ secretary は**指示書**を返してくるので、それを読んだメイン
 
 スラッグは論文カード・記事で揃えること（`research/retinol-wrinkle.md` ↔ `articles/retinol-wrinkle.md`）。
 
-## 自前サイト
+## 自前サイト（GitHub Pages に自動公開）
 
-`articles/*.md` を書いたら、`site/articles.json` に1ブロック足して以下を実行するだけで、
-トップページ・記事ページ・RSS・サイトマップが自動生成される。
+記事を書いたら `site/articles.json` に1ブロック足して push するだけ。
+GitHub Actions が `site/build.mjs` を回して、サイトを自動で公開する。
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File site\build.ps1
+git add -A; git commit -m "記事を追加"; git push
 ```
 
-- 出力先は `site/dist/`。**毎回まるごと作り直されるので、ここを直接編集しない。**
+- ビルドの本体は `site/build.mjs`（Node、外部ライブラリなし）。`site/build.ps1` はそれを呼ぶだけのラッパー。
+  **ビルドのロジックを2箇所に書かないこと。**
+- 出力先は `site/dist/`。**毎回まるごと作り直されるので、ここを直接編集しない**（git 管理外）。
 - `site/articles.json` の `published: false` で記事を寝かせられる（週2本ずつ出す運用のため）。
-- **`site/build.ps1` に日本語を書かないこと。** Windows PowerShell 5.1 が文字化けさせる。
-  日本語は `config.json` / `articles.json` / `templates/*.html` に置く。
-- 公開したら `site/config.json` の `baseUrl` を実際のURLに直してビルドし直すこと。
+- **リポジトリは public。** `ops/`、`x/`、`output/` は `.gitignore` で公開対象から外してある。
+  ここに秘密を書き足すときは、公開対象に入っていないか必ず確認すること。
+- `.gitignore` は行末コメントを解釈しない。`ops/  # メモ` と書くと除外が効かなくなる。
+- 手元で確認するだけなら `node site/build.mjs` → `site/dist/index.html` を開く。
 
 ## 全員が守るルール
 

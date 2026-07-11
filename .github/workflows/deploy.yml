@@ -32,8 +32,11 @@ jobs:
       - name: サイトをビルドする
         run: node site/build.mjs
 
-      - name: GitHub Pages の設定を読む
+      - name: GitHub Pages を有効にする
         uses: actions/configure-pages@v5
+        with:
+          # リポジトリ側で Pages がまだ有効になっていなければ、自動で有効化する
+          enablement: true
 
       - name: できあがったサイトを渡す
         uses: actions/upload-pages-artifact@v3
