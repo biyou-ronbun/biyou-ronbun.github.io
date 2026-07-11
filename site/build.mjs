@@ -13,6 +13,7 @@
 import { readFileSync, writeFileSync, mkdirSync, rmSync, cpSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { FIGURES } from './figures.mjs';
 
 const SITE = dirname(fileURLToPath(import.meta.url));
 const ROOT = dirname(SITE);
@@ -97,6 +98,20 @@ function markdownToHtml(md) {
     const line = raw.replace(/\s+$/, '');
 
     if (/^\s*$/.test(line)) { flushAll(); continue; }
+
+    // 図版:  ::figure:retinol-dropout::
+    const fig = line.match(/^::figure:([a-z0-9-]+)::$/);
+    if (fig) {
+      flushAll();
+      const svg = FIGURES[fig[1]];
+      if (svg) {
+        out.push(svg);
+      } else {
+        console.error(`  !! 図版が見つかりません: ${fig[1]}（site/figures.mjs に定義してください）`);
+        process.exitCode = 1;
+      }
+      continue;
+    }
 
     // 表
     if (/^\s*\|.*\|\s*$/.test(line)) {

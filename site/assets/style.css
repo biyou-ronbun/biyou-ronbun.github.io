@@ -20,6 +20,13 @@
   --rose:      #b5776f;  /* くすんだローズ。ここぞの一点だけ */
   --rose-wash: #f6ebe8;
 
+  /* 図版の色。飾りの色（--gold）はデータには使わない。
+     明度・彩度・色覚多様性・コントラストの検証を通した値だけを使う。 */
+  --chart-1:    #9c4f47;
+  --chart-2:    #3a6ea5;
+  --chart-track: #efe7e0;
+  --chart-off:  #b9aca3;
+
   --serif: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", "Times New Roman", serif;
   --sans:  "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "YuGothic", "Noto Sans JP", "Segoe UI", system-ui, sans-serif;
 }
@@ -39,6 +46,12 @@
     --gold:      #ab9370;
     --rose:      #d99a92;
     --rose-wash: #2e2320;
+
+    /* ダークは明るくしただけの色ではなく、暗い地の上で検証し直した値 */
+    --chart-1:    #cd7a6f;
+    --chart-2:    #5f95cf;
+    --chart-track: #302a27;
+    --chart-off:  #6e635c;
   }
 }
 
@@ -409,6 +422,243 @@ a { color: var(--rose); }
 .post-body tr:last-child td { border-bottom: 0; }
 
 .post-body h3 + ol { font-size: 13px; color: var(--ink-soft); line-height: 1.95; }
+
+/* ---------- 図版 ---------- */
+
+.fig {
+  margin: 52px 0;
+  padding: 30px 28px 24px;
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+}
+
+.fig-title {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: .05em;
+  margin: 0 0 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.fig-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: -8px 0 22px;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  letter-spacing: .04em;
+}
+
+.fig-key { display: inline-flex; align-items: center; gap: 6px; }
+
+.fig-swatch { display: inline-block; width: 10px; height: 10px; }
+.fig-swatch.fig-col-1 { background: var(--chart-1); }
+.fig-swatch.fig-col-2 { background: var(--chart-2); }
+
+.fig-chart { display: grid; gap: 12px; }
+
+.fig-row.is-grouped { align-items: center; }
+
+.fig-track.is-grouped {
+  height: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;                 /* 隣り合う塗りの間に必ず地の色を残す */
+}
+
+.fig-track.is-grouped .fig-bar { height: 9px; }
+.fig-bar.fig-col-1 { background: var(--chart-1); }
+.fig-bar.fig-col-2 { background: var(--chart-2); }
+
+.fig-value.is-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.35;
+  font-size: 11px;
+}
+
+.fig-row {
+  display: grid;
+  grid-template-columns: 8.5em 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.fig-label {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  letter-spacing: .02em;
+}
+
+.fig-track {
+  position: relative;
+  height: 20px;
+  background: var(--chart-track);
+}
+
+.fig-bar {
+  display: block;
+  height: 100%;
+  background: var(--chart-1);
+  border-radius: 0 3px 3px 0;   /* データの端だけ丸める */
+}
+
+/* 「観察期間内に戻らなかった」など、値が確定していないもの。
+   実測値と同じ塗りにしない。 */
+.fig-bar.is-pending {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--chart-1) 0 3px,
+    transparent 3px 7px
+  );
+  border: 1px solid var(--chart-1);
+  border-left: 0;
+  box-sizing: border-box;
+}
+
+/* 基準線 */
+.fig-ref {
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  width: 0;
+  border-left: 1px dashed var(--ink-mute);
+}
+
+.fig-value {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: .04em;
+  min-width: 3.4em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.fig-unit,
+.fig-note {
+  font-size: 11.5px;
+  line-height: 1.9;
+  color: var(--ink-mute);
+  margin: 20px 0 0;
+  letter-spacing: .02em;
+}
+
+.fig-note { margin-top: 6px; }
+
+.fig-ref-key {
+  display: inline-block;
+  width: 14px;
+  border-top: 1px dashed var(--ink-mute);
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.fig figcaption {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule-soft);
+  font-size: 11.5px;
+  line-height: 1.9;
+  color: var(--ink-mute);
+  letter-spacing: .02em;
+}
+
+/* 対比表 */
+.fig-matrix { border-collapse: collapse; width: 100%; font-size: 13px; }
+
+.fig-matrix th,
+.fig-matrix td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--rule-soft);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.fig-matrix thead th {
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: .06em;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--rule);
+}
+
+.fig-matrix tbody th {
+  font-weight: 400;
+  color: var(--ink-soft);
+  background: var(--bg-wash);
+}
+
+.fig-matrix tbody tr:last-child th,
+.fig-matrix tbody tr:last-child td { border-bottom: 0; }
+
+.fig-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: baseline;
+}
+
+.fig-dot.fig-col-1.is-on  { background: var(--chart-1); }
+.fig-dot.fig-col-2.is-on  { background: var(--chart-2); }
+.fig-dot.is-off {
+  background: transparent;
+  border: 1px solid var(--chart-off);
+}
+
+/* 根拠の階段 */
+.fig-ladder { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+
+.fig-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.fig-pips { display: flex; gap: 3px; padding-top: 5px; }
+
+.fig-pip {
+  display: block;
+  width: 7px;
+  height: 14px;
+  background: transparent;
+  border: 1px solid var(--chart-off);
+}
+
+.fig-pip.is-on { background: var(--chart-1); border-color: var(--chart-1); }
+
+.fig-step-name {
+  display: block;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink);
+  letter-spacing: .03em;
+}
+
+.fig-step-note {
+  display: block;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--ink-mute);
+  margin-top: 2px;
+}
+
+@media (max-width: 600px) {
+  .fig { padding: 22px 18px 18px; margin: 40px -18px; border-left: 0; border-right: 0; }
+  .fig-row { grid-template-columns: 6.5em 1fr auto; gap: 8px; }
+  .fig-label { font-size: 11.5px; }
+  .fig-value { font-size: 11.5px; min-width: 3em; }
+}
 
 .post-footer {
   margin-top: 72px;

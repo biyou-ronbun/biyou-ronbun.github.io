@@ -32,6 +32,8 @@
 - 企業の資金が入った研究だけだと、**3項目すべてで有意な効果あり**
 - 研究の質が高いものだけに絞っても、**全項目で有意差なし**
 
+::figure:collagen-funding::
+
 著者らの結論は、"There is currently no clinical evidence to support the use of collagen supplements to prevent or treat skin aging."（現時点で、皮膚老化の予防・治療のためにコラーゲンサプリの使用を支持する臨床的根拠はない）。
 
 この論文自体には、資金提供もCOI（利益相反）の申告もありません。スポンサーのいない研究がスポンサーの影響を指摘した、という構図です。

@@ -14,7 +14,33 @@
       "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd e:\\\\claude; gh run view 29160041726 --log-failed 2>&1 | Select-Object -Last 30 | Out-String)",
       "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd e:\\\\claude; $id = \\(gh run list --limit 1 --json databaseId --jq '.[0].databaseId'\\); gh run watch $id --exit-status --compact 2>&1 | Select-Object -Last 5 | Out-String; Write-Output \"=== 結果 ===\"; gh run list --limit 1 2>&1 | Out-String)",
       "PowerShell(Start-Process \"https://github.com/account/organizations/new?plan=free\")",
-      "WebFetch(domain:www.youtube.com)"
+      "WebFetch(domain:www.youtube.com)",
+      "WebFetch(domain:inv.nadeko.net)",
+      "WebFetch(domain:yewtu.be)",
+      "Bash(curl -sL -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\)\" \"https://www.youtube.com/playlist?list=PLaVpd8HnsAzc32NDtKIPr9zXnGh28SOKI&hl=ja\" -o pl.html)",
+      "Bash(node -e ' *)",
+      "Bash(curl -sL -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/126.0 Safari/537.36\" -H \"Accept-Language: ja,en;q=0.9\" -b \"CONSENT=YES+cb; SOCS=CAISNQgQEitib3FfaWRlbnRpdHlmcm9udGVuZHVpc2VydmVyXzIwMjQwNjExLjA2X3AwGgJlbiADGgYIgLC-uwY\" \"https://www.youtube.com/playlist?list=PLaVpd8HnsAzc32NDtKIPr9zXnGh28SOKI&hl=ja&gl=JP\" -o pl2.html)",
+      "Bash(where.exe yt-dlp *)",
+      "Skill(dataviz)",
+      "Skill(dataviz:*)",
+      "Bash(./yt-dlp.exe --flat-playlist --skip-download -J \"https://www.youtube.com/playlist?list=PLaVpd8HnsAzc32NDtKIPr9zXnGh28SOKI\")",
+      "Bash(echo \"exit=$?\")",
+      "Bash(./yt-dlp.exe --skip-download -J --no-warnings \"https://www.youtube.com/watch?v=KuSqaYSLtJc\")",
+      "Bash(node -e \"try{const d=JSON.parse\\(require\\('fs'\\).readFileSync\\('v1.json','utf8'\\)\\);console.log\\(d.title,'|',d.uploader,'|',d.view_count,'|',d.upload_date\\);}catch\\(e\\){console.log\\('parse fail'\\)}\")",
+      "Bash(curl -s -X POST 'https://www.youtube.com/youtubei/v1/browse?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8&prettyPrint=false' -H 'Content-Type: application/json' -H 'User-Agent: Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/126.0.0.0 Safari/537.36' -H 'Origin: https://www.youtube.com' -H 'Referer: https://www.youtube.com/playlist?list=PLaVpd8HnsAzc32NDtKIPr9zXnGh28SOKI' -H 'X-Youtube-Client-Name: 1' -H 'X-Youtube-Client-Version: 2.20250701.00.00' -H 'Cookie: SOCS=CAI' --data @body3.json -o br4.json -w 'http=%{http_code}\\\\n')",
+      "Bash(./yt-dlp.exe --flat-playlist -J --no-warnings --extractor-args \"youtubetab:skip=webpage\" \"https://www.youtube.com/playlist?list=PLaVpd8HnsAzc32NDtKIPr9zXnGh28SOKI\")",
+      "Bash(node -e \"try{const d=JSON.parse\\(require\\('fs'\\).readFileSync\\('plist2.json','utf8'\\)\\);console.log\\('TITLE:',d.title,'| UPLOADER:',d.uploader,'| N:',\\(d.entries||[]\\).length\\);\\(d.entries||[]\\).forEach\\(\\(e,i\\)=>console.log\\(\\(i+1\\)+'\\\\t'+e.id+'\\\\t'+e.title+'\\\\t'+\\(e.view_count||''\\)+'\\\\t'+\\(e.duration||''\\)\\)\\);}catch\\(e\\){console.log\\('parse fail'\\)}\")",
+      "Bash(curl -s \"https://www.youtube.com/feeds/videos.xml?playlist_id=PLaVpd8HnsAzc32NDtKIPr9zXnGh28SOKI\" -o feed.xml -w \"http=%{http_code}\\\\n\")",
+      "Bash(mkdir -p /e/mv-lab/research /e/mv-lab/playbook /e/mv-lab/ideas /e/mv-lab/ops /e/mv-lab/tools /e/mv-lab/data)",
+      "Bash(cp \"C:/Users/Owner/AppData/Local/Temp/claude/e--claude/d802c3ed-bc37-4fdb-863e-6d44985579e6/scratchpad/yt-dlp.exe\" /e/mv-lab/tools/yt-dlp.exe)",
+      "Read(//e//**)",
+      "Read(//e/mv-lab/**)",
+      "Bash(node tools/fetch.mjs KuSqaYSLtJc)",
+      "Bash(node -e \"console.log\\(JSON.stringify\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('data/index.json','utf8'\\)\\)[0].credits,null,1\\)\\)\")"
+    ],
+    "additionalDirectories": [
+      "E:\\mv-lab\\tools",
+      "E:\\mv-lab"
     ]
   }
 }
