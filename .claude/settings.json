@@ -36,7 +36,13 @@
       "Read(//e//**)",
       "Read(//e/mv-lab/**)",
       "Bash(node tools/fetch.mjs KuSqaYSLtJc)",
-      "Bash(node -e \"console.log\\(JSON.stringify\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('data/index.json','utf8'\\)\\)[0].credits,null,1\\)\\)\")"
+      "Bash(node -e \"console.log\\(JSON.stringify\\(JSON.parse\\(require\\('fs'\\).readFileSync\\('data/index.json','utf8'\\)\\)[0].credits,null,1\\)\\)\")",
+      "WebFetch(domain:www.mhlw.go.jp)",
+      "WebFetch(domain:www.help-note.com)",
+      "WebFetch(domain:help.kit.com)",
+      "Bash(node --test test/)",
+      "Bash(node --test \"test/quota.test.js\")",
+      "Bash(npm install *)"
     ],
     "additionalDirectories": [
       "E:\\mv-lab\\tools",

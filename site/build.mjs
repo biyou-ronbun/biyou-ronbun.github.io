@@ -175,9 +175,27 @@ const tpl = {
   card:    read(join(SITE, 'templates', 'card.html')),
   article: read(join(SITE, 'templates', 'article.html')),
   about:   read(join(SITE, 'templates', 'about.html')),
+  policy:  read(join(SITE, 'templates', 'policy.html')),
+  cta:     read(join(SITE, 'templates', 'cta.html')),
 };
 
 const baseUrl = cfg.baseUrl.replace(/\/+$/, '');
+
+// 質問箱。フォームのURLが設定されていなければ、枠ごと出さない。
+// 押しても何も起きないボタンを置くのが、いちばん信用を落とす。
+const ctaFor = (rootPath) => {
+  if (!cfg.askUrl) return '';
+  return tpl.cta.split('{{ASK_URL}}').join(cfg.askUrl).split('{{ROOT}}').join(rootPath);
+};
+
+if (!cfg.askUrl) {
+  console.log('  -- 質問箱は非表示（site/config.json の askUrl が空です）');
+}
+
+// Cloudflare Web Analytics。Cookie を使わないので同意バナーが要らない。
+const analytics = cfg.analyticsToken
+  ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "${cfg.analyticsToken}"}'></script>`
+  : '';
 
 const fill = (tplText, vars) =>
   Object.entries(vars).reduce(
@@ -197,6 +215,7 @@ const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath 
     FOOTER_NOTE: escapeHtml(cfg.footerNote),
     YEAR: String(new Date().getFullYear()),
     ROOT: rootPath,
+    ANALYTICS: analytics,
   });
 
 // ---- 出力先を作り直す -------------------------------------------
@@ -226,6 +245,7 @@ for (const a of meta) {
     CATEGORY: escapeHtml(a.category),
     DATE: a.date,
     DATE_LABEL: a.date.replace(/-/g, '.'),
+    CTA: ctaFor('../'),
     ROOT: '../',
   });
 
@@ -270,7 +290,7 @@ const cards = published
 write(
   join(DIST, 'index.html'),
   renderPage({
-    content: tpl.home.replace('{{ARTICLE_LIST}}', cards),
+    content: tpl.home.replace('{{ARTICLE_LIST}}', cards).replace('{{CTA}}', ctaFor('')),
     headTitle: cfg.title,
     metaDesc: cfg.description,
     canonical: `${baseUrl}/`,
@@ -294,6 +314,21 @@ write(
   })
 );
 console.log('  built  about.html');
+
+// ---- お金の取り方（これ自体が信頼の資産なので、必ず出す） -----------
+
+write(
+  join(DIST, 'policy.html'),
+  renderPage({
+    content: tpl.policy,
+    headTitle: `お金の取り方について | ${cfg.title}`,
+    metaDesc: 'このブログは広告・アフィリエイト・PR記事を掲載していません。なぜ載せないのか、では何で続けるのかを書いています。',
+    canonical: `${baseUrl}/policy.html`,
+    ogType: 'website',
+    rootPath: '',
+  })
+);
+console.log('  built  policy.html');
 
 // ---- RSS ---------------------------------------------------------
 
@@ -332,6 +367,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>${baseUrl}/</loc></url>
 <url><loc>${baseUrl}/about.html</loc></url>
+<url><loc>${baseUrl}/policy.html</loc></url>
 ${published
   .map((a) => `<url><loc>${baseUrl}/articles/${a.slug}.html</loc><lastmod>${a.date}</lastmod></url>`)
   .join('\n')}

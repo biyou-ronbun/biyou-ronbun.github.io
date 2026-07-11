@@ -691,6 +691,77 @@ a { color: var(--rose); }
 
 .back-link:hover { color: var(--rose); }
 
+/* ---------- 質問箱（読者リストの入口） ---------- */
+
+.cta {
+  margin: 72px 0 0;
+  padding: 40px 36px 36px;
+  background: var(--bg-wash);
+  border-top: 1px solid var(--gold);
+  text-align: center;
+}
+
+.article-list + .cta { margin-top: 8px; margin-bottom: 40px; }
+
+.cta-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: .1em;
+  line-height: 1.8;
+  margin: 0 0 18px;
+}
+
+.cta-body {
+  margin: 0 auto 28px;
+  max-width: 30em;
+  font-size: 14px;
+  line-height: 2.05;
+  color: var(--ink-soft);
+  text-align: left;
+}
+
+.cta-body strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.cta-action { margin: 0 0 22px; }
+
+.cta-button {
+  display: inline-block;
+  padding: 15px 40px;
+  background: var(--ink);
+  color: var(--bg);
+  text-decoration: none;
+  font-size: 13.5px;
+  letter-spacing: .16em;
+  text-indent: .16em;
+  transition: background .25s ease;
+}
+
+.cta-button:hover { background: var(--rose); }
+
+.cta-note {
+  margin: 0 auto;
+  max-width: 32em;
+  font-size: 11.5px;
+  line-height: 1.95;
+  color: var(--ink-mute);
+}
+
+.policy-updated {
+  font-size: 12px;
+  color: var(--ink-mute);
+  letter-spacing: .06em;
+}
+
+@media (max-width: 600px) {
+  .cta { padding: 32px 20px 28px; margin-left: -20px; margin-right: -20px; }
+  .cta-title { font-size: 17px; }
+  .cta-button { padding: 14px 28px; font-size: 12.5px; }
+}
+
 /* ---------- フッター ---------- */
 
 .site-footer {
