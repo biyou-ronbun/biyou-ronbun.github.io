@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{HEAD_TITLE}}</title>
+<meta name="description" content="{{META_DESC}}">
+<link rel="canonical" href="{{CANONICAL}}">
+<meta property="og:type" content="{{OG_TYPE}}">
+<meta property="og:title" content="{{HEAD_TITLE}}">
+<meta property="og:description" content="{{META_DESC}}">
+<meta property="og:site_name" content="{{SITE_TITLE}}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/rss+xml" title="{{SITE_TITLE}}" href="{{ROOT}}feed.xml">
+<link rel="stylesheet" href="{{ROOT}}assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="{{ROOT}}index.html">
+      <span class="brand-name">{{SITE_TITLE}}</span>
+      <span class="brand-tagline">{{TAGLINE}}</span>
+    </a>
+    <nav class="site-nav">
+      <a href="{{ROOT}}index.html">記事</a>
+      <a href="{{ROOT}}about.html">このブログについて</a>
+      <a href="{{ROOT}}feed.xml">RSS</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+{{CONTENT}}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p class="disclaimer">{{FOOTER_NOTE}}</p>
+    <p class="copyright">&copy; {{YEAR}} {{SITE_TITLE}}</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+name: サイトを公開する
+
+# main ブランチに push されたら自動で走る。
+# 手動で走らせたいときは、GitHub の Actions タブから「Run workflow」でも実行できる。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 公開の途中でもう一度 push されても、混ざらないようにする
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリを取ってくる
+        uses: actions/checkout@v4
+
+      - name: Node を用意する
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: サイトをビルドする
+        run: node site/build.mjs
+
+      - name: GitHub Pages の設定を読む
+        uses: actions/configure-pages@v5
+
+      - name: できあがったサイトを渡す
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 公開する
+        id: deployment
+        uses: actions/deploy-pages@v4

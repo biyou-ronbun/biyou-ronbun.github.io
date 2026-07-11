@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($ids = @\\('Git.Git','OpenJS.NodeJS.LTS','GitHub.cli'\\); foreach \\($id in $ids\\) { Write-Output \"=== installing $id ===\"; winget install --id $id -e --source winget --silent --accept-package-agreements --accept-source-agreements --disable-interactivity | Select-Object -Last 3 })",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); foreach \\($c in 'git','node','npm','gh'\\) { $p = Get-Command $c -ErrorAction SilentlyContinue; if \\($p\\) { \"{0,-5} {1,-10} {2}\" -f $c, \\(& $c --version 2>$null | Select-Object -First 1\\), $p.Source } else { \"$c : NOT FOUND\" } })",
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); node e:\\\\claude\\\\site\\\\build.mjs)"
+    ]
+  }
+}
