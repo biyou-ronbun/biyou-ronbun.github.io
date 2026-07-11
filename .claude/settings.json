@@ -13,7 +13,8 @@
       "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd e:\\\\claude; gh run watch 29160041726 --exit-status --compact 2>&1 | Out-String; Write-Output \"=== 結果 ===\"; gh run list --limit 1 2>&1 | Out-String)",
       "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd e:\\\\claude; gh run view 29160041726 --log-failed 2>&1 | Select-Object -Last 30 | Out-String)",
       "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"Path\",\"User\"\\); cd e:\\\\claude; $id = \\(gh run list --limit 1 --json databaseId --jq '.[0].databaseId'\\); gh run watch $id --exit-status --compact 2>&1 | Select-Object -Last 5 | Out-String; Write-Output \"=== 結果 ===\"; gh run list --limit 1 2>&1 | Out-String)",
-      "PowerShell(Start-Process \"https://github.com/account/organizations/new?plan=free\")"
+      "PowerShell(Start-Process \"https://github.com/account/organizations/new?plan=free\")",
+      "WebFetch(domain:www.youtube.com)"
     ]
   }
 }
