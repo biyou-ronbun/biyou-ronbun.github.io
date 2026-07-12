@@ -667,13 +667,23 @@ const receiptFor = (slug) => {
     <li class="receipt-warn">その結果、<strong>${n} 本が撤回された論文</strong>だと分かりました。記事には撤回された事実を明記し、<strong>「撤回された後も、売り文句の根拠として使われている」という事実そのもの</strong>として引用しています。根拠としては使っていません。</li>`
     : `<li>実在すること、タイトルが一致すること、<strong>撤回されていないこと</strong>を確認しています。</li>`;
 
+  // 引いた論文の内訳。**「総説を探した」ことの証明にはなりません。**
+  // 機械に分かるのは「引いた論文のうち何本が総説だったか」だけです。
+  // 探したかどうかは機械には確認できないので、そう書きます。
+  const mix = `<li>内訳は、<strong>総説・メタアナリシス ${v.reviews ?? 0} 本</strong>、<strong>ヒトを対象にした試験 ${v.humanTrials ?? 0} 本</strong>（PubMed の分類による）。${
+    (v.reviews ?? 0) === 0
+      ? '<strong>この記事は総説を1本も引いていません。</strong>個々の研究だけを根拠にしています。'
+      : ''
+  }</li>`;
+
   return `<aside class="receipt">
   <p class="receipt-title">この記事の参考文献を、機械が確かめました</p>
   <ul class="receipt-list">
     <li><strong>${v.count} 本</strong>の論文すべてを、<strong>${d}</strong> に PubMed へ自動照会しました。</li>
     ${checked}
+    ${mix}
   </ul>
-  <p class="receipt-limit"><strong>確かめたのは、論文が実在することだけです。</strong> 論文の内容が正しいかどうかは、機械には判定できません。<strong>医師の監修はありません。</strong> この記事は AI が書き、上記の照会に通ったものだけが公開されています。照会に1本でも通らなければ、この記事は世に出ていません。</p>
+  <p class="receipt-limit"><strong>確かめたのは、論文が実在することだけです。</strong> 論文の内容が正しいかどうかは、機械には判定できません。<strong>医師の監修はありません。</strong> この記事は AI が書き、上記の照会に通ったものだけが公開されています。照会に1本でも通らなければ、この記事は世に出ていません。<br><strong>そして、上の内訳は「総説を探した」ことの証明ではありません。</strong> 機械に数えられるのは「引いた論文のうち何本が総説だったか」だけで、<strong>探したかどうかまでは確認できません。</strong></p>
 </aside>`;
 };
 

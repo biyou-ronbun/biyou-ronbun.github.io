@@ -595,6 +595,68 @@ try {
   }
 }
 
+// ---- 「証拠が無い」と「効果が無い」を、混ぜていないか -------------------
+//
+// ★ うちの記事の大半は「ヒト試験が見つかりませんでした」で終わります。
+//   **つまり、うちの記事は全部、この地雷の上に立っています。**
+//
+// Cochrane Handbook が明示的に警告しています（実物）:
+//
+//   **"confuse 'no evidence of an effect' with 'evidence of no effect'"** —— これを混同するな。
+//   信頼区間が広いとき、"no effect" や "no different" と主張するのは **"wrong"**。
+//
+// そして世界で最も厳格なエビデンス評価機関が「確実性が低い」と書いたら、
+// **読者には「効かない」と読まれました。**
+//
+//   EWG      : データ不足 → 「危険」
+//   Cochrane : データ不足 → 「効かない」（読者が勝手に翻訳する）
+//
+// Cochrane の対処は、スコアの廃止ではなく **文の型の固定** でした。
+// 確実性が最低のとき、彼らはこう書きます:
+//
+//   **"The evidence is very uncertain about the effect of X."**
+//
+// **"no effect"（効果がない）とは1文字も書いていません。**
+// 主語が「X」から「the evidence」に入れ替わっています。
+// **対象について語ることをやめ、自分の知識について語っている。**
+//
+//   （方法論の一次情報: GRADE guidelines 26. J Clin Epidemiol. 2020;119:126-135. PMID 31711912）
+//
+// ★ ここで止めるのは「無かった」を「無い」に変換している文だけです。
+//   「有意差はありませんでした」は事実の報告なので、通します。
+
+{
+  const ABSENCE_TO_NONEXISTENCE = [
+    // 「効果がない」＋「分かった/示された/結論」の形。＝ 証拠の不在を、効果の不在に変換している
+    /効果が(ない|無い)(こと|と)(が|は)?(分か|わか|示され|判明|結論|証明)/,
+    /(効かない|効果がない|効果はない)(ことが|ことは)(分か|わか|示され|判明|証明)/,
+    /(意味がない|無意味だ)(ことが|と)(分か|わか|示され|判明|結論)/,
+    // 「根拠が無い」＝「効果が無い」と直結させる形
+    /根拠が(ない|無い)(ので|から|ため)[^。]{0,12}(効かない|効果はない|意味がない)/,
+  ];
+
+  for (const a of articles) {
+    for (const re of ABSENCE_TO_NONEXISTENCE) {
+      const m = a.text.match(re);
+      if (!m) continue;
+      failures.push(
+        `${a.slug}: 「証拠が無い」を「効果が無い」に変換しています\n` +
+          `      該当: ${m[0]}\n` +
+          `\n` +
+          `      **"no evidence of an effect"（効果の証拠が無い）と\n` +
+          `        "evidence of no effect"（効果が無いという証拠）は、別のことです。**\n` +
+          `      前者しか持っていないのに後者を書くのは、Cochrane が "wrong" と明言している誤りです。\n` +
+          `\n` +
+          `      書けるのはここまでです:\n` +
+          `        「この主張の出典を辿りましたが、ヒトで確かめた研究は見つかりませんでした」\n` +
+          `        「効果があるともないとも、いまのデータでは言えません」\n` +
+          `      （主語を「対象」から「証拠」に移すこと。対象を裁くのではなく、自分の知識の範囲を語る）`
+      );
+      break;
+    }
+  }
+}
+
 // ---- 図の来歴（provenance） -------------------------------------------
 //
 // ★ うちの図は、記事の中で最も強く記憶される部分です。
@@ -872,12 +934,39 @@ const receipt = {
   articles: Object.fromEntries(
     articles.map((a) => {
       const pmids = [...new Set(a.pmids.map((p) => p.pmid))];
+      const typeOf = (p) => result[p]?.pubtype ?? [];
+
+      // ★ 「総説を探したか」を、機械が数える（WP:MEDRS）
+      //
+      //   Wikipedia の医学分野の出典基準は、こう言っています。
+      //   **「一次研究を、二次情報（総説・メタアナリシス）の結論を覆すために引くな」**
+      //
+      //   これは、うちのやり方を名指しで否定しています。
+      //   衝突は部分的です——うちが辿っているのは総説ではなく「出典の無い売り文句」だからです。
+      //   **しかし、うちは「総説を探したか」を、どこにも書いていませんでした。**
+      //
+      //   「28日を測った論文は見つかりませんでした」と書くとき、
+      //   総説をちゃんと探したうえで無かったのか、探していないだけなのか、
+      //   **読者には区別がつきません。** だから、数を出します。
+      //
+      //   ★ ただし、これは「総説を探した」ことの証明にはなりません。
+      //     機械に分かるのは「引いた論文のうち何本が総説だったか」だけです。
+      //     **探したかどうかは、機械には確認できません。** レシートにもそう書きます。
+      const isReview = (p) =>
+        typeOf(p).some((t) => ['Review', 'Systematic Review', 'Meta-Analysis'].includes(t));
+      const isHuman = (p) =>
+        typeOf(p).some((t) =>
+          ['Randomized Controlled Trial', 'Clinical Trial', 'Controlled Clinical Trial'].includes(t)
+        );
+
       return [
         a.slug,
         {
           pmids,
           count: pmids.length,
-          retracted: pmids.filter((p) => (result[p]?.pubtype ?? []).includes('Retracted Publication')),
+          reviews: pmids.filter(isReview).length,
+          humanTrials: pmids.filter(isHuman).length,
+          retracted: pmids.filter((p) => typeOf(p).includes('Retracted Publication')),
         },
       ];
     })

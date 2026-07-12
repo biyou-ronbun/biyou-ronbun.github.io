@@ -9,7 +9,7 @@
     "**論文の内容が正しいかどうかは、機械には判定できません。** 医師の監修もありません。",
     "そう書いてあることが、この仕組みの価値です。"
   ],
-  "verifiedAt": "2026-07-12T18:18:30.685Z",
+  "verifiedAt": "2026-07-12T18:31:01.585Z",
   "articles": {
     "pdrn-salmon-dna": {
       "pmids": [
@@ -23,6 +23,8 @@
         "39486723"
       ],
       "count": 8,
+      "reviews": 1,
+      "humanTrials": 3,
       "retracted": [
         "25473210",
         "39313949"
@@ -38,6 +40,8 @@
         "6827031"
       ],
       "count": 6,
+      "reviews": 1,
+      "humanTrials": 0,
       "retracted": []
     },
     "sunscreen-spf": {
@@ -56,6 +60,8 @@
         "20924436"
       ],
       "count": 12,
+      "reviews": 3,
+      "humanTrials": 5,
       "retracted": []
     },
     "oral-collagen": {
@@ -70,6 +76,8 @@
         "28244315"
       ],
       "count": 8,
+      "reviews": 2,
+      "humanTrials": 3,
       "retracted": []
     },
     "bathing-dryness": {
@@ -83,6 +91,8 @@
         "25423895"
       ],
       "count": 7,
+      "reviews": 0,
+      "humanTrials": 3,
       "retracted": []
     },
     "retinol-concentration": {
@@ -95,6 +105,8 @@
         "39184919"
       ],
       "count": 6,
+      "reviews": 3,
+      "humanTrials": 2,
       "retracted": []
     },
     "vitamin-c-derivatives": {
@@ -112,6 +124,8 @@
         "29104718"
       ],
       "count": 11,
+      "reviews": 2,
+      "humanTrials": 5,
       "retracted": []
     },
     "hyaluronic-acid": {
@@ -127,6 +141,8 @@
         "39807700"
       ],
       "count": 9,
+      "reviews": 2,
+      "humanTrials": 3,
       "retracted": []
     },
     "skin-fasting": {
@@ -139,6 +155,8 @@
         "35335373"
       ],
       "count": 6,
+      "reviews": 1,
+      "humanTrials": 3,
       "retracted": []
     }
   }
