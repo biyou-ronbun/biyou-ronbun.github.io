@@ -46,7 +46,8 @@
       "Bash(cat /tmp/wrangler.log 2>/dev/null | tail -25)",
       "Read(//tmp/**)",
       "Bash(node -e \"let s='';process.stdin.on\\('data',d=>s+=d\\).on\\('end',\\(\\)=>{const q=JSON.parse\\(s\\).quota.ask;console.log\\(' ask → あと '+q.left+' / '+q.limit+' （3のままなら、失敗した回は枠を食っていない）'\\)}\\)\")",
-      "Bash(pkill -f \"wrangler dev\")"
+      "Bash(pkill -f \"wrangler dev\")",
+      "PowerShell(Start-Process \"https://docs.google.com/forms/create\")"
     ],
     "additionalDirectories": [
       "E:\\mv-lab\\tools",

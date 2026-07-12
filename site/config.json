@@ -10,7 +10,7 @@
   "noteUrl": "",
 
   "_askUrl": "読者からの質問を受けるフォームのURL（Googleフォーム等）。空のあいだは、質問箱の枠がサイトに出ません。",
-  "askUrl": "",
+  "askUrl": "https://forms.gle/V4tNomjBNbHEHbFm9",
 
   "_analyticsToken": "Cloudflare Web Analytics のトークン。Cookieを使わないので同意バナーが要りません。空なら計測タグを出しません。",
   "analyticsToken": ""
