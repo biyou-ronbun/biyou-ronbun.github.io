@@ -13,5 +13,17 @@
   "askUrl": "https://forms.gle/V4tNomjBNbHEHbFm9",
 
   "_analyticsToken": "Cloudflare Web Analytics のトークン。Cookieを使わないので同意バナーが要りません。空なら計測タグを出しません。",
-  "analyticsToken": ""
+  "analyticsToken": "",
+
+  "_ads": "広告（Google AdSense）。adsenseClientId が空のあいだは、広告タグもCookieの開示文も一切出ません。審査に通り、下のブロック設定を管理画面で全部済ませてから、はじめてIDを入れること。順番を逆にすると、監査した業界の広告が監査記事の横に出ます。",
+  "ads": {
+    "adsenseClientId": "",
+    "blockedCategories": [
+      "薬品・サプリメント（Drugs & supplements）",
+      "美容整形・美容医療（Cosmetic procedures & body modification）",
+      "ダイエット・減量（Weight loss）",
+      "化粧品・スキンケア（一般カテゴリ）"
+    ],
+    "blockedAdvertisers": []
+  }
 }

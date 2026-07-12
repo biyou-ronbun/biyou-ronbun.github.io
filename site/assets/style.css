@@ -750,6 +750,24 @@ a { color: var(--rose); }
   color: var(--ink-mute);
 }
 
+/* ---------- 広告枠 ---------- */
+
+.adbox {
+  margin: 48px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule-soft);
+}
+
+.adbox-label {
+  margin: 0 0 12px;
+  font-size: 11px;
+  letter-spacing: .16em;
+  color: var(--ink-mute);
+}
+
+.adbox-label a { color: var(--ink-mute); text-decoration: underline; text-underline-offset: 3px; }
+.adbox-label a:hover { color: var(--rose); }
+
 .policy-updated {
   font-size: 12px;
   color: var(--ink-mute);

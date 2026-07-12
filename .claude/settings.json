@@ -47,7 +47,15 @@
       "Read(//tmp/**)",
       "Bash(node -e \"let s='';process.stdin.on\\('data',d=>s+=d\\).on\\('end',\\(\\)=>{const q=JSON.parse\\(s\\).quota.ask;console.log\\(' ask → あと '+q.left+' / '+q.limit+' （3のままなら、失敗した回は枠を食っていない）'\\)}\\)\")",
       "Bash(pkill -f \"wrangler dev\")",
-      "PowerShell(Start-Process \"https://docs.google.com/forms/create\")"
+      "PowerShell(Start-Process \"https://docs.google.com/forms/create\")",
+      "WebFetch(domain:publicsuffix.org)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npx wrangler *)",
+      "WebFetch(domain:www.google.com)",
+      "WebFetch(domain:adsense.google.com)",
+      "Bash(npm test *)",
+      "Bash(curl -sS -v -m 20 https://kaerimi-proxy.kaerimi.workers.dev/health)",
+      "Bash(node -e \"require\\('dns'\\).resolve4\\('kaerimi-proxy.kaerimi.workers.dev',\\(e,a\\)=>console.log\\(e?\\('DNS: '+e.code\\):\\('DNS: '+a.join\\(', '\\)\\)\\)\\)\")"
     ],
     "additionalDirectories": [
       "E:\\mv-lab\\tools",

@@ -175,10 +175,51 @@ const tpl = {
   card:    read(join(SITE, 'templates', 'card.html')),
   article: read(join(SITE, 'templates', 'article.html')),
   about:   read(join(SITE, 'templates', 'about.html')),
-  policy:  read(join(SITE, 'templates', 'policy.html')),
   privacy: read(join(SITE, 'templates', 'privacy.html')),
+  adsPolicy: read(join(SITE, 'templates', 'ads-policy.html')),
   cta:     read(join(SITE, 'templates', 'cta.html')),
 };
+
+// ---- 広告 ---------------------------------------------------------
+//
+// adsenseClientId が空のあいだは、広告タグも Cookie の開示文も一切出ない。
+// 「審査に通す → 管理画面でブロック設定を全部済ませる → ここにIDを入れる」
+// この順番を守ること。逆にすると、検証した業界の広告が検証記事の横に出る。
+
+const ads = cfg.ads ?? {};
+const adsOn = Boolean(ads.adsenseClientId);
+
+const adsenseHead = adsOn
+  ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ads.adsenseClientId}" crossorigin="anonymous"></script>`
+  : '';
+
+// 記事末尾にだけ置く。本文に差し込む「自動広告」は使わない。
+const adSlot = (rootPath) =>
+  adsOn
+    ? `<aside class="adbox">
+  <p class="adbox-label">広告　<a href="${rootPath}ads-policy.html">化粧品・サプリ・美容医療の広告はブロックしています</a></p>
+  <ins class="adsbygoogle" style="display:block" data-ad-client="${ads.adsenseClientId}" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</aside>`
+    : '';
+
+// プライバシーポリシーの開示文。広告を入れた瞬間に必要になる文面。
+const adsDisclosure = adsOn
+  ? `<h2>広告について</h2>
+
+<p>このサイトは、第三者配信の広告サービス <strong>Google AdSense</strong> を利用しています。</p>
+
+<p>Google などの第三者配信事業者は、<strong>Cookie を使用して</strong>、ユーザーがこのサイトや他のサイトに過去にアクセスした際の情報に基づいて広告を配信します。</p>
+
+<p>Google が広告 Cookie を使用することにより、ユーザーは <a href="https://adssettings.google.com/" target="_blank" rel="noopener">広告設定</a> でパーソナライズ広告を無効にできます。また <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">www.aboutads.info</a> から、第三者配信事業者の Cookie を無効にすることもできます。</p>
+
+<p><strong>ただし、このサイトでは化粧品・サプリメント・美容医療・ダイエットの広告カテゴリをブロックしています。</strong> 何をブロックしているかの一覧は <a href="{{ROOT}}ads-policy.html">広告について</a> に公開しています。</p>`
+  : `<p>広告配信事業者による Cookie（Google AdSense 等）は、現在このサイトでは使用していません。</p>`;
+
+const listHtml = (items, empty) =>
+  items && items.length
+    ? `<ul>\n${items.map((i) => `<li>${escapeHtml(i)}</li>`).join('\n')}\n</ul>`
+    : `<p>${escapeHtml(empty)}</p>`;
 
 const baseUrl = cfg.baseUrl.replace(/\/+$/, '');
 
@@ -217,6 +258,7 @@ const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath 
     YEAR: String(new Date().getFullYear()),
     ROOT: rootPath,
     ANALYTICS: analytics,
+    ADSENSE: adsenseHead,
   });
 
 // ---- 出力先を作り直す -------------------------------------------
@@ -247,6 +289,7 @@ for (const a of meta) {
     DATE: a.date,
     DATE_LABEL: a.date.replace(/-/g, '.'),
     CTA: ctaFor('../'),
+    ADSLOT: adSlot('../'),
     ROOT: '../',
   });
 
@@ -316,35 +359,49 @@ write(
 );
 console.log('  built  about.html');
 
-// ---- お金の取り方（これ自体が信頼の資産なので、必ず出す） -----------
-
-write(
-  join(DIST, 'policy.html'),
-  renderPage({
-    content: tpl.policy,
-    headTitle: `お金の取り方について | ${cfg.title}`,
-    metaDesc: 'このブログは広告・アフィリエイト・PR記事を掲載していません。なぜ載せないのか、では何で続けるのかを書いています。',
-    canonical: `${baseUrl}/policy.html`,
-    ogType: 'website',
-    rootPath: '',
-  })
-);
-console.log('  built  policy.html');
-
 // ---- プライバシーポリシー（フォームを出す前に必須） -----------------
 
 write(
   join(DIST, 'privacy.html'),
   renderPage({
-    content: tpl.privacy,
+    content: tpl.privacy.replace('{{ADS_DISCLOSURE}}', adsDisclosure),
     headTitle: `プライバシーポリシー | ${cfg.title}`,
-    metaDesc: 'このサイトが受け取る情報と、その使い道。追跡Cookieも広告配信も使用していません。',
+    metaDesc: 'このサイトが受け取る情報と、その使い道。',
     canonical: `${baseUrl}/privacy.html`,
     ogType: 'website',
     rootPath: '',
   })
 );
 console.log('  built  privacy.html');
+
+// ---- 広告について（ブロックリストを公開するページ） ------------------
+
+write(
+  join(DIST, 'ads-policy.html'),
+  renderPage({
+    content: fill(tpl.adsPolicy, {
+      BLOCKED_CATEGORIES: listHtml(ads.blockedCategories, 'ブロック設定はまだ登録されていません。'),
+      BLOCKED_ADVERTISERS: listHtml(
+        ads.blockedAdvertisers,
+        '現在、個別にブロックしている広告主はありません。記事で研究の資金提供元として名前が出た企業が現れ次第、ここに追記します。'
+      ),
+    }),
+    headTitle: `広告について | ${cfg.title}`,
+    metaDesc: 'このサイトが広告でブロックしているカテゴリと広告主の一覧。化粧品・サプリメント・美容医療の広告は表示しません。',
+    canonical: `${baseUrl}/ads-policy.html`,
+    ogType: 'website',
+    rootPath: '',
+  })
+);
+console.log('  built  ads-policy.html');
+
+// ---- ads.txt（AdSense が要求する所有証明） --------------------------
+
+if (adsOn) {
+  const pub = ads.adsenseClientId.replace(/^ca-/, '');
+  write(join(DIST, 'ads.txt'), `google.com, ${pub}, DIRECT, f08c47fec0942fa0\n`);
+  console.log('  built  ads.txt');
+}
 
 // ---- RSS ---------------------------------------------------------
 
@@ -383,8 +440,8 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>${baseUrl}/</loc></url>
 <url><loc>${baseUrl}/about.html</loc></url>
-<url><loc>${baseUrl}/policy.html</loc></url>
 <url><loc>${baseUrl}/privacy.html</loc></url>
+<url><loc>${baseUrl}/ads-policy.html</loc></url>
 ${published
   .map((a) => `<url><loc>${baseUrl}/articles/${a.slug}.html</loc><lastmod>${a.date}</lastmod></url>`)
   .join('\n')}
