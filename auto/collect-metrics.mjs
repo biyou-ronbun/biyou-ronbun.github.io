@@ -24,6 +24,7 @@
 //
 //    Cloudflare Web Analytics … PV・訪問数。取れる（ただし ★注意 を読むこと）
 //    Stripe                  … 売上・サブスク数。取れる
+//    Google Search Console   … 表示回数・クリック・検索語。取れる（サービスアカウント）
 //    Google AdSense          … 取れない。OAuth が要る（人間が管理画面から ops/metrics.md へ）
 //    Kindle (KDP)            … 取れない。**KDP には API がありません**（同上）
 //
@@ -219,6 +220,115 @@ async function stripeRevenue() {
   };
 }
 
+// ---- Google Search Console -------------------------------------------
+//
+// 「どんな言葉で検索した人が、このサイトを見つけたか」が取れます。
+// **このブログにとって、いちばん大事な数字です。** 読者が実際に使った言葉だからです。
+// （こちらが「毛穴」と呼んでいるものを、読者は「いちご鼻」と呼んでいるかもしれない）
+//
+// 認証: サービスアカウント。外部ライブラリを使わず、JWT を自分で署名します。
+//   https://developers.google.com/identity/protocols/oauth2/service-account
+//   https://developers.google.com/webmaster-tools/v1/searchanalytics/query
+//
+// ★ Search Console のデータは 2〜3日遅れて確定します。
+//   「昨日のぶん」を聞いても空です。0 ではなく、まだ無いだけです。
+//   だから、window は「3日前まで」で切ります。
+
+const GSC_EMAIL = env.GOOGLE_SA_EMAIL;
+const GSC_KEY = (env.GOOGLE_SA_PRIVATE_KEY ?? '').replace(/\\n/g, '\n');
+const GSC_SITE = env.GSC_SITE_URL; // ドメインプロパティなら sc-domain:biyou-ronbun.com
+
+const b64url = (buf) =>
+  Buffer.from(buf).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+async function gscToken() {
+  const { createSign } = await import('node:crypto');
+  const now = Math.floor(Date.now() / 1000);
+
+  const header = b64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
+  const claim = b64url(
+    JSON.stringify({
+      iss: GSC_EMAIL,
+      scope: 'https://www.googleapis.com/auth/webmasters.readonly',
+      aud: 'https://oauth2.googleapis.com/token',
+      exp: now + 3600,
+      iat: now,
+    })
+  );
+
+  const sign = createSign('RSA-SHA256');
+  sign.update(`${header}.${claim}`);
+  const jwt = `${header}.${claim}.${b64url(sign.sign(GSC_KEY))}`;
+
+  const res = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      assertion: jwt,
+    }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(`トークンが取れません: ${json.error_description ?? json.error ?? res.status}`);
+  return json.access_token;
+}
+
+async function gscQuery(token, body) {
+  const url = `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(
+    GSC_SITE
+  )}/searchAnalytics/query`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${json.error?.message ?? ''}`);
+  return json.rows ?? [];
+}
+
+async function gscSearch() {
+  const token = await gscToken();
+
+  // Search Console は 2〜3日遅れる。確定しているところだけを見る。
+  const end = new Date(now.getTime() - 3 * 86400_000);
+  const start = new Date(end.getTime() - 7 * 86400_000);
+
+  const [totals, queries, pages] = await Promise.all([
+    gscQuery(token, { startDate: day(start), endDate: day(end), dimensions: [] }),
+    gscQuery(token, {
+      startDate: day(start),
+      endDate: day(end),
+      dimensions: ['query'],
+      rowLimit: 15,
+    }),
+    gscQuery(token, { startDate: day(start), endDate: day(end), dimensions: ['page'], rowLimit: 10 }),
+  ]);
+
+  const t = totals[0];
+
+  return {
+    from: day(start),
+    to: day(end),
+    // rows が空なのは「まだデータが無い」。取得は成功している。だから 0 と書いてよい。
+    impressions: t?.impressions ?? 0,
+    clicks: t?.clicks ?? 0,
+    position: t?.position != null ? Math.round(t.position * 10) / 10 : null,
+    queries: queries.map((r) => ({
+      q: r.keys[0],
+      impressions: r.impressions,
+      clicks: r.clicks,
+      position: Math.round(r.position * 10) / 10,
+    })),
+    pages: pages.map((r) => ({
+      url: r.keys[0],
+      impressions: r.impressions,
+      clicks: r.clicks,
+    })),
+    note: t ? '' : 'まだデータがありません（登録直後は数週間かかります。取得は成功しています）',
+  };
+}
+
 // ---- 実行 -----------------------------------------------------------
 
 if (DISCOVER) {
@@ -263,6 +373,16 @@ if (STRIPE_KEY) {
   results.stripe = { skipped: '鍵がありません（auto/.env の STRIPE_SECRET_KEY）' };
 }
 
+if (GSC_EMAIL && GSC_KEY && GSC_SITE) {
+  try {
+    results.gsc = await gscSearch();
+  } catch (e) {
+    results.gsc = { error: e.message };
+  }
+} else {
+  results.gsc = { skipped: '鍵がありません（auto/.env の GOOGLE_SA_* / GSC_SITE_URL）' };
+}
+
 // ---- 書く -----------------------------------------------------------
 //
 // 取れなかったものは「取得失敗」と書く。0 と書かない。
@@ -276,6 +396,7 @@ const cell = (r, pick) => {
 
 const cf = results.cloudflare;
 const st = results.stripe;
+const gs = results.gsc;
 
 const notes = [];
 if (cf.error) notes.push(`- ${day(now)} Cloudflare: 取得失敗 — ${cf.error}`);
@@ -283,14 +404,26 @@ if (cf.note) notes.push(`- ${day(now)} Cloudflare: ${cf.note}`);
 if (cf.skipped) notes.push(`- ${day(now)} Cloudflare: ${cf.skipped}`);
 if (st.error) notes.push(`- ${day(now)} Stripe: 取得失敗 — ${st.error}`);
 if (st.skipped) notes.push(`- ${day(now)} Stripe: ${st.skipped}`);
+if (gs.error) notes.push(`- ${day(now)} Search Console: 取得失敗 — ${gs.error}`);
+if (gs.note) notes.push(`- ${day(now)} Search Console: ${gs.note}`);
+if (gs.skipped) notes.push(`- ${day(now)} Search Console: ${gs.skipped}`);
 
 console.log('');
 console.log(`  期間: ${day(from)} 〜 ${day(now)}`);
 console.log(`  PV        : ${cell(cf, (r) => r.pv)}`);
 console.log(`  訪問       : ${cell(cf, (r) => r.visits)}`);
+console.log(`  検索の表示回数 : ${cell(gs, (r) => r.impressions)}`);
+console.log(`  検索のクリック : ${cell(gs, (r) => r.clicks)}`);
 console.log(`  売上(総額)  : ${cell(st, (r) => r.gross)} 円`);
 console.log(`  売上(手取り) : ${cell(st, (r) => r.net)} 円`);
 console.log(`  サブスク    : ${cell(st, (r) => r.activeSubscriptions)} 件`);
+if (gs.queries?.length) {
+  console.log('');
+  console.log('  読者が実際に使った言葉:');
+  gs.queries.slice(0, 10).forEach((q) =>
+    console.log(`    ${String(q.impressions).padStart(5)} 回表示 / ${q.clicks} クリック  ${q.q}`)
+  );
+}
 notes.forEach((n) => console.log(`  ${n.replace(/^- /, '')}`));
 console.log('');
 
@@ -311,6 +444,7 @@ history.push({
   to: day(now),
   cloudflare: cf,
   stripe: st,
+  gsc: gs,
 });
 writeFileSync(DATA, JSON.stringify(history, null, 2) + '\n', 'utf8');
 
@@ -320,21 +454,53 @@ const rows = history
       `| ${h.collectedAt} | ${h.from}〜${h.to} ` +
       `| ${cell(h.cloudflare, (r) => r.pv)} ` +
       `| ${cell(h.cloudflare, (r) => r.visits)} ` +
+      `| ${cell(h.gsc ?? { skipped: 1 }, (r) => r.impressions)} ` +
+      `| ${cell(h.gsc ?? { skipped: 1 }, (r) => r.clicks)} ` +
       `| ${cell(h.stripe, (r) => r.gross)} ` +
       `| ${cell(h.stripe, (r) => r.net)} ` +
       `| ${cell(h.stripe, (r) => r.activeSubscriptions)} |`
   )
   .join('\n');
 
+// 読者が実際に使った言葉。最新の1回ぶんだけを出す（過去ぶんは JSON に残っている）。
+const latestGsc = history[history.length - 1]?.gsc ?? {};
+const queryBlock = latestGsc.queries?.length
+  ? `## 読者が実際に使った言葉（${latestGsc.from}〜${latestGsc.to}）
+
+**この表が、次に何を書くかを決める材料です。**
+こちらが「毛穴」と呼んでいるものを、読者は別の言葉で探しているかもしれません。
+**こちらの語彙ではなく、この表の語彙に合わせること。**
+
+| 検索した言葉 | 表示回数 | クリック | 平均順位 |
+|---|---|---|---|
+${latestGsc.queries
+  .map((q) => `| ${q.q} | ${q.impressions} | ${q.clicks} | ${q.position} |`)
+  .join('\n')}
+`
+  : '';
+
+const pageBlock = latestGsc.pages?.length
+  ? `## 検索から人が来ているページ（${latestGsc.from}〜${latestGsc.to}）
+
+| ページ | 表示回数 | クリック |
+|---|---|---|
+${latestGsc.pages.map((p) => `| ${p.url} | ${p.impressions} | ${p.clicks} |`).join('\n')}
+`
+  : '';
+
 const allNotes = history.flatMap((h) => {
   const out = [];
   const c = h.cloudflare ?? {};
   const s = h.stripe ?? {};
+  const g = h.gsc ?? {};
   if (c.error) out.push(`- ${h.collectedAt} Cloudflare: **取得失敗** — ${c.error}`);
   if (c.note) out.push(`- ${h.collectedAt} Cloudflare: ${c.note}`);
   if (c.skipped) out.push(`- ${h.collectedAt} Cloudflare: ${c.skipped}`);
   if (s.error) out.push(`- ${h.collectedAt} Stripe: **取得失敗** — ${s.error}`);
   if (s.skipped) out.push(`- ${h.collectedAt} Stripe: ${s.skipped}`);
+  if (g.error) out.push(`- ${h.collectedAt} Search Console: **取得失敗** — ${g.error}`);
+  if (g.note) out.push(`- ${h.collectedAt} Search Console: ${g.note}`);
+  if (g.skipped) out.push(`- ${h.collectedAt} Search Console: ${g.skipped}`);
   return out;
 });
 
@@ -343,7 +509,7 @@ const md = `# 数値の記録（機械が取ったもの）
 **このファイルは \`auto/collect-metrics.mjs\` が毎回まるごと作り直します。手で編集しても、次回の実行で消えます。**
 **数字を直したいときは \`ops/auto-metrics.json\` を直してください。**
 
-- ここに入るのは、**公式APIから機械が取った実測値だけ**です（Cloudflare Web Analytics / Stripe）。
+- ここに入るのは、**公式APIから機械が取った実測値だけ**です（Cloudflare Web Analytics / Stripe / Google Search Console）。
 - 人間が管理画面から持ってきた数値は、\`ops/metrics.md\` のほうに入ります。**混ぜないこと。**
 - **取得に失敗したら「取得失敗」と書きます。0 とは書きません。**
   「0だった」と「数えられなかった」は、別の事実です（\`CLAUDE.md\` ルール4）。
@@ -359,10 +525,15 @@ const md = `# 数値の記録（機械が取ったもの）
 **売上は円**（JPY は zero-decimal なので、Stripe の \`amount\` がそのまま円です）。
 **「手取り」は Stripe の手数料を引いた後**（\`net\`）。振込手数料は、まだ引かれていません。
 
-| 取得日 | 期間 | PV | 訪問 | 売上(総額) | 売上(手取り) | サブスク |
-|---|---|---|---|---|---|---|
+**Search Console のデータは 2〜3日遅れて確定します。** だから期間は「3日前まで」で切っています。
+昨日ぶんが空なのは、0 だからではなく、**まだ存在しないから**です。
+
+| 取得日 | 期間 | PV | 訪問 | 検索表示 | 検索クリック | 売上(総額) | 売上(手取り) | サブスク |
+|---|---|---|---|---|---|---|---|---|
 ${rows}
 
+${queryBlock}
+${pageBlock}
 ${allNotes.length ? '## 注記\n\n' + allNotes.join('\n') + '\n' : ''}`;
 
 writeFileSync(OUT, md, 'utf8');
