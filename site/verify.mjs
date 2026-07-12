@@ -25,6 +25,7 @@ const SITE = dirname(fileURLToPath(import.meta.url));
 const ROOT = dirname(SITE);
 
 const meta = JSON.parse(readFileSync(join(SITE, 'articles.json'), 'utf8'));
+const products = JSON.parse(readFileSync(join(SITE, 'products.json'), 'utf8'));
 
 const failures = [];
 const warnings = [];
@@ -44,6 +45,35 @@ const FORBIDDEN = [
   'ニキビが治る', 'アトピーが治る',
   '医師も推奨', '医師が推奨',
 ];
+
+// ---- 商品（アフィリエイト）の検査 ---------------------------------
+//
+// 薬機法66条は「何人も」が対象。効能を書いた瞬間、罰せられるのは
+// 広告主ではなく、書いた側です。商品説明にも同じ検査をかけます。
+
+for (const [slug, entry] of Object.entries(products)) {
+  if (slug.startsWith('_')) continue;
+  for (const item of entry.items ?? []) {
+    if (!item.url || !item.name) continue;
+
+    for (const ng of FORBIDDEN) {
+      if ((item.criterion ?? '').includes(ng) || (item.name ?? '').includes(ng)) {
+        failures.push(
+          `${slug}: 商品「${item.name}」の説明に薬機法でアウトな表現があります → 「${ng}」`
+        );
+      }
+    }
+    if (!item.criterion) {
+      failures.push(
+        `${slug}: 商品「${item.name}」に criterion（記事のどの基準に合うか）がありません。` +
+          `基準なしで商品を並べるのは、このブログでは単なる宣伝です`
+      );
+    }
+    if (!/^https?:\/\//.test(item.url)) {
+      failures.push(`${slug}: 商品「${item.name}」の url が不正です`);
+    }
+  }
+}
 
 // ---- PubMed に問い合わせる ---------------------------------------
 
@@ -108,6 +138,55 @@ for (const a of meta) {
   }
   if (pmids.length === 0) {
     failures.push(`${a.slug}: PMID 付きの参考文献が1つもありません（論文カードに基づいていない疑い）`);
+  }
+
+  // --- 質の関門 ---
+  //
+  // Google のスパムポリシーは「AIで価値を加えないページを大量生成すること」を
+  // 明示的に禁じている（自動か人力かを問わない）。
+  // 論文が実在するだけでは足りない。「他所では読めない一段」が無い記事は、
+  // 量産された無価値なページと判定され、サイトごと沈む。
+  //
+  // ここは機械にできる範囲の代理指標。完璧ではないが、
+  // 「薄い記事を1本も通さない」ための最低ラインとして機能する。
+
+  const body = text.replace(/<!--[\s\S]*?-->/g, '');
+
+  // 1. 「ここまでは言えません」——限界を書いていない記事は、このブログの記事ではない
+  if (!/ここまでは言えません|ここまでは言えない/.test(body)) {
+    failures.push(
+      `${a.slug}: 「ここまでは言えません」のセクションがありません。` +
+        `根拠の限界を書かない記事は、このブログの武器を捨てています`
+    );
+  }
+
+  // 2. 独自の一段があるか（資金提供元 / 動物実験 / 出典が無いことの指摘）
+  const SIGNATURE = [
+    '資金', '利益相反', 'COI', 'スポンサー',
+    'マウス', 'ラット', 'ブタ', '動物実験', '培養', 'in vitro', '試験管',
+    '見つかりませんでした', '見つかりません', '確認できませんでした', '確認できていません',
+    '根拠は見当たりません', '裏付けは', '出典',
+  ];
+  if (!SIGNATURE.some((s) => body.includes(s))) {
+    failures.push(
+      `${a.slug}: このブログ固有の一段（資金提供元・動物実験・出典が無いことの指摘）が1つもありません。\n` +
+        `      他所のまとめ記事と区別がつかない記事は、Google に価値なしと判定されます`
+    );
+  }
+
+  // 3. 根拠の厚み。PMID が3件未満の記事は、調べ切れていない
+  const unique = new Set(pmids.map((p) => p.pmid));
+  if (unique.size > 0 && unique.size < 3) {
+    failures.push(
+      `${a.slug}: 引用している論文が ${unique.size} 件しかありません（最低3件）。` +
+        `1〜2本の論文で結論を出すのは、このブログのやり方ではありません`
+    );
+  }
+
+  // 4. 薄さの検出
+  const chars = body.replace(/\s/g, '').length;
+  if (chars < 2000) {
+    failures.push(`${a.slug}: 本文が ${chars} 字しかありません（最低2,000字）`);
   }
 
   // --- 薬機法の検査 ---

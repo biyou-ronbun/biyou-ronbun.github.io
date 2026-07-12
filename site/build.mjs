@@ -168,6 +168,43 @@ function markdownToHtml(md) {
 
 const cfg = JSON.parse(read(join(SITE, 'config.json')));
 const meta = JSON.parse(read(join(SITE, 'articles.json')));
+const products = JSON.parse(read(join(SITE, 'products.json')));
+
+// ---- 関連商品（アフィリエイト） --------------------------------------
+//
+// url が空の商品は出さない（押しても何も起きないリンクは信用を落とす）。
+// 商品を1つでも出す記事には、PR表記が自動で付く。
+// これは景品表示法（ステマ規制）の義務なので、外せない仕組みにしてある。
+
+const itemsFor = (slug) =>
+  (products[slug]?.items ?? []).filter((i) => i.url && i.name);
+
+const prBanner = (slug) =>
+  itemsFor(slug).length
+    ? `<p class="pr-banner">この記事は広告（アフィリエイトリンク）を含みます。</p>`
+    : '';
+
+const productBlock = (slug) => {
+  const items = itemsFor(slug);
+  if (!items.length) return '';
+
+  const rows = items
+    .map(
+      (i) => `    <li class="prod">
+      <a class="prod-name" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">${escapeHtml(i.name)}</a>
+      <span class="prod-criterion">${escapeHtml(i.criterion)}</span>
+    </li>`
+    )
+    .join('\n');
+
+  return `<aside class="products">
+  <p class="products-title">この記事の基準に合うもの</p>
+  <p class="products-lead">下は<strong>広告リンク</strong>です。ここから購入されると、このブログに収益が入ります。<strong>効果を保証するものではありません。</strong>記事で示した「選び方の基準」に合うかどうかだけを書いています。</p>
+  <ul class="products-list">
+${rows}
+  </ul>
+</aside>`;
+};
 
 const tpl = {
   layout:  read(join(SITE, 'templates', 'layout.html')),
@@ -282,6 +319,8 @@ for (const a of meta) {
     CATEGORY: escapeHtml(a.category),
     DATE: a.date,
     DATE_LABEL: a.date.replace(/-/g, '.'),
+    PR_BANNER: prBanner(a.slug),
+    PRODUCTS: productBlock(a.slug),
     CTA: ctaFor('../'),
     ADSLOT: adSlot(),
     ROOT: '../',

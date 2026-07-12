@@ -63,11 +63,34 @@
       "WebFetch(domain:developer.x.com)",
       "WebFetch(domain:devcommunity.x.com)",
       "WebFetch(domain:help.x.com)",
-      "Bash(node \"C:/Users/Owner/AppData/Local/Temp/claude/e--claude/1d107a12-9117-41e9-94ab-7fbca572ecb4/scratchpad/oauth-test.mjs\")"
+      "Bash(node \"C:/Users/Owner/AppData/Local/Temp/claude/e--claude/1d107a12-9117-41e9-94ab-7fbca572ecb4/scratchpad/oauth-test.mjs\")",
+      "Bash(node --test test/quota.test.js test/entitlement.test.js)",
+      "WebFetch(domain:kdp.amazon.co.jp)",
+      "WebFetch(domain:www.yakujihou.com)",
+      "WebFetch(domain:yosca.jp)",
+      "WebFetch(domain:affiliate.amazon.co.jp)",
+      "WebFetch(domain:affiliate.rakuten.co.jp)",
+      "Bash(node tool/make_icon.mjs)",
+      "WebFetch(domain:keiyouwhite.com)",
+      "WebFetch(domain:ja.wikipedia.org)",
+      "WebFetch(domain:developers.google.com)",
+      "WebFetch(domain:www.gsqi.com)",
+      "WebFetch(domain:ameblo.jp)",
+      "WebFetch(domain:x.com)",
+      "WebFetch(domain:news.theletter.jp)",
+      "WebFetch(domain:theletter.jp)",
+      "Bash(ls -la /e/claude/.claude/agents/ 2>/dev/null; echo \"---- user-level ----\"; ls -la /c/Users/Owner/.claude/agents/ 2>/dev/null; echo \"---- ai-app ----\"; ls -la /e/ai-app/.claude/agents/ 2>/dev/null; ls /e/ai-app 2>/dev/null | head -20)",
+      "Read(//c/Users/Owner/.claude/**)",
+      "Bash(ls /e/ 2>/dev/null; echo \"---- secretary.md \\(blog\\) ----\"; cat /e/claude/.claude/agents/secretary.md)",
+      "Bash(node count.mjs)",
+      "Bash(mkdir -p ideas design shots boards tech/blender tech/ae refs lyrics dev/blender dev/ae dev/pipeline)",
+      "Read(//c/Program Files/Blender Foundation/**)",
+      "Read(//c/Program Files/Adobe/**)"
     ],
     "additionalDirectories": [
       "E:\\mv-lab\\tools",
-      "E:\\mv-lab"
+      "E:\\mv-lab",
+      "E:\\mv-lab\\.claude\\agents"
     ]
   }
 }

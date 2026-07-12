@@ -691,6 +691,73 @@ a { color: var(--rose); }
 
 .back-link:hover { color: var(--rose); }
 
+/* ---------- PR表記・関連商品 ---------- */
+
+/* 法律上の義務。目立たない場所に隠さない。 */
+.pr-banner {
+  margin: 20px 0 0;
+  padding: 8px 14px;
+  display: inline-block;
+  background: var(--bg-wash);
+  border: 1px solid var(--rule);
+  font-size: 11.5px;
+  letter-spacing: .06em;
+  color: var(--ink-soft);
+}
+
+.products {
+  margin: 64px 0 0;
+  padding: 32px 30px 28px;
+  border: 1px solid var(--rule);
+  background: var(--bg-raised);
+}
+
+.products-title {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: .08em;
+  margin: 0 0 14px;
+}
+
+.products-lead {
+  margin: 0 0 24px;
+  font-size: 12.5px;
+  line-height: 1.95;
+  color: var(--ink-mute);
+}
+
+.products-lead strong { color: var(--ink-soft); font-weight: 500; }
+
+.products-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 20px; }
+
+.prod {
+  padding-top: 18px;
+  border-top: 1px solid var(--rule-soft);
+}
+
+.prod:first-child { padding-top: 0; border-top: 0; }
+
+.prod-name {
+  display: block;
+  font-size: 15px;
+  line-height: 1.7;
+  letter-spacing: .03em;
+  text-underline-offset: 4px;
+}
+
+.prod-criterion {
+  display: block;
+  margin-top: 6px;
+  font-size: 12.5px;
+  line-height: 1.95;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 600px) {
+  .products { padding: 24px 20px 20px; margin-left: -20px; margin-right: -20px; }
+}
+
 /* ---------- 質問箱（読者リストの入口） ---------- */
 
 .cta {
