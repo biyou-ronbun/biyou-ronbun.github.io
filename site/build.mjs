@@ -219,6 +219,12 @@ const tpl = {
   cta:     read(join(SITE, 'templates', 'cta.html')),
 };
 
+// カテゴリ名 → URL に使える名前。
+// 記事ループでもカテゴリページでも使うので、先に定義しておく。
+const catSlug = (name) =>
+  ({ '塗る': 'nuru', '飲む': 'nomu', '習慣': 'shukan', '塗る / 飲む': 'nuru-nomu' }[name] ??
+    encodeURIComponent(name));
+
 // ---- 目次 -------------------------------------------------------------
 //
 // 記事は3,000〜6,000字ある。目次が無いと、読者はどこに何があるか分からない。
@@ -514,6 +520,7 @@ for (const a of meta) {
     TITLE: escapeHtml(a.title),
     SUBTITLE: escapeHtml(a.subtitle),
     CATEGORY: escapeHtml(a.category),
+    CATEGORY_SLUG: catSlug(a.category),
     DATE: a.date,
     DATE_LABEL: a.date.replace(/-/g, '.'),
     PR_BANNER: prBanner(a.slug),
@@ -621,6 +628,78 @@ if (cfg.customDomain) {
   console.log(`  built  CNAME (${cfg.customDomain})`);
 }
 
+// ---- カテゴリ別のページ -------------------------------------------------
+//
+// 記事は平日毎日1本増える。1ヶ月で28本、3ヶ月で70本。
+// トップに全部並べると読めなくなるので、カテゴリで切る。
+// カテゴリは articles.json の category から自動で作る（増えても手を入れない）。
+
+const categories = [...new Set(published.map((a) => a.category))];
+
+for (const cat of categories) {
+  const items = published.filter((a) => a.category === cat);
+
+  const cards = items
+    .map((a) =>
+      fill(tpl.card, {
+        SLUG: a.slug,
+        TITLE: escapeHtml(a.title),
+        SUBTITLE: escapeHtml(a.subtitle),
+        SUMMARY: escapeHtml(a.summary),
+        CATEGORY: escapeHtml(a.category),
+        DATE: a.date,
+        DATE_LABEL: a.date.replace(/-/g, '.'),
+        ROOT: '../',
+      })
+    )
+    .join('');
+
+  const content = `<section class="hero is-narrow">
+  <p class="hero-lead">「${escapeHtml(cat)}」の記事</p>
+  <p class="hero-body">${items.length} 本あります。すべて、論文の一次情報まで辿って書いたものです。</p>
+</section>
+
+<ul class="article-list">
+${cards}
+</ul>
+
+<p class="back-to-index"><a class="back-link" href="../index.html">すべての記事へ</a></p>`;
+
+  write(
+    join(DIST, 'category', `${catSlug(cat)}.html`),
+    renderPage({
+      content,
+      headTitle: `「${cat}」の記事 | ${cfg.title}`,
+      metaDesc: `${cfg.title}の「${cat}」に関する記事の一覧です。`,
+      canonical: `${baseUrl}/category/${catSlug(cat)}.html`,
+      ogType: 'website',
+      rootPath: '../',
+      ogSlug: '_home',
+    })
+  );
+}
+console.log(`  built  category/ (${categories.length} 個)`);
+
+// ---- サイト内検索用のデータ ---------------------------------------------
+//
+// サーバーが無いので、検索は読者のブラウザの中で行う。
+// そのためのデータをここで書き出す（記事が増えても自動で入る）。
+
+write(
+  join(DIST, 'search.json'),
+  JSON.stringify(
+    published.map((a) => ({
+      slug: a.slug,
+      title: a.title,
+      subtitle: a.subtitle,
+      summary: a.summary,
+      category: a.category,
+      date: a.date,
+    }))
+  )
+);
+console.log('  built  search.json');
+
 // ---- 404 ---------------------------------------------------------------
 
 write(
@@ -709,6 +788,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <url><loc>${baseUrl}/about.html</loc></url>
 <url><loc>${baseUrl}/contact.html</loc></url>
 <url><loc>${baseUrl}/privacy.html</loc></url>
+${categories.map((c) => `<url><loc>${baseUrl}/category/${catSlug(c)}.html</loc></url>`).join('\n')}
 ${published
   .map((a) => `<url><loc>${baseUrl}/articles/${a.slug}.html</loc><lastmod>${a.date}</lastmod></url>`)
   .join('\n')}

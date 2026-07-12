@@ -3,11 +3,93 @@
   <p class="hero-body">レチノール、コラーゲン、日焼け止め。よく聞く美容の話を、雑誌やSNSではなく<strong>学術論文まで辿って</strong>確かめます。数字はそのまま出します。そして、<strong>「ここまでは言えません」も正直に書きます。</strong></p>
 </section>
 
+<div class="finder">
+  <label class="finder-search">
+    <span class="sr-only">記事を検索</span>
+    <input type="search" id="q" placeholder="成分名や気になる言葉で探す（例: レチノール、資金、動物実験）" autocomplete="off">
+  </label>
+  <div class="finder-cats" id="cats"></div>
+  <p class="finder-count" id="count"></p>
+</div>
+
 <h2 class="section-heading">記事</h2>
 
-<ul class="article-list">
+<ul class="article-list" id="list">
 {{ARTICLE_LIST}}
 </ul>
+
+<p class="finder-empty" id="empty" hidden>見つかりませんでした。<br>「見つからない」と書くのがこのブログの流儀なので、ここでも正直に書きます。</p>
+
+<script>
+// サーバーが無いので、検索は読者のブラウザの中で行う。
+// 記事が増えても、build が search.json を作り直すので、ここは触らなくていい。
+(function () {
+  var input = document.getElementById('q');
+  var list = document.getElementById('list');
+  var cats = document.getElementById('cats');
+  var count = document.getElementById('count');
+  var empty = document.getElementById('empty');
+  if (!input || !list) return;
+
+  var cards = Array.prototype.slice.call(list.querySelectorAll('.card'));
+  var data = [];
+  var activeCat = null;
+
+  fetch('search.json')
+    .then(function (r) { return r.json(); })
+    .then(function (json) {
+      data = json;
+      var names = [];
+      json.forEach(function (a) {
+        if (names.indexOf(a.category) < 0) names.push(a.category);
+      });
+      names.forEach(function (name) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'finder-cat';
+        b.textContent = name;
+        b.addEventListener('click', function () {
+          activeCat = activeCat === name ? null : name;
+          Array.prototype.forEach.call(cats.children, function (c) {
+            c.classList.toggle('is-on', c.textContent === activeCat);
+          });
+          apply();
+        });
+        cats.appendChild(b);
+      });
+    })
+    .catch(function () { /* 検索データが読めなくても、記事一覧はそのまま出る */ });
+
+  function haystack(slug) {
+    var a = data.filter(function (x) { return x.slug === slug; })[0];
+    if (!a) return '';
+    return [a.title, a.subtitle, a.summary, a.category].join(' ').toLowerCase();
+  }
+
+  function apply() {
+    var q = input.value.trim().toLowerCase();
+    var shown = 0;
+
+    cards.forEach(function (card) {
+      var link = card.querySelector('.card-link');
+      var slug = link ? link.getAttribute('href').split('/').pop().replace('.html', '') : '';
+      var rec = data.filter(function (x) { return x.slug === slug; })[0];
+
+      var okCat = !activeCat || (rec && rec.category === activeCat);
+      var okQ = !q || haystack(slug).indexOf(q) >= 0;
+
+      var show = okCat && okQ;
+      card.hidden = !show;
+      if (show) shown++;
+    });
+
+    empty.hidden = shown > 0;
+    count.textContent = (q || activeCat) ? shown + ' 本' : '';
+  }
+
+  input.addEventListener('input', apply);
+})();
+</script>
 
 {{BOOK}}
 
