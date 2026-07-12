@@ -343,8 +343,24 @@ const fill = (tplText, vars) =>
     tplText
   );
 
-const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath }) =>
+// X やはてブに貼ったときのリンクカードの画像。
+// これが無いと、テキストだけの弱いカードになる。
+// 画像は site/ogp.ps1 が作り、リポジトリに入っている（Linux 上のビルドでも使える）。
+const ogImage = (slug) => {
+  const file = slug
+    ? existsSync(join(SITE, 'assets', 'ogp', `${slug}.jpg`))
+      ? `${baseUrl}/assets/ogp/${slug}.jpg`
+      : ''
+    : '';
+  if (!file) return '';
+  return `<meta property="og:image" content="${escapeAttr(file)}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">`;
+};
+
+const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath, ogSlug }) =>
   fill(tpl.layout, {
+    OG_IMAGE: ogImage(ogSlug),
     CONTENT: content,
     HEAD_TITLE: escapeAttr(headTitle),
     META_DESC: escapeAttr(metaDesc),
@@ -409,6 +425,7 @@ for (const a of meta) {
       canonical: `${baseUrl}/articles/${a.slug}.html`,
       ogType: 'article',
       rootPath: '../',
+      ogSlug: a.slug,
     })
   );
 
@@ -450,6 +467,7 @@ write(
     canonical: `${baseUrl}/`,
     ogType: 'website',
     rootPath: '',
+    ogSlug: '_home',
   })
 );
 console.log('  built  index.html');

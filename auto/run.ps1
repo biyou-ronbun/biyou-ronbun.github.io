@@ -83,6 +83,21 @@ Log '-----------------------------------'
 
 # ---- 結果の確認 --------------------------------------------------
 
+# 新しい記事の OGP 画像（X に貼ったときのリンクカードの画像）を作る。
+# Claude が push した後だと画像が入らないので、ここで作って追加コミットする。
+Log ''
+Log 'OGP画像を作ります（新しい記事のぶん）'
+& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root 'site\ogp.ps1') 2>&1 |
+  ForEach-Object { Log "  $_" }
+
+$newImages = git status --porcelain -- site/assets/ogp
+if ($newImages) {
+  Log 'OGP画像を追加でコミットします'
+  git add site/assets/ogp 2>&1 | Out-Null
+  git commit -q -m "OGP画像を追加" 2>&1 | ForEach-Object { Log "  git: $_" }
+  git push origin main 2>&1 | ForEach-Object { Log "  git: $_" }
+}
+
 Log ''
 Log '公開されたか確認します'
 
