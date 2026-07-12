@@ -104,7 +104,29 @@
       "WebFetch(domain:news.ycombinator.com)",
       "WebFetch(domain:metr.org)",
       "Bash(ls -la /e/note/research/ 2>/dev/null)",
-      "Read(//e/note/research//**)"
+      "Read(//e/note/research//**)",
+      "WebFetch(domain:vrm-addon-for-blender.info)",
+      "WebFetch(domain:laws.e-gov.go.jp)",
+      "WebFetch(domain:www.dekyo.or.jp)",
+      "WebFetch(domain:vroid.pixiv.help)",
+      "Bash(python -c ' *)",
+      "WebFetch(domain:vroid.com)",
+      "Bash(gh api *)",
+      "Bash(S=\"C:/Users/Owner/AppData/Local/Temp/claude/e--claude/4986a2ff-fcf6-4063-8fef-3fc3ae3c083d/scratchpad\"; cat \"$S/append4.md\" >> \"e:/note/products/ai-output-gate/verify.md\" && echo \"追記完了\" && grep -n \"^# 再検証\" \"e:/note/products/ai-output-gate/verify.md\" && wc -l \"e:/note/products/ai-output-gate/verify.md\")",
+      "Bash(curl -s https://vrm-addon-for-blender.info/en-us/)",
+      "Bash(curl -s https://raw.githubusercontent.com/saturday06/VRM-Addon-for-Blender/main/src/io_scene_vrm/__init__.py)",
+      "Bash(rm -rf v5)",
+      "Bash(mkdir -p v5/articles)",
+      "Bash(cp \"e:/note/products/ai-output-gate/owner-check/verify.mjs\" \"e:/note/products/ai-output-gate/owner-check/rules.json\" v5/)",
+      "Bash(curl -sL \"https://api.github.com/search/code?q=TOPBAR_MT_file_import+repo:saturday06/VRM-Addon-for-Blender\" -H \"Accept: application/vnd.github+json\")",
+      "Bash(curl -sL https://raw.githubusercontent.com/saturday06/VRM-Addon-for-Blender/main/src/io_scene_vrm/__init__.py)",
+      "Bash(curl -sL https://raw.githubusercontent.com/saturday06/VRM-Addon-for-Blender/main/src/io_scene_vrm/registration.py)",
+      "Bash(curl -sL https://raw.githubusercontent.com/saturday06/VRM-Addon-for-Blender/main/src/io_scene_vrm/importer/import_scene.py)",
+      "Bash(curl -sL https://raw.githubusercontent.com/saturday06/VRM-Addon-for-Blender/main/src/io_scene_vrm/preferences.py)",
+      "Bash(curl -sL https://raw.githubusercontent.com/saturday06/VRM-Addon-for-Blender/main/src/io_scene_vrm/common/preferences.py)",
+      "Bash(curl -sL https://raw.githubusercontent.com/saturday06/VRM-Addon-for-Blender/main/src/io_scene_vrm/editor/ops.py)",
+      "Bash(grep -v \"^[0-9]*:  *//\")",
+      "Bash(curl -sL https://raw.githubusercontent.com/saturday06/VRM-Addon-for-Blender/main/src/io_scene_vrm/external/io_scene_gltf2_support.py)"
     ],
     "additionalDirectories": [
       "E:\\mv-lab\\tools",
@@ -117,7 +139,8 @@
       "E:\\mv-lab\\playbook",
       "e:\\note\\ops",
       "e:\\note\\docs",
-      "e:\\note\\research"
+      "e:\\note\\research",
+      "e:\\note\\products\\ai-output-gate"
     ]
   }
 }
