@@ -110,6 +110,7 @@ for (const [key, p] of ledger) {
     ];
 
     let humanTrial = 0;
+    let asked = 0;
 
     for (const c of claims) {
       if (!TRACED_WORDS.includes(c.traced)) {
@@ -117,7 +118,21 @@ for (const [key, p] of ledger) {
           `診断 ${c.id}: traced が「${c.traced}」です。使えるのは ${TRACED_WORDS.join(' / ')} のみ`
         );
       }
-      if (c.traced === 'human-trial') humanTrial++;
+
+      // 診断に出す項目は、日常の言葉の質問文と、グループ名が要る
+      if (c.ask !== false) {
+        asked++;
+        if (!c.question) {
+          failures.push(
+            `診断 ${c.id}: question（日常の言葉の質問文）がありません。\n` +
+              `      論文の言葉のままでは、読者に何を聞かれているか分かりません`
+          );
+        }
+        if (!c.topic) {
+          failures.push(`診断 ${c.id}: topic（グループ名）がありません`);
+        }
+        if (c.traced === 'human-trial') humanTrial++;
+      }
 
       const text = `${c.claim ?? ''} ${c.found ?? ''} ${c.note ?? ''}`;
       for (const w of JUDGEMENT) {
@@ -133,10 +148,18 @@ for (const [key, p] of ledger) {
     }
 
     // ヒト試験まで辿れたものが1つも無ければ、それはただの糾弾リストです
-    if (claims.length > 0 && humanTrial === 0) {
+    if (asked > 0 && humanTrial === 0) {
       failures.push(
-        `診断: traced が human-trial のものが1件もありません。\n` +
+        `診断: 出題する項目に、traced が human-trial のものが1件もありません。\n` +
           `      辿り着けた言説を載せないと、これは「効かないものリスト」にしかなりません`
+      );
+    }
+
+    // 出題する項目のうち、ヒト試験まで辿れたものが2割を切ったら警告
+    if (asked > 0 && humanTrial > 0 && humanTrial / asked < 0.2) {
+      warnings.push(
+        `診断: 出題 ${asked} 件のうち、ヒト試験まで辿れたものが ${humanTrial} 件` +
+          `（${Math.round((humanTrial / asked) * 100)}%）しかありません。糾弾リストに近づいています`
       );
     }
   }

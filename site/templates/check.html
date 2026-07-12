@@ -82,7 +82,8 @@
 
     picked.forEach(function (p) {
       html += '<div class="check-item is-' + p.traced + '">';
-      html += '<p class="check-claim">' + esc(p.claim) + '</p>';
+      html += '<p class="check-claim">' + esc(p.question) + '</p>';
+      html += '<p class="check-precise">調べたのは、この主張です → 「' + esc(p.claim) + '」</p>';
       html += '<p class="check-traced">' + esc(LABEL[p.traced]) + '</p>';
       html += '<p class="check-found">' + esc(p.found) + '</p>';
       if (p.note) html += '<p class="check-note">ここまでは言えません: ' + esc(p.note) + '</p>';

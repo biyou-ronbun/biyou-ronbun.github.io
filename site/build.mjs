@@ -751,32 +751,48 @@ console.log('  built  search.json');
 
 {
   const claimsData = JSON.parse(read(join(SITE, 'claims.json')));
-  const claims = claimsData.claims;
 
-  // 記事ごとにまとめる（読者が自分の関心から探せるように）
-  const byArticle = new Map();
+  // ask: false のものは診断に出さない（読者が「自分のこと」として答えられない項目）
+  // ただしデータは残す
+  const claims = claimsData.claims.filter((c) => c.ask !== false && c.question);
+
+  // topic（日焼け止め / お風呂と保湿 …）でまとめる。
+  // 記事のタイトルは長すぎて、質問の見出しにならない。
+  const byTopic = new Map();
   for (const c of claims) {
-    if (!byArticle.has(c.article)) byArticle.set(c.article, []);
-    byArticle.get(c.article).push(c);
+    const t = c.topic ?? 'その他';
+    if (!byTopic.has(t)) byTopic.set(t, []);
+    byTopic.get(t).push(c);
   }
 
-  const groups = [...byArticle.entries()]
-    .map(([slug, items]) => {
-      const info = published.find((a) => a.slug === slug);
-      return { slug, title: info ? info.title : slug, date: info ? info.date : '', items };
-    })
-    .filter((g) => g.title)
-    .sort((a, b) => (a.date < b.date ? 1 : -1));
+  // 「辿り着けた話」が先に来るように並べる。糾弾リストに見せないため。
+  const TOPIC_ORDER = [
+    '日焼け止め',
+    'お風呂と保湿',
+    'ビタミンC',
+    'レチノール',
+    'ヒアルロン酸',
+    '飲むもの',
+    'ターンオーバー',
+    '肌断食',
+  ];
+  const groups = [...byTopic.entries()]
+    .map(([topic, items]) => ({ topic, items }))
+    .sort((a, b) => {
+      const ia = TOPIC_ORDER.indexOf(a.topic);
+      const ib = TOPIC_ORDER.indexOf(b.topic);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    });
 
   const itemsHtml = groups
     .map(
       (g) => `  <fieldset class="check-group">
-    <legend>${escapeHtml(g.title)}</legend>
+    <legend>${escapeHtml(g.topic)}</legend>
 ${g.items
   .map(
-    (c, i) => `    <label class="check-row">
-      <input type="checkbox" value="${escapeAttr(`${g.slug}-${i}`)}">
-      <span>${escapeHtml(c.claim)}</span>
+    (c) => `    <label class="check-row">
+      <input type="checkbox" value="${escapeAttr(c.id)}">
+      <span>${escapeHtml(c.question)}</span>
     </label>`
   )
   .join('\n')}
@@ -784,17 +800,16 @@ ${g.items
     )
     .join('\n');
 
-  // JS に渡すデータ（key で紐づける）
-  const payload = groups.flatMap((g) =>
-    g.items.map((c, i) => ({
-      key: `${g.slug}-${i}`,
-      claim: c.claim,
-      traced: c.traced,
-      found: c.found,
-      note: c.note ?? '',
-      article: c.article,
-    }))
-  );
+  // JS に渡すデータ
+  const payload = claims.map((c) => ({
+    key: c.id,
+    question: c.question,
+    claim: c.claim,
+    traced: c.traced,
+    found: c.found,
+    note: c.note ?? '',
+    article: c.article,
+  }));
 
   write(
     join(DIST, 'check.html'),
