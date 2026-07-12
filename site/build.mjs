@@ -218,6 +218,49 @@ const tpl = {
   cta:     read(join(SITE, 'templates', 'cta.html')),
 };
 
+// ---- 関連記事 ---------------------------------------------------------
+//
+// 記事は自動で増えるので、関連記事も自動で選ぶ。
+// 同じカテゴリ（塗る / 飲む / 習慣）を優先し、足りなければ新しい順で埋める。
+// 「読者が次に読むもの」を用意しないと、1記事読んで帰ってしまう。
+
+const relatedFor = (slug, all) => {
+  const me = all.find((a) => a.slug === slug);
+  if (!me) return [];
+
+  const others = all.filter((a) => a.slug !== slug);
+  const sameCat = others.filter((a) => a.category === me.category);
+  const rest = others.filter((a) => a.category !== me.category);
+
+  // 同じカテゴリを先に、そのあと新しい順
+  const byDate = (a, b) => (a.date < b.date ? 1 : -1);
+  return [...sameCat.sort(byDate), ...rest.sort(byDate)].slice(0, 3);
+};
+
+const relatedBlock = (slug, all) => {
+  const items = relatedFor(slug, all);
+  if (!items.length) return '';
+
+  const rows = items
+    .map(
+      (a) => `    <li class="rel">
+      <a class="rel-link" href="../articles/${a.slug}.html">
+        <span class="rel-cat">${escapeHtml(a.category)}</span>
+        <span class="rel-title">${escapeHtml(a.title)}</span>
+        <span class="rel-sub">${escapeHtml(a.subtitle ?? '')}</span>
+      </a>
+    </li>`
+    )
+    .join('\n');
+
+  return `<aside class="related">
+  <p class="related-title">この記事のあとに読むなら</p>
+  <ul class="related-list">
+${rows}
+  </ul>
+</aside>`;
+};
+
 // ---- 本（Kindle） -----------------------------------------------------
 //
 // Amazon のURLが無ければ出さない。
@@ -358,9 +401,31 @@ const ogImage = (slug) => {
 <meta property="og:image:height" content="630">`;
 };
 
-const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath, ogSlug }) =>
+// 構造化データ。Google に「誰がいつ書いた記事で、何を根拠にしているか」を機械可読で渡す。
+// このブログの武器は出典なので、それを検索エンジンにも伝わる形にしておく。
+const jsonLd = (a) => {
+  if (!a) return '';
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: a.title,
+    description: a.summary,
+    datePublished: a.date,
+    dateModified: a.date,
+    inLanguage: 'ja',
+    image: `${baseUrl}/assets/ogp/${a.slug}.jpg`,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${baseUrl}/articles/${a.slug}.html` },
+    author: { '@type': 'Organization', name: cfg.title, url: `${baseUrl}/` },
+    publisher: { '@type': 'Organization', name: cfg.title, url: `${baseUrl}/` },
+    isAccessibleForFree: true,
+  };
+  return `<script type="application/ld+json">${JSON.stringify(data)}</script>`;
+};
+
+const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath, ogSlug, article }) =>
   fill(tpl.layout, {
     OG_IMAGE: ogImage(ogSlug),
+    JSONLD: jsonLd(article),
     CONTENT: content,
     HEAD_TITLE: escapeAttr(headTitle),
     META_DESC: escapeAttr(metaDesc),
@@ -410,6 +475,7 @@ for (const a of meta) {
     DATE_LABEL: a.date.replace(/-/g, '.'),
     PR_BANNER: prBanner(a.slug),
     PRODUCTS: productBlock(a.slug),
+    RELATED: relatedBlock(a.slug, meta.filter((m) => m.published)),
     BOOK: bookBlock('../'),
     CTA: ctaFor('../'),
     ADSLOT: adSlot(),
@@ -426,6 +492,7 @@ for (const a of meta) {
       ogType: 'article',
       rootPath: '../',
       ogSlug: a.slug,
+      article: a,
     })
   );
 

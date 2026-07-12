@@ -758,6 +758,72 @@ a { color: var(--rose); }
   .products { padding: 24px 20px 20px; margin-left: -20px; margin-right: -20px; }
 }
 
+/* ---------- 関連記事 ---------- */
+
+.related {
+  margin: 64px 0 0;
+  padding-top: 34px;
+  border-top: 1px solid var(--rule);
+}
+
+.related-title {
+  font-family: var(--serif);
+  font-size: 12px;
+  letter-spacing: .28em;
+  text-indent: .28em;
+  color: var(--ink-mute);
+  margin: 0 0 26px;
+  text-align: center;
+}
+
+.related-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+
+.rel-link {
+  display: block;
+  padding: 20px 22px;
+  text-decoration: none;
+  color: inherit;
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  transition: border-color .25s ease;
+}
+
+.rel-link:hover { border-color: var(--gold); }
+
+.rel-cat {
+  display: inline-block;
+  padding: 2px 9px;
+  margin-bottom: 10px;
+  background: var(--bg-wash);
+  color: var(--ink-soft);
+  font-size: 10.5px;
+  letter-spacing: .16em;
+  text-indent: .16em;
+}
+
+.rel-title {
+  display: block;
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.75;
+  letter-spacing: .04em;
+  transition: color .25s ease;
+}
+
+.rel-link:hover .rel-title { color: var(--rose); }
+
+.rel-sub {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--ink-mute);
+}
+
+@media (max-width: 600px) {
+  .rel-link { padding: 16px 16px; }
+  .rel-title { font-size: 14.5px; }
+}
+
 /* ---------- 本（Kindle） ---------- */
 
 .bookbox {
