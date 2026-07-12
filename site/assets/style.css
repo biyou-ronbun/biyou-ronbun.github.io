@@ -758,6 +758,71 @@ a { color: var(--rose); }
   .products { padding: 24px 20px 20px; margin-left: -20px; margin-right: -20px; }
 }
 
+/* ---------- 本（Kindle） ---------- */
+
+.bookbox {
+  margin: 64px 0 0;
+  padding: 34px 32px 30px;
+  border: 1px solid var(--gold);
+  background: var(--bg-raised);
+  text-align: center;
+}
+
+.article-list + .bookbox { margin-top: 8px; }
+
+.bookbox-label {
+  margin: 0 0 16px;
+  font-size: 11px;
+  letter-spacing: .24em;
+  text-indent: .24em;
+  color: var(--ink-mute);
+}
+
+.bookbox-title {
+  margin: 0 0 6px;
+  font-family: var(--serif);
+  font-size: 22px;
+  letter-spacing: .08em;
+}
+
+.bookbox-sub {
+  margin: 0 0 22px;
+  font-size: 13px;
+  color: var(--ink-mute);
+}
+
+.bookbox-note {
+  margin: 0 auto 24px;
+  max-width: 32em;
+  font-size: 12.5px;
+  line-height: 2;
+  color: var(--ink-soft);
+  text-align: left;
+}
+
+.bookbox-note strong { color: var(--ink); font-weight: 500; }
+
+.bookbox-action { margin: 0; }
+
+.bookbox-button {
+  display: inline-block;
+  padding: 14px 36px;
+  background: var(--ink);
+  color: var(--bg);
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: .14em;
+  text-indent: .14em;
+  transition: background .25s ease;
+}
+
+.bookbox-button:hover { background: var(--rose); }
+
+@media (max-width: 600px) {
+  .bookbox { padding: 26px 20px 22px; margin-left: -20px; margin-right: -20px; }
+  .bookbox-title { font-size: 19px; }
+}
+
 /* ---------- メンバーシップ ---------- */
 
 .plans {

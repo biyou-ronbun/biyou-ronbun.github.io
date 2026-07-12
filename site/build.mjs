@@ -218,6 +218,27 @@ const tpl = {
   cta:     read(join(SITE, 'templates', 'cta.html')),
 };
 
+// ---- 本（Kindle） -----------------------------------------------------
+//
+// Amazon のURLが無ければ出さない。
+// 「記事は無料で読める」ことを紹介文に必ず書く。隠して売らない。
+
+const bk = cfg.book ?? {};
+const bookOn = Boolean(bk.amazonUrl);
+
+const bookBlock = (rootPath) =>
+  bookOn
+    ? `<aside class="bookbox">
+  <p class="bookbox-label">本になりました</p>
+  <p class="bookbox-title">${escapeHtml(bk.title)}</p>
+  <p class="bookbox-sub">${escapeHtml(bk.subtitle)}</p>
+  <p class="bookbox-note"><strong>この本に収めた記事は、すべてこのサイトで無料で読めます。</strong>それでも本にしたのは、まとめて読みたい方のためと、この検証を続けるための費用にするためです。無料で読める場所があることを、隠さずに書いておきます。</p>
+  <p class="bookbox-action"><a class="bookbox-button" href="${escapeAttr(bk.amazonUrl)}" target="_blank" rel="noopener">Kindle で読む（${escapeHtml(bk.price ?? '')}）</a></p>
+</aside>`
+    : '';
+
+if (!bookOn) console.log('  -- 本の紹介は非表示（site/config.json の book.amazonUrl が空です）');
+
 // ---- メンバーシップ（支援型） ----------------------------------------
 //
 // Stripe の支払いリンクが1つも入っていなければ、ページも導線も出さない。
@@ -373,6 +394,7 @@ for (const a of meta) {
     DATE_LABEL: a.date.replace(/-/g, '.'),
     PR_BANNER: prBanner(a.slug),
     PRODUCTS: productBlock(a.slug),
+    BOOK: bookBlock('../'),
     CTA: ctaFor('../'),
     ADSLOT: adSlot(),
     ROOT: '../',
@@ -419,7 +441,10 @@ const cards = published
 write(
   join(DIST, 'index.html'),
   renderPage({
-    content: tpl.home.replace('{{ARTICLE_LIST}}', cards).replace('{{CTA}}', ctaFor('')),
+    content: tpl.home
+      .replace('{{ARTICLE_LIST}}', cards)
+      .replace('{{BOOK}}', bookBlock(''))
+      .replace('{{CTA}}', ctaFor('')),
     headTitle: cfg.title,
     metaDesc: cfg.description,
     canonical: `${baseUrl}/`,
