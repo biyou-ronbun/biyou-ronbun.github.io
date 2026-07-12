@@ -552,6 +552,55 @@ const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath,
       : '',
   });
 
+// ---- 検証レシート ---------------------------------------------------------
+//
+// うちは毎回 PubMed に問い合わせて、論文の実在・タイトル・撤回を確かめています。
+// **それを読者に1文字も見せていませんでした。**
+// やっている検証を見せない媒体は、やっていない媒体と区別がつきません。
+//
+// ★ ここに書くのは、機械が確かめたことだけです。
+//
+//   確かめたこと   : 論文が実在すること / タイトルが一致すること / 撤回されていないこと
+//   確かめていないこと: **論文の内容が正しいかどうか。** 機械には判定できません
+//
+//   「監修」「医学的にレビュー済み」を名乗らないこと。
+//   **名乗った瞬間、論文の捏造を機械で止めながら、看板で捏造することになります。**
+//   だから「医師の監修はありません」と、レシート自身に書いてあります。
+//
+// ★★ 偽造できないことが、この仕組みの全てです。
+//   verified.json は verify.mjs しか書きません。articles.json に手書きの欄を作らないこと。
+//   そして **レシートを集めたページを作らないこと。** それは「表」であり、却下済みの形です。
+
+const verified = (() => {
+  const p = join(SITE, 'verified.json');
+  if (!existsSync(p)) return null;
+  return JSON.parse(read(p));
+})();
+
+const receiptFor = (slug) => {
+  const v = verified?.articles?.[slug];
+  if (!v || !v.count) return '';
+
+  const d = (verified.verifiedAt ?? '').slice(0, 10).replace(/-/g, '.');
+  const n = v.retracted?.length ?? 0;
+
+  // 撤回論文を引いている記事に「撤回されていないことを確認しました」と書かせない。
+  // レシートの中で矛盾したら、レシートの意味が消える。
+  const checked = n
+    ? `<li>実在すること、タイトルが一致すること、そして<strong>撤回されていないか</strong>を確認しています。</li>
+    <li class="receipt-warn">その結果、<strong>${n} 本が撤回された論文</strong>だと分かりました。記事には撤回された事実を明記し、<strong>「撤回された後も、売り文句の根拠として使われている」という事実そのもの</strong>として引用しています。根拠としては使っていません。</li>`
+    : `<li>実在すること、タイトルが一致すること、<strong>撤回されていないこと</strong>を確認しています。</li>`;
+
+  return `<aside class="receipt">
+  <p class="receipt-title">この記事の参考文献を、機械が確かめました</p>
+  <ul class="receipt-list">
+    <li><strong>${v.count} 本</strong>の論文すべてを、<strong>${d}</strong> に PubMed へ自動照会しました。</li>
+    ${checked}
+  </ul>
+  <p class="receipt-limit"><strong>確かめたのは、論文が実在することだけです。</strong> 論文の内容が正しいかどうかは、機械には判定できません。<strong>医師の監修はありません。</strong> この記事は AI が書き、上記の照会に通ったものだけが公開されています。照会に1本でも通らなければ、この記事は世に出ていません。</p>
+</aside>`;
+};
+
 // ---- 悩みから探す（タグ） -------------------------------------------------
 //
 // うちのカテゴリ（塗る / 飲む / 習慣）は「対象の分類」であって、読者の悩みではない。
@@ -698,6 +747,7 @@ for (const a of meta) {
     DATE: a.date,
     DATE_LABEL: a.date.replace(/-/g, '.'),
     PR_BANNER: prBanner(a.slug),
+    RECEIPT: receiptFor(a.slug),
     PRODUCTS: productBlock(a.slug),
     TAG_LINKS: tagLinks(a, '../'),
     RELATED: relatedBlock(a.slug, meta.filter((m) => m.published)),
@@ -1135,6 +1185,7 @@ if (memberToken && memOn) {
       DATE: a.date,
       DATE_LABEL: `${a.date.replace(/-/g, '.')} 公開予定`,
       PR_BANNER: '',
+      RECEIPT: receiptFor(a.slug),
       PRODUCTS: '',
       TAG_LINKS: '',
       RELATED: '',

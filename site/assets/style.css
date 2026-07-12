@@ -1442,6 +1442,66 @@ a { color: var(--rose); }
   .mem-honest { padding: 22px 18px 18px; }
 }
 
+/* ---------- 検証レシート ----------
+   ★ 「信頼の記号」に見せないこと。
+      金のバッジ、盾のアイコン、チェックマーク——それらは「安心してよい」という合図で、
+      このブログが渡したいのは「自分で確かめられる」です。
+      だから、装飾のない、事実の記述として組みます。            */
+
+.receipt {
+  margin: 56px 0 0;
+  padding: 24px 26px 20px;
+  border: 1px solid var(--rule);
+  background: var(--bg-raised);
+}
+
+.receipt-title {
+  margin: 0 0 14px;
+  font-family: var(--serif);
+  font-size: 14px;
+  letter-spacing: .1em;
+  color: var(--ink);
+}
+
+.receipt-list {
+  margin: 0 0 16px;
+  padding-left: 1.2em;
+  list-style: none;
+}
+
+.receipt-list li {
+  position: relative;
+  margin-bottom: 8px;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--ink-soft);
+}
+
+.receipt-list li::before {
+  content: '—';
+  position: absolute;
+  left: -1.2em;
+  color: var(--ink-mute);
+}
+
+.receipt-list strong { color: var(--ink); font-weight: 500; }
+.receipt-warn strong { color: var(--rose); }
+
+.receipt-limit {
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule-soft);
+  font-size: 12.5px;
+  line-height: 1.95;
+  color: var(--ink-mute);
+}
+
+.receipt-limit strong { color: var(--ink-soft); font-weight: 500; }
+
+@media (max-width: 600px) {
+  .receipt { padding: 20px 18px 16px; }
+}
+
 /* ---------- 悩みから探す（トップ） ---------- */
 
 .tagnav {

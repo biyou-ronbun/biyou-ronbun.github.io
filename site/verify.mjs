@@ -17,7 +17,7 @@
 //    4. 「日常への生かし方」と参考文献のセクションがあるか
 // ---------------------------------------------------------------
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -468,6 +468,49 @@ for (const a of articles) {
       continue;
     }
 
+    // 1.5 撤回された論文を、撤回と書かずに引いていないか
+    //
+    // ★ 論文は、あとから撤回されます。
+    //   書いた日に正しかった記事が、半年後に「撤回された論文を根拠にした記事」になる。
+    //   **これは、書いた本人には気づけません。** 記事はもう書き終わっているからです。
+    //
+    //   大手の医療メディアは、これを人手の定期監査でやっています。
+    //   うちは毎日、全記事の全PMIDを PubMed に問い合わせています。
+    //   **だから、この検査は「1行足すだけ」で手に入ります。**
+    //
+    // ★★ ただし、止めるのは「撤回を隠して引いているとき」だけです。
+    //
+    //   「撤回された論文が、まだ売り文句の根拠に使われている」——
+    //   **これを書くことこそ、このブログの仕事です。**
+    //   撤回を明記して引いている記事を関門が止めるなら、間違っているのは関門のほうです。
+    //
+    //   （2026-07-13、この検査を入れた初日に pdrn-salmon-dna が引っかかった。
+    //     そして記事は「※2016年に撤回」「※2026年に撤回」と、すでに正しく書いていた。
+    //     撤回通知そのもの（PMID 26839493）まで引用していた。関門を直した。）
+    const pubtype = rec.pubtype ?? [];
+    const isRetracted = pubtype.includes('Retracted Publication');
+    const disclosesRetraction = /撤回|retract/i.test(line);
+
+    if (isRetracted && !disclosesRetraction) {
+      failures.push(
+        `${a.slug}: PMID ${pmid} は【撤回された論文】ですが、記事にその記載がありません\n` +
+          `      ${rec.title ?? ''}\n` +
+          `      記事: ${line.trim().slice(0, 90)}\n` +
+          `\n` +
+          `      引くなとは言いません。**撤回されたと書いてください。**\n` +
+          `      「撤回された論文が、いまも売り文句の根拠に使われている」——それを書くのが、このブログの仕事です。\n` +
+          `      根拠として使っているなら、その記述ごと取り除いてください。\n` +
+          `      （書いた時点では撤回されていなかった可能性があります。それでも、いま黙って出してはいけません）`
+      );
+      continue;
+    }
+
+    if (isRetracted) {
+      warnings.push(
+        `${a.slug}: PMID ${pmid} は撤回された論文です（記事に撤回の記載あり。通します）`
+      );
+    }
+
     // 本文中で PMID に触れているだけの行は、ここまで。
     // タイトルの照合は、参考文献の行だけに対して行う。
     if (!isRef) continue;
@@ -529,8 +572,59 @@ if (failures.length) {
   process.exit(1);
 }
 
+// ---- 検証レシートを書き出す -----------------------------------------
+//
+// ★ ここが要点です。
+//
+//   うちは毎回 PubMed に問い合わせて、論文の実在・タイトル・撤回を確かめています。
+//   **それを、読者に1文字も見せていませんでした。**
+//   やっている検証を見せない媒体は、やっていない媒体と区別がつきません。
+//
+//   だから、検証の結果をここに書き出し、build.mjs はこのファイルだけを読みます。
+//
+// ★★ 偽造できないことが、この仕組みの全てです。
+//
+//   ・articles.json に「検証済み」という手書きの欄を作らないこと。
+//     作った瞬間、それは飾りになります（true と書けば true になるから）。
+//   ・レシートの文言を人間（やエージェント）が書けるようにしないこと。
+//   ・**レシートを集めたページを作らないこと。** それは「表」であり、却下済みの形です。
+//
+//   検査が走っていない記事には、レシートが物理的に付きません。
+//   これは、このブログのエージェント自身にも偽造できません。
+
+const receipt = {
+  _readme: [
+    'site/verify.mjs が書き出します。手で編集しないこと。',
+    '',
+    'build.mjs は、記事に出す「検証レシート」をこのファイルからしか作りません。',
+    'articles.json に「検証済み」の欄を作らないでください。作った瞬間、それは飾りになります。',
+    '',
+    'ここに書いてあるのは「論文が実在し、タイトルが一致し、撤回されていない」ことだけです。',
+    '**論文の内容が正しいかどうかは、機械には判定できません。** 医師の監修もありません。',
+    'そう書いてあることが、この仕組みの価値です。',
+  ],
+  verifiedAt: new Date().toISOString(),
+  articles: Object.fromEntries(
+    articles.map((a) => {
+      const pmids = [...new Set(a.pmids.map((p) => p.pmid))];
+      return [
+        a.slug,
+        {
+          pmids,
+          count: pmids.length,
+          retracted: pmids.filter((p) => (result[p]?.pubtype ?? []).includes('Retracted Publication')),
+        },
+      ];
+    })
+  ),
+};
+
+writeFileSync(join(SITE, 'verified.json'), JSON.stringify(receipt, null, 2) + '\n', 'utf8');
+
 console.log('=========================================');
 console.log(`  検証を通過しました`);
 console.log(`  記事 ${articles.length} 本 / PMID ${allPmids.size} 件すべてが PubMed に実在し、`);
 console.log(`  タイトルも一致しています。薬機法の禁止表現もありません。`);
 console.log('=========================================');
+console.log('');
+console.log('  site/verified.json に検証レシートを書きました');
