@@ -148,7 +148,11 @@ async function cfPageviews() {
 
   // 「訪問数」に相当するフィールドがあるなら足す。無ければ count だけで数える。
   // ★ 決め打ちしないこと。Cloudflare が「持っている」と言ったものだけを聞く。
-  const hasVisits = Array.isArray(available) && available.includes('visits');
+  //
+  // ★★ availableFields は "sum_visits" と返してくるが、クエリに書くときは sum { visits } と書く。
+  //    （availableFields は「グループ名_フィールド名」の平たい形で返ってくる）
+  //    2026-07-13、実際に問い合わせて確認した。'visits' で探すと永遠に見つからない。
+  const hasVisits = Array.isArray(available) && available.includes('sum_visits');
   const visitsPart = hasVisits ? 'sum { visits }' : '';
 
   const data = await cfQuery(
