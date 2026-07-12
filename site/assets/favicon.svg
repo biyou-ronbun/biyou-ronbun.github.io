@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#2e2724"/>
+  <rect x="4" y="4" width="56" height="56" fill="none" stroke="#c9b391" stroke-width="1.5"/>
+  <text x="32" y="45"
+        font-family="Yu Mincho, Hiragino Mincho ProN, MS Mincho, serif"
+        font-size="38"
+        fill="#faf7f4"
+        text-anchor="middle">出</text>
+</svg>

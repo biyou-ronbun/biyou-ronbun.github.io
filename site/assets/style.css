@@ -758,6 +758,56 @@ a { color: var(--rose); }
   .products { padding: 24px 20px 20px; margin-left: -20px; margin-right: -20px; }
 }
 
+/* ---------- 目次 ---------- */
+
+.toc {
+  margin: 0 0 56px;
+  padding: 26px 28px 24px;
+  background: var(--bg-wash);
+  border-left: 2px solid var(--gold);
+}
+
+.toc-title {
+  margin: 0 0 16px;
+  font-size: 11px;
+  letter-spacing: .24em;
+  text-indent: .24em;
+  color: var(--ink-mute);
+}
+
+.toc-list {
+  margin: 0;
+  padding-left: 1.4em;
+  list-style: decimal;
+}
+
+.toc-list li {
+  margin-bottom: 8px;
+  font-size: 13.5px;
+  line-height: 1.8;
+}
+
+.toc-list li::marker { color: var(--gold); }
+
+.toc-list a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.toc-list a:hover {
+  color: var(--rose);
+  border-bottom-color: var(--gold);
+}
+
+/* 目次から飛んだとき、見出しがヘッダーに隠れないように */
+.post-body h2 { scroll-margin-top: 24px; }
+
+@media (max-width: 600px) {
+  .toc { padding: 20px 18px 18px; margin-bottom: 44px; }
+  .toc-list li { font-size: 13px; }
+}
+
 /* ---------- 関連記事 ---------- */
 
 .related {

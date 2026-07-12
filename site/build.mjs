@@ -219,6 +219,45 @@ const tpl = {
   cta:     read(join(SITE, 'templates', 'cta.html')),
 };
 
+// ---- 目次 -------------------------------------------------------------
+//
+// 記事は3,000〜6,000字ある。目次が無いと、読者はどこに何があるか分からない。
+// 見出し（h2）から自動で作る。記事が自動生成されても、目次は自動で付く。
+
+const slugifyHeading = (text, i) =>
+  'h-' +
+  (text
+    .replace(/<[^>]+>/g, '')
+    .replace(/[^0-9A-Za-z぀-ヿ一-龯]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 40) || String(i));
+
+// 本文の h2 に id を振り、目次を組み立てる
+const withToc = (bodyHtml) => {
+  const items = [];
+  let i = 0;
+
+  const body = bodyHtml.replace(/<h2>([\s\S]*?)<\/h2>/g, (_, inner) => {
+    i++;
+    const id = slugifyHeading(inner, i);
+    const label = inner.replace(/<[^>]+>/g, '');
+    items.push({ id, label });
+    return `<h2 id="${id}">${inner}</h2>`;
+  });
+
+  // 見出しが少ない記事に目次は要らない
+  if (items.length < 4) return { body, toc: '' };
+
+  const toc = `<nav class="toc" aria-label="目次">
+  <p class="toc-title">この記事の中身</p>
+  <ol class="toc-list">
+${items.map((it) => `    <li><a href="#${it.id}">${escapeHtml(it.label)}</a></li>`).join('\n')}
+  </ol>
+</nav>`;
+
+  return { body, toc };
+};
+
 // ---- 関連記事 ---------------------------------------------------------
 //
 // 記事は自動で増えるので、関連記事も自動で選ぶ。
@@ -467,8 +506,11 @@ for (const a of meta) {
   }
   if (!a.published) { heldBack.push(a.slug); continue; }
 
+  const { body, toc } = withToc(markdownToHtml(read(mdPath)));
+
   const page = fill(tpl.article, {
-    BODY: markdownToHtml(read(mdPath)),
+    BODY: body,
+    TOC: toc,
     TITLE: escapeHtml(a.title),
     SUBTITLE: escapeHtml(a.subtitle),
     CATEGORY: escapeHtml(a.category),
@@ -578,6 +620,21 @@ if (cfg.customDomain) {
   write(join(DIST, 'CNAME'), `${cfg.customDomain}\n`);
   console.log(`  built  CNAME (${cfg.customDomain})`);
 }
+
+// ---- 404 ---------------------------------------------------------------
+
+write(
+  join(DIST, '404.html'),
+  renderPage({
+    content: read(join(SITE, 'templates', '404.html')),
+    headTitle: `ページが見つかりません | ${cfg.title}`,
+    metaDesc: 'お探しのページは見つかりませんでした。',
+    canonical: `${baseUrl}/404.html`,
+    ogType: 'website',
+    rootPath: '',
+  })
+);
+console.log('  built  404.html');
 
 // ---- お問い合わせ -----------------------------------------------------
 
