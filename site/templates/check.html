@@ -1,0 +1,114 @@
+<article class="post">
+  <header class="post-header">
+    <h1 class="post-title">あなたのスキンケア、根拠を確かめる</h1>
+    <p class="post-subtitle">商品は勧めません。あなたが今やっていることの、出典だけを返します</p>
+  </header>
+
+  <div class="post-body">
+
+<p>あなたが信じていること、実践していることに、チェックを入れてください。<strong>その一つひとつについて、私たちが論文をどこまで辿れたかを返します。</strong></p>
+
+<div class="check-warn">
+  <p><strong>先に、いちばん大事なことを書きます。</strong></p>
+  <p><strong>「出典が見つからなかった」は、「効かない」ではありません。</strong> 調べたけれど確かめられなかった、という意味です。この2つを混同すると、根拠が無いことを根拠に逆方向に断定することになります。それは、このブログが批判していることと同じです。</p>
+  <p>この診断は、<strong>あなたに何かを買わせるためのものではありません。</strong> 商品名も、成分の推奨も、一つも出しません。肌の状態を判定することもしません（それは医師の仕事です）。<strong>渡すのは、あなたが自分で判断するための材料だけです。</strong></p>
+</div>
+
+<div class="check-form" id="checkForm">
+{{CHECK_ITEMS}}
+</div>
+
+<p class="check-actions">
+  <button type="button" class="cta-button" id="checkRun">確かめる</button>
+</p>
+
+<div id="checkResult" hidden></div>
+
+<script type="application/json" id="claimsData">{{CLAIMS_JSON}}</script>
+
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById('claimsData').textContent);
+  var form = document.getElementById('checkForm');
+  var btn = document.getElementById('checkRun');
+  var out = document.getElementById('checkResult');
+  if (!form || !btn || !out) return;
+
+  var LABEL = {
+    'human-trial':      'ヒトの試験まで辿れました',
+    'industry-only':    'ヒト試験はありますが、メーカー資金のものしか見つかりませんでした',
+    'lab-measure-only': 'ヒトで測ってはいますが、肌の見た目や症状は測っていません',
+    'invitro-only':     '培養細胞・摘出皮膚の実験しか見つかりませんでした',
+    'animal-only':      '動物実験しか見つかりませんでした',
+    'no-source':        '出典が見つかりませんでした'
+  };
+
+  btn.addEventListener('click', function () {
+    var checked = Array.prototype.slice.call(form.querySelectorAll('input:checked'));
+
+    if (checked.length === 0) {
+      out.hidden = false;
+      out.innerHTML = '<p class="check-empty">1つ以上チェックしてください。</p>';
+      out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    var picked = checked.map(function (c) {
+      return data.filter(function (d) { return d.key === c.value; })[0];
+    }).filter(Boolean);
+
+    var counts = {};
+    picked.forEach(function (p) { counts[p.traced] = (counts[p.traced] || 0) + 1; });
+
+    var human = counts['human-trial'] || 0;
+    var nosrc = counts['no-source'] || 0;
+
+    var html = '<h2>結果</h2>';
+
+    html += '<div class="check-summary">';
+    html += '<p>あなたがチェックしたのは <strong>' + picked.length + '個</strong> です。</p>';
+    html += '<ul>';
+    if (human > 0) html += '<li><strong>' + human + '個</strong>は、ヒトの臨床試験まで辿れました。</li>';
+    if (nosrc > 0) html += '<li><strong>' + nosrc + '個</strong>は、出典が見つかりませんでした。</li>';
+    var others = picked.length - human - nosrc;
+    if (others > 0) html += '<li><strong>' + others + '個</strong>は、辿り着いた先が動物実験・培養細胞・実験室の測定値・メーカー資金の試験でした。</li>';
+    html += '</ul>';
+    html += '<p class="check-summary-note"><strong>出典が見つからなかったものを、今すぐやめる必要はありません。</strong> 「確かめられなかった」であって「効かない」ではないからです。ただ、<strong>それが「確かめられていないこと」だと知ったうえで続けるのと、知らずに続けるのとでは、まったく違います。</strong></p>';
+    html += '</div>';
+
+    // 辿り着いた先の順に並べる（ヒト試験を先に出す。糾弾リストにしないため）
+    var order = ['human-trial', 'industry-only', 'lab-measure-only', 'invitro-only', 'animal-only', 'no-source'];
+    picked.sort(function (a, b) { return order.indexOf(a.traced) - order.indexOf(b.traced); });
+
+    picked.forEach(function (p) {
+      html += '<div class="check-item is-' + p.traced + '">';
+      html += '<p class="check-claim">' + esc(p.claim) + '</p>';
+      html += '<p class="check-traced">' + esc(LABEL[p.traced]) + '</p>';
+      html += '<p class="check-found">' + esc(p.found) + '</p>';
+      if (p.note) html += '<p class="check-note">ここまでは言えません: ' + esc(p.note) + '</p>';
+      html += '<p class="check-link"><a href="articles/' + esc(p.article) + '.html">この話を詳しく書いた記事へ</a></p>';
+      html += '</div>';
+    });
+
+    html += '<p class="check-reset"><button type="button" class="back-link" id="checkAgain">もう一度やる</button></p>';
+
+    out.innerHTML = html;
+    out.hidden = false;
+    out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    document.getElementById('checkAgain').addEventListener('click', function () {
+      checked.forEach(function (c) { c.checked = false; });
+      out.hidden = true;
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+})();
+</script>
+
+  </div>
+</article>

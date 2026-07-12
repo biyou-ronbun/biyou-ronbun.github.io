@@ -81,6 +81,67 @@ for (const [key, p] of ledger) {
   }
 }
 
+// ---- 診断（claims.json）の検査 --------------------------------------
+//
+// この診断は、商品を勧めた瞬間に薬機法66条の射程に入り、
+// 肌の状態を判定した瞬間に医師法17条の問題になります。
+// 越えないから安全に作れています。機械で越えられないようにします。
+
+{
+  const claimsFile = join(SITE, 'claims.json');
+  if (existsSync(claimsFile)) {
+    const claimsData = JSON.parse(readFileSync(claimsFile, 'utf8'));
+    const claims = claimsData.claims ?? [];
+
+    const TRACED_WORDS = [
+      'human-trial',
+      'industry-only',
+      'lab-measure-only',
+      'invitro-only',
+      'animal-only',
+      'no-source',
+    ];
+
+    // 診断が「効かない」と言い出したら、それは糾弾リストです
+    const JUDGEMENT = [
+      '効かない', '効果がない', '効果はない', '無意味です', '意味がない',
+      'やめるべき', 'おすすめ', '使うべき', '向いています', '避けるべき',
+      '買うべき', '不要です',
+    ];
+
+    let humanTrial = 0;
+
+    for (const c of claims) {
+      if (!TRACED_WORDS.includes(c.traced)) {
+        failures.push(
+          `診断 ${c.id}: traced が「${c.traced}」です。使えるのは ${TRACED_WORDS.join(' / ')} のみ`
+        );
+      }
+      if (c.traced === 'human-trial') humanTrial++;
+
+      const text = `${c.claim ?? ''} ${c.found ?? ''} ${c.note ?? ''}`;
+      for (const w of JUDGEMENT) {
+        // claim（世間で言われていること）に「効く」等が入るのは正常なので、found と note だけ見る
+        const target = `${c.found ?? ''} ${c.note ?? ''}`;
+        if (target.includes(w)) {
+          failures.push(
+            `診断 ${c.id}: 評価・推奨が書かれています →「${w}」\n` +
+              `      この診断は、商品も成分も勧めません。書けるのは「どこまで辿れたか」だけです`
+          );
+        }
+      }
+    }
+
+    // ヒト試験まで辿れたものが1つも無ければ、それはただの糾弾リストです
+    if (claims.length > 0 && humanTrial === 0) {
+      failures.push(
+        `診断: traced が human-trial のものが1件もありません。\n` +
+          `      辿り着けた言説を載せないと、これは「効かないものリスト」にしかなりません`
+      );
+    }
+  }
+}
+
 // ---- 商品（アフィリエイト）の検査 ---------------------------------
 //
 // 薬機法66条は「何人も」が対象。効能を書いた瞬間、罰せられるのは
@@ -148,16 +209,23 @@ for (const a of meta) {
 
   const text = readFileSync(path, 'utf8');
 
-  // 参考文献の行だけを取り出す（PMID を含む行）
-  const refLines = text
-    .split(/\r?\n/)
-    .filter((l) => /PMID/i.test(l));
+  // PMID を含む行を全部取り出す。
+  //
+  // ただし2種類ある:
+  //   - 参考文献の行（「1. 著者. タイトル. 誌名. 年.（PMID: xxx）」）
+  //     → タイトル・年・著者を PubMed と突き合わせる
+  //   - 本文中の言及（「2本目の撤回（PMID: xxx）の理由が分かりませんでした」）
+  //     → 実在の確認だけ。タイトル照合はしない（文章なので一致するはずがない）
+  //
+  // ここを区別しないと、本文で PMID に触れただけで公開が止まる。
+  const isReference = (l) => /^\s*\d+\.\s/.test(l);
 
   const pmids = [];
-  for (const line of refLines) {
-    const m = line.match(/PMID[:：]?\s*(\d{6,9})/i);
-    if (m) {
-      pmids.push({ pmid: m[1], line });
+  for (const line of text.split(/\r?\n/)) {
+    if (!/PMID/i.test(line)) continue;
+    // 1行に複数の PMID があることもある
+    for (const m of line.matchAll(/PMID[:：]?\s*(\d{6,9})/gi)) {
+      pmids.push({ pmid: m[1], line, isRef: isReference(line) });
       allPmids.add(m[1]);
     }
   }
@@ -262,14 +330,18 @@ try {
 }
 
 for (const a of articles) {
-  for (const { pmid, line } of a.pmids) {
+  for (const { pmid, line, isRef } of a.pmids) {
     const rec = result[pmid];
 
-    // 1. 実在するか
+    // 1. 実在するか（本文中の言及も、これは必ず検査する）
     if (!rec || rec.error) {
       failures.push(`${a.slug}: PMID ${pmid} は PubMed に存在しません（捏造の疑い）`);
       continue;
     }
+
+    // 本文中で PMID に触れているだけの行は、ここまで。
+    // タイトルの照合は、参考文献の行だけに対して行う。
+    if (!isRef) continue;
 
     const refNorm = normalize(line);
 

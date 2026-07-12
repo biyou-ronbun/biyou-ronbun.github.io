@@ -740,6 +740,81 @@ write(
 );
 console.log('  built  search.json');
 
+// ---- 根拠を確かめる（スキンケア診断） -----------------------------------
+//
+// 商品を1つも勧めません。成分の推奨もしません。肌の状態も判定しません。
+// 返すのは「あなたが今やっていることの、出典をどこまで辿れたか」だけです。
+//
+// ★ 商品を勧めた瞬間、薬機法66条の射程に入り、書き手が処罰対象になります。
+// ★ 肌の状態を判定した瞬間、医師法17条の問題になります。
+//   ここは絶対に越えないこと。越えないから、これは安全に作れています。
+
+{
+  const claimsData = JSON.parse(read(join(SITE, 'claims.json')));
+  const claims = claimsData.claims;
+
+  // 記事ごとにまとめる（読者が自分の関心から探せるように）
+  const byArticle = new Map();
+  for (const c of claims) {
+    if (!byArticle.has(c.article)) byArticle.set(c.article, []);
+    byArticle.get(c.article).push(c);
+  }
+
+  const groups = [...byArticle.entries()]
+    .map(([slug, items]) => {
+      const info = published.find((a) => a.slug === slug);
+      return { slug, title: info ? info.title : slug, date: info ? info.date : '', items };
+    })
+    .filter((g) => g.title)
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
+
+  const itemsHtml = groups
+    .map(
+      (g) => `  <fieldset class="check-group">
+    <legend>${escapeHtml(g.title)}</legend>
+${g.items
+  .map(
+    (c, i) => `    <label class="check-row">
+      <input type="checkbox" value="${escapeAttr(`${g.slug}-${i}`)}">
+      <span>${escapeHtml(c.claim)}</span>
+    </label>`
+  )
+  .join('\n')}
+  </fieldset>`
+    )
+    .join('\n');
+
+  // JS に渡すデータ（key で紐づける）
+  const payload = groups.flatMap((g) =>
+    g.items.map((c, i) => ({
+      key: `${g.slug}-${i}`,
+      claim: c.claim,
+      traced: c.traced,
+      found: c.found,
+      note: c.note ?? '',
+      article: c.article,
+    }))
+  );
+
+  write(
+    join(DIST, 'check.html'),
+    renderPage({
+      content: fill(read(join(SITE, 'templates', 'check.html')), {
+        CHECK_ITEMS: itemsHtml,
+        CLAIMS_JSON: JSON.stringify(payload).replace(/</g, '\\u003c'),
+      }),
+      headTitle: `あなたのスキンケア、根拠を確かめる | ${cfg.title}`,
+      metaDesc:
+        '商品は勧めません。あなたが今やっているスキンケアについて、私たちが論文をどこまで辿れたかだけを返します。「出典が見つからなかった」は「効かない」ではありません。',
+      canonical: `${baseUrl}/check.html`,
+      ogType: 'website',
+      rootPath: '',
+      ogSlug: '_home',
+    })
+  );
+  console.log(`  built  check.html (${payload.length} 件の言説)`);
+}
+
 // ---- 404 ---------------------------------------------------------------
 
 write(
@@ -826,6 +901,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>${baseUrl}/</loc></url>
 <url><loc>${baseUrl}/about.html</loc></url>
+<url><loc>${baseUrl}/check.html</loc></url>
 <url><loc>${baseUrl}/contact.html</loc></url>
 <url><loc>${baseUrl}/privacy.html</loc></url>
 ${categories.map((c) => `<url><loc>${baseUrl}/category/${catSlug(c)}.html</loc></url>`).join('\n')}
