@@ -126,7 +126,17 @@
       "Bash(curl -sL https://raw.githubusercontent.com/saturday06/VRM-Addon-for-Blender/main/src/io_scene_vrm/common/preferences.py)",
       "Bash(curl -sL https://raw.githubusercontent.com/saturday06/VRM-Addon-for-Blender/main/src/io_scene_vrm/editor/ops.py)",
       "Bash(grep -v \"^[0-9]*:  *//\")",
-      "Bash(curl -sL https://raw.githubusercontent.com/saturday06/VRM-Addon-for-Blender/main/src/io_scene_vrm/external/io_scene_gltf2_support.py)"
+      "Bash(curl -sL https://raw.githubusercontent.com/saturday06/VRM-Addon-for-Blender/main/src/io_scene_vrm/external/io_scene_gltf2_support.py)",
+      "Bash(curl -s -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 Chrome/120 Safari/537.36\" -L \"https://vroid.pixiv.help/hc/en-us/articles/15760756822297-I-want-to-learn-more-about-the-VRM-export-feature\" -o /tmp/vroid.html -w \"%{http_code}\\\\n\")",
+      "Bash(grep -oE '<h[12][^>]*>[^<]+|<p>[^<]{20,200}' /tmp/vroid.html)",
+      "Bash(grep -v '^\\\\s*$')",
+      "WebFetch(domain:docs.blender.org)",
+      "Bash(curl -s -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 Chrome/120 Safari/537.36\" -L \"https://docs.blender.org/manual/en/latest/advanced/extensions/addons.html\" -o /tmp/bl.html -w \"%{http_code}\\\\n\")",
+      "Bash(sed -e 's/<[^>]*>/\\\\n/g' /tmp/bl.html)",
+      "Bash(curl -s -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) Chrome/120\" -L \"https://docs.blender.org/manual/en/latest/advanced/extensions/getting_started.html\" -o /tmp/bl2.html -w \"%{http_code}\\\\n\")",
+      "Bash(sed -e 's/<[^>]*>/\\\\n/g' /tmp/bl2.html)",
+      "Bash(grep -v \"^$\")",
+      "WebFetch(domain:developer.blender.org)"
     ],
     "additionalDirectories": [
       "E:\\mv-lab\\tools",
@@ -140,7 +150,8 @@
       "e:\\note\\ops",
       "e:\\note\\docs",
       "e:\\note\\research",
-      "e:\\note\\products\\ai-output-gate"
+      "e:\\note\\products\\ai-output-gate",
+      "\\tmp"
     ]
   }
 }
