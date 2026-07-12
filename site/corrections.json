@@ -1,0 +1,27 @@
+{
+  "_readme": [
+    "site/verify.mjs が追記します。**手で編集しないこと。行を消さないこと。**",
+    "",
+    "ここに記録されるのは「この記事は、撤回された論文を引いていた」という事実です。",
+    "記事から引用を消しても、この記録は残り、記事に訂正ログが出続けます。",
+    "",
+    "★ そうしないと、「引用をそっと消す」だけで、こちらに都合の悪い歴史が消せてしまう。",
+    "  それは、黙って書き換えることです。このブログの唯一の武器と、正面から矛盾します。"
+  ],
+  "items": [
+    {
+      "slug": "pdrn-salmon-dna",
+      "pmid": "25473210",
+      "title": "A phase III, randomized, double-blind, matched-pairs, active-controlled clinical trial and preclinical animal study to compare the durability, efficacy and safety between polynucleotide filler and hyaluronic acid filler in the correction of crow's feet: a new concept of regenerative filler.",
+      "noticedOn": "2026-07-12",
+      "kind": "retracted"
+    },
+    {
+      "slug": "pdrn-salmon-dna",
+      "pmid": "39313949",
+      "title": "A Randomized, Participant- and Evaluator-Blinded, Matched-Pair, Prospective Study Comparing the Safety and Efficacy Between Polycaprolactone and Polynucleotide Fillers in the Correction of Crow's Feet.",
+      "noticedOn": "2026-07-12",
+      "kind": "retracted"
+    }
+  ]
+}

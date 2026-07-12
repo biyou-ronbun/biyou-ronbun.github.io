@@ -481,6 +481,57 @@ for (const a of meta) {
 
 // ---- PubMed で実在とタイトルを突き合わせる -------------------------
 
+// ---- 訂正台帳（追記だけ。消さない） ---------------------------------
+//
+// ★ この台帳の存在理由は、たった1つです。
+//
+//   撤回された論文を引いていた記事から、その引用を「そっと消す」ことを、できなくするため。
+//
+//   引用を消せば PMID が消え、照会対象から外れ、verified.json からも消える。
+//   **「うちが撤回論文を根拠にしていた」という事実が、こちらの都合で歴史から消える。**
+//   読者からは、その記事は最初から正しかったようにしか見えない。
+//
+//   だから、**一度でも撤回論文を見たら、ここに書く。そして二度と消さない。**
+//   引用を消しても、記事には訂正ログが出続けます。
+//
+//   （Retraction Watch が10年やっているのは、まさにこれをやらせないことです）
+//
+// ★ このファイルを手で編集しないこと。消さないこと。
+//   消したくなったときが、いちばん消してはいけないときです。
+
+const CORRECTIONS = join(SITE, 'corrections.json');
+
+const corrections = existsSync(CORRECTIONS)
+  ? JSON.parse(readFileSync(CORRECTIONS, 'utf8'))
+  : {
+      _readme: [
+        'site/verify.mjs が追記します。**手で編集しないこと。行を消さないこと。**',
+        '',
+        'ここに記録されるのは「この記事は、撤回された論文を引いていた」という事実です。',
+        '記事から引用を消しても、この記録は残り、記事に訂正ログが出続けます。',
+        '',
+        '★ そうしないと、「引用をそっと消す」だけで、こちらに都合の悪い歴史が消せてしまう。',
+        '  それは、黙って書き換えることです。このブログの唯一の武器と、正面から矛盾します。',
+      ],
+      items: [],
+    };
+
+const today = new Date().toISOString().slice(0, 10);
+let correctionsChanged = false;
+
+function seenRetraction(slug, pmid, title) {
+  const already = corrections.items.find((i) => i.slug === slug && i.pmid === String(pmid));
+  if (already) return;
+  corrections.items.push({
+    slug,
+    pmid: String(pmid),
+    title,
+    noticedOn: today,
+    kind: 'retracted',
+  });
+  correctionsChanged = true;
+}
+
 console.log(`PubMed に ${allPmids.size} 件の PMID を問い合わせます...`);
 
 let result = {};
@@ -539,6 +590,69 @@ try {
       // 「『効かない』とは書けません」のように断っている見出しは通す
       if (second.includes(w) && !/とは|ではあり|わけでは/.test(second)) {
         failures.push(`${a.slug}: 2番目の見出しに「${w}」があります（言い過ぎ）\n      見出し: ${second}`);
+      }
+    }
+  }
+}
+
+// ---- 図の来歴（provenance） -------------------------------------------
+//
+// ★ うちの図は、記事の中で最も強く記憶される部分です。
+//   そして今まで、そこだけが検証機構の外にありました。
+//   verify.mjs は figures.json を1行も読んでいませんでした。
+//   source が自由記述だったので、何を書いてもビルドが通っていました
+//   （実際、「出典: 記事末尾の参考文献を参照」と書かれた図がありました。それは出典ではありません）。
+//
+//   Our World in Data の本体は「データを落とせるボタン」ではありません。
+//   **「来歴は、必ずデータに随伴する」という規律**です。移植するのは、そちらです。
+//
+// 決まり:
+//   ・記事で使う図には sourcePmids（配列）を必ず書く
+//   ・そこに書いた PMID は、PubMed に実在し、**その記事の参考文献にも載っていること**
+//   ・PubMed に無い出典（日本語誌など）を使うときは sourceOther に書く。
+//     **「無い」と言うだけでは通りません。何なのかを書いてください**
+
+{
+  const figFile = join(SITE, 'figures.json');
+  if (existsSync(figFile)) {
+    const figs = JSON.parse(readFileSync(figFile, 'utf8')).figures ?? {};
+
+    for (const a of articles) {
+      const used = [...a.text.matchAll(/^::figure:([\w-]+)::/gm)].map((m) => m[1]);
+      const cited = new Set(a.pmids.map((p) => String(p.pmid)));
+
+      for (const id of used) {
+        const f = figs[id];
+        if (!f) continue; // 図が無いことは build.mjs 側が検出する
+
+        const pmids = (f.sourcePmids ?? []).map(String);
+        const other = f.sourceOther;
+
+        if (!pmids.length && !other) {
+          failures.push(
+            `${a.slug}: 図「${id}」に出典がありません（sourcePmids または sourceOther が要ります）\n` +
+              `      図は、記事の中で最も強く記憶される部分です。そこだけを検証の外に置かないでください。\n` +
+              `      いまの source: ${String(f.source ?? '(なし)').slice(0, 60)}`
+          );
+          continue;
+        }
+
+        for (const p of pmids) {
+          // 図の出典は「記事の参考文献にも載っていること」を必須にしているので、
+          // PubMed への実在照会・撤回確認は、参考文献の側ですでに済んでいる。
+          if (!cited.has(p)) {
+            failures.push(
+              `${a.slug}: 図「${id}」の出典 PMID ${p} が、記事の参考文献にありません\n` +
+                `      図だけが引いている論文があってはいけません。読者は図から原典に帰れなくなります。`
+            );
+          }
+        }
+
+        if (!pmids.length && other && !/\d{4}/.test(JSON.stringify(other))) {
+          failures.push(
+            `${a.slug}: 図「${id}」の sourceOther に年がありません（著者・年・掲載誌・DOI を書いてください）`
+          );
+        }
       }
     }
   }
@@ -614,24 +728,41 @@ for (const a of articles) {
     const isRetracted = pubtype.includes('Retracted Publication');
     const disclosesRetraction = /撤回|retract/i.test(line);
 
+    if (isRetracted) {
+      // ★ 撤回を「見た」という事実を、記事から消せない場所に記録する。
+      //
+      //   この記録が無いと、関門を通す道が2つできてしまう。
+      //     (a) 参考文献に「※撤回」と書く  → 撤回が読者に見える
+      //     (b) その引用を、記事から消す    → 撤回が読者から見えなくなる。そしてビルドは通る
+      //
+      //   (b) を選ぶと、PMID が消え、次回から照会対象から外れ、verified.json からも消える。
+      //   **「うちが撤回論文を根拠にしていた」という事実が、こちらの都合で歴史から消える。**
+      //   読者からは、その記事は最初から正しかったようにしか見えない。
+      //
+      //   **それは、黙って書き換えることです。** うちの唯一の武器と正面から矛盾します。
+      //   だから、引用を消しても、この記録は残ります（corrections.json は追記だけ）。
+      seenRetraction(a.slug, pmid, rec.title ?? '');
+    }
+
     if (isRetracted && !disclosesRetraction) {
       failures.push(
         `${a.slug}: PMID ${pmid} は【撤回された論文】ですが、記事にその記載がありません\n` +
           `      ${rec.title ?? ''}\n` +
           `      記事: ${line.trim().slice(0, 90)}\n` +
           `\n` +
-          `      引くなとは言いません。**撤回されたと書いてください。**\n` +
+          `      引くなとは言いません。「撤回された」と書いてください。\n` +
           `      「撤回された論文が、いまも売り文句の根拠に使われている」——それを書くのが、このブログの仕事です。\n` +
-          `      根拠として使っているなら、その記述ごと取り除いてください。\n` +
-          `      （書いた時点では撤回されていなかった可能性があります。それでも、いま黙って出してはいけません）`
+          `\n` +
+          `      ★ 引用を消して黙らせることは、してはいけません。\n` +
+          `        消してもビルドは通りますが、「うちが撤回論文を根拠にしていた」という事実が、\n` +
+          `        こちらの都合で歴史から消えます。それは、黙って書き換えることです。\n` +
+          `        （消しても site/corrections.json には記録が残り、記事に訂正ログが出ます）`
       );
       continue;
     }
 
     if (isRetracted) {
-      warnings.push(
-        `${a.slug}: PMID ${pmid} は撤回された論文です（記事に撤回の記載あり。通します）`
-      );
+      warnings.push(`${a.slug}: PMID ${pmid} は撤回された論文です（記事に撤回の記載あり。通します）`);
     }
 
     // 本文中で PMID に触れているだけの行は、ここまで。
@@ -674,6 +805,17 @@ for (const a of articles) {
       warnings.push(`${a.slug}: PMID ${pmid} の第一著者（${surname}）が参考文献の行に見当たりません`);
     }
   }
+}
+
+// ---- 訂正台帳を書き出す ---------------------------------------------
+//
+// ★ 検査に落ちても、ここは書きます。
+//   「撤回論文を引いていた」という事実は、検査の結果とは関係なく、起きた事実だからです。
+//   落ちたから記録しない、では、落ちるたびに歴史が消えます。
+
+if (correctionsChanged) {
+  writeFileSync(CORRECTIONS, JSON.stringify(corrections, null, 2) + '\n', 'utf8');
+  console.log(`  site/corrections.json に訂正の記録を追記しました`);
 }
 
 // ---- 結果 ---------------------------------------------------------

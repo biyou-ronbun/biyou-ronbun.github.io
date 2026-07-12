@@ -589,6 +589,45 @@ ${sibs
 </aside>`;
 };
 
+// ---- 訂正ログ -------------------------------------------------------------
+//
+// ★ 「この記事は、撤回された論文を引いていた」という事実を、読者に見せる。
+//
+//   site/corrections.json は verify.mjs が追記するだけで、消しません。
+//   **記事から引用をそっと消しても、このログは残り続けます。**
+//
+//   そうしないと、引用を消すだけで、こちらに都合の悪い歴史が消せてしまう。
+//   それは、黙って書き換えることです。うちの唯一の武器と正面から矛盾します。
+//
+// ★ ここに「だから、この記事は正しい」と書かないこと。
+//   訂正ログは弁明の場所ではありません。**起きたことを、起きたとおりに置く場所**です。
+
+const corrections = (() => {
+  const p = join(SITE, 'corrections.json');
+  if (!existsSync(p)) return [];
+  return JSON.parse(read(p)).items ?? [];
+})();
+
+const correctionLog = (slug) => {
+  const items = corrections.filter((c) => c.slug === slug);
+  if (!items.length) return '';
+
+  return `<aside class="corr">
+  <p class="corr-title">この記事の訂正記録</p>
+  <ul class="corr-list">
+${items
+  .map(
+    (c) => `    <li>
+      <span class="corr-date">${escapeHtml(c.noticedOn)}</span>
+      <span class="corr-body">この記事が引用している論文（PMID ${escapeHtml(c.pmid)}）が、<strong>撤回されている</strong>ことを、毎日の自動照会で確認しました。記事には撤回された事実を明記し、<strong>「撤回された後も、売り文句の根拠として使われている」という事実そのもの</strong>として引用しています。根拠としては使っていません。</span>
+    </li>`
+  )
+  .join('\n')}
+  </ul>
+  <p class="corr-note">この記録は消しません。引用を記事から削除しても残ります。<strong>「うちが撤回された論文を引いていた」という事実を、こちらの都合で消せないようにするため</strong>です。</p>
+</aside>`;
+};
+
 // ---- 検証レシート ---------------------------------------------------------
 //
 // うちは毎回 PubMed に問い合わせて、論文の実在・タイトル・撤回を確かめています。
@@ -837,6 +876,7 @@ for (const a of meta) {
     DATE: a.date,
     DATE_LABEL: a.date.replace(/-/g, '.'),
     PR_BANNER: prBanner(a.slug),
+    CORRECTIONS: correctionLog(a.slug),
     SERIES: seriesBlock(a),
     RECEIPT: receiptFor(a.slug),
     PRODUCTS: productBlock(a.slug),
@@ -1288,6 +1328,7 @@ if (memberToken && memOn) {
       DATE: a.date,
       DATE_LABEL: `${a.date.replace(/-/g, '.')} 公開予定`,
       PR_BANNER: '',
+      CORRECTIONS: correctionLog(a.slug),
       SERIES: '',
       RECEIPT: receiptFor(a.slug),
       PRODUCTS: '',

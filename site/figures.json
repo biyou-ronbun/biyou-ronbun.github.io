@@ -34,7 +34,9 @@
         { "label": "塗るPDRNの唯一のヒト試験（2026）", "cells": [{ "on": false, "text": "利益相反なし・資金提供なし" }, { "on": true, "text": "著者5名中3名が化粧品・バイオ企業2社の所属" }] },
         { "label": "PNフィラー vs ヒアルロン酸（2022）", "cells": [{ "on": false, "text": "記載なし" }, { "on": false, "text": "著者11名全員が大学病院。企業所属者なし" }] }
       ],
-      "source": "出典: 各論文のPubMed公式API（E-utilities）の記録。著者所属・利益相反・資金提供の記載を1本ずつ確認（2026-07-13）。企業の資金が入ること自体は普通のことです。問題は、それを「なし」と書くことのほうです"
+      "source": "出典: 各論文のPubMed公式API（E-utilities）の記録。著者所属・利益相反・資金提供の記載を1本ずつ確認（2026-07-13）。企業の資金が入ること自体は普通のことです。問題は、それを「なし」と書くことのほうです",
+      "sourcePmids": ["25473210", "35209068", "39313949", "42430369", "32248707"],
+      "sourceOther": null
     },
 
     "sunscreen-amount": {
@@ -49,7 +51,9 @@
         { "label": "スプレー", "value": 0.5 },
         { "label": "ジェル", "value": 1.2 }
       ],
-      "source": "出典: Marume 2020（日本化粧品技術者会誌、日本人女性131人の実測）"
+      "source": "出典: Marume 2020（日本化粧品技術者会誌、日本人女性131人の実測）",
+      "sourcePmids": [],
+      "sourceOther": { "citation": "Marume A, Kuramochi M, Kawashima M. Comparison of Usage Amount of Various Sunscreen Products by a Questionnaire Survey and Application Study on Volunteers. 日本化粧品技術者会誌（J Soc Cosmet Chem Jpn）. 2020;44(2):87-91.", "doi": "10.11469/koshohin.44.87", "why": "日本化粧品技術者会誌の論文で、PubMed に収載されていないため" }
     },
 
     "collagen-funding": {
@@ -61,7 +65,9 @@
         { "label": "弾力", "cells": [{ "on": true, "text": "有意な改善" }, { "on": false, "text": "差なし" }] },
         { "label": "シワ", "cells": [{ "on": true, "text": "有意な改善" }, { "on": false, "text": "差なし" }] }
       ],
-      "source": "出典: Myung & Park 2025（Am J Med、23件のRCT・のべ1,474人）"
+      "source": "出典: Myung & Park 2025（Am J Med、23件のRCT・のべ1,474人）",
+      "sourcePmids": ["40324552"],
+      "sourceOther": null
     },
 
     "bathing-nolotion": {
@@ -77,7 +83,9 @@
         { "label": "入浴＋30分後に塗る", "values": [141.0, 178.6] },
         { "label": "入浴なし・塗るだけ", "values": [206.2, 215.0] }
       ],
-      "source": "出典: 記事末尾の参考文献を参照"
+      "source": "出典: Chiang & Eichenfield 2009（Pediatr Dermatol、アトピー児5人＋健常者5人の計10人・ランダム化クロスオーバー）",
+      "sourcePmids": ["19706087"],
+      "sourceOther": null
     },
 
     "retinol-dropout": {
@@ -89,7 +97,9 @@
         { "label": "0.3% を使った群", "value": 4, "display": "4人" },
         { "label": "1% を使った群", "value": 23, "display": "23人" }
       ],
-      "source": "肌の反応が「なし、または軽度」で済んだ人は、0.3%群 88.7% に対して 1%群 62.1%（p<0.0001）"
+      "source": "肌の反応が「なし、または軽度」で済んだ人は、0.3%群 88.7% に対して 1%群 62.1%（p<0.0001）。出典: Mellody 2022（Int J Cosmet Sci、218人の在宅忍容性試験）",
+      "sourcePmids": ["35778881"],
+      "sourceOther": null
     },
 
     "vitc-evidence": {
@@ -101,7 +111,9 @@
         { "strength": 2, "name": "リン酸アスコルビルMg（MAP）", "note": "1996年の、対照群のない試験が1本（34人中19人）" },
         { "strength": 1, "name": "VC-IP / アスコルビルグルコシド / 3-O-エチルアスコルビン酸", "note": "単独のヒトRCTを、今回の調査では確認できず" }
       ],
-      "source": "「最新」「高浸透」と書かれた成分ほど、下に来る。広告が強い成分と、根拠が強い成分は別物です"
+      "source": "「最新」「高浸透」と書かれた成分ほど、下に来る。広告が強い成分と、根拠が強い成分は別物です。並べ替えの根拠: ピュアL-アスコルビン酸=システマティックレビュー（Correia 2023）＋二重盲検RCT（Traikovich 1999・Fitzpatrick 2002）／SAP=ニキビのRCT（Woolery-Lloyd 2010）／MAP=対照群なしの試験（Kameyama 1996）。最下段（VC-IP等）は単独ヒトRCTを確認できず、根拠となる論文が存在しないため掲載なし",
+      "sourcePmids": ["37128827", "10522500", "11896774", "20367669", "8543691"],
+      "sourceOther": null
     },
 
     "ha-fate": {
@@ -114,7 +126,9 @@
         { "label": "糞", "value": 11.9, "display": "11.9%" },
         { "label": "尿", "value": 3.0, "display": "3.0%" }
       ],
-      "source": "ラットに標識したヒアルロン酸を飲ませた実験です。ヒトの皮膚で確かめたデータではありません"
+      "source": "ラットに標識したヒアルロン酸を飲ませた実験です。ヒトの皮膚で確かめたデータではありません。出典: Oe 2014（ScientificWorldJournal、¹⁴C標識ヒアルロン酸のラット実験）",
+      "sourcePmids": ["25383371"],
+      "sourceOther": null
     },
 
     "fasting-recovery": {
@@ -128,7 +142,9 @@
         { "label": "15〜20歳（夏）", "value": 11, "display": "11日" },
         { "label": "40〜55歳", "value": 21, "display": "戻らず", "pending": true }
       ],
-      "source": "出典: Maul 2020（分割顔パイロット試験）。40〜55歳群は21日間の観察期間内に有意な回復が見られなかった。ただし13人と小さな群です"
+      "source": "出典: Maul 2020（分割顔パイロット試験）。40〜55歳群は21日間の観察期間内に有意な回復が見られなかった。ただし13人と小さな群です",
+      "sourcePmids": ["33026578"],
+      "sourceOther": null
     },
 
     "turnover-days": {
@@ -142,7 +158,9 @@
         { "label": "Bergstresser & Taylor 1977", "value": 45, "display": "45日" },
         { "label": "Iizuka 1994（同じデータの再計算）", "value": 48, "display": "47〜48日" }
       ],
-      "source": "「28日」の棒は、実測値ではなく「その数字を報告した論文が0件だった」ことを示しています（斜線）"
+      "source": "「28日」の棒は、実測値ではなく「その数字を報告した論文が0件だった」ことを示しています（斜線）。実測値の出典: Weinstein 1984（39日）・Bergstresser & Taylor 1977（45日）・Iizuka 1994（同じデータの再計算で47〜48日）",
+      "sourcePmids": ["6725985", "871385", "7865480"],
+      "sourceOther": null
     }
   }
 }

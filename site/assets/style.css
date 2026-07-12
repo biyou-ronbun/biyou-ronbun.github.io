@@ -1584,6 +1584,69 @@ a { color: var(--rose); }
   .series { padding: 18px 16px 14px; }
 }
 
+/* ---------- 訂正ログ ----------
+   ★ 警告色（赤・黄）を使わないこと。
+      訂正ログは「危ない」という合図ではない。**起きたことを、起きたとおりに置く場所**。
+      赤くした瞬間、それは事故報告になり、次から書きたくなくなる。
+      書きたくなくなった時点で、この仕組みは死ぬ。                */
+
+.corr {
+  margin: 56px 0 0;
+  padding: 24px 26px 20px;
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--ink-mute);
+  background: var(--bg-wash);
+}
+
+.corr-title {
+  margin: 0 0 16px;
+  font-family: var(--serif);
+  font-size: 14px;
+  letter-spacing: .1em;
+  color: var(--ink);
+}
+
+.corr-list { margin: 0 0 16px; padding: 0; list-style: none; }
+
+.corr-list li {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.corr-date {
+  flex: 0 0 auto;
+  font-size: 11.5px;
+  letter-spacing: .04em;
+  color: var(--ink-mute);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+
+.corr-body {
+  font-size: 13px;
+  line-height: 1.95;
+  color: var(--ink-soft);
+}
+
+.corr-body strong { color: var(--ink); font-weight: 500; }
+
+.corr-note {
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule-soft);
+  font-size: 12.5px;
+  line-height: 1.95;
+  color: var(--ink-mute);
+}
+
+.corr-note strong { color: var(--ink-soft); font-weight: 500; }
+
+@media (max-width: 600px) {
+  .corr { padding: 20px 18px 16px; }
+  .corr-list li { flex-direction: column; gap: 4px; }
+}
+
 /* ---------- 検証レシート ----------
    ★ 「信頼の記号」に見せないこと。
       金のバッジ、盾のアイコン、チェックマーク——それらは「安心してよい」という合図で、
