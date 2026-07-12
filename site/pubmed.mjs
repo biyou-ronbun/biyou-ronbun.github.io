@@ -20,6 +20,12 @@
 //     本文しか書かれていない数値は「アブストラクトのみ確認」と明記すること。
 // ---------------------------------------------------------------
 
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const SITE_DIR = dirname(fileURLToPath(import.meta.url));
+
 const EUTILS = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils';
 const UA = { 'User-Agent': 'biyou-ronbun/1.0 (research)' };
 
@@ -56,6 +62,52 @@ const pickAll = (xml, tag) =>
 
 // ---- サブコマンド ------------------------------------------------
 
+// ---- 検索ログ（機械が、検索を実行した副作用として書く） ------------------
+//
+// ★ このファイルを手で編集しないこと。エージェントに書かせないこと。
+//   書かせた瞬間、それは「検索した証拠」ではなく「検索したという主張」に戻ります。
+//
+//   記録するのは、実際に PubMed に投げた検索語と、返ってきた件数と、日付だけです。
+//   件数が 0 でも記録します。**むしろ 0 のときこそ、この記録に意味があります。**
+
+const SEARCHES = join(SITE_DIR, 'searches.json');
+
+function recordSearch(slug, query, count) {
+  if (!slug) return; // --for が無いときは記録しない（下調べの検索まで全部は残さない）
+
+  const data = existsSync(SEARCHES)
+    ? JSON.parse(readFileSync(SEARCHES, 'utf8'))
+    : {
+        _readme: [
+          'site/pubmed.mjs が、検索を実行した副作用として追記します。',
+          '**手で編集しないこと。エージェントに書かせないこと。**',
+          '書かせた瞬間、これは「検索した証拠」ではなく「検索したという主張」になります。',
+          '',
+          'ここに記録されるのは、実際に PubMed に投げた検索語・返ってきた件数・日付だけです。',
+          '件数が 0 でも記録します。**むしろ 0 のときこそ、この記録に意味があります。**',
+          '',
+          'この記録は、記事のレシートに「読者がクリックできるリンク」として出ます。',
+          '★ 読者は30秒で、うちの検索を自分の画面で再実行できます。',
+          '  **このブログを信じなくても、答えが手に入る。** それが、この仕組みの目的です。',
+        ],
+        searches: {},
+      };
+
+  const day = new Date().toISOString().slice(0, 10);
+  data.searches[slug] ??= [];
+
+  // 同じ検索語を何度も走らせても、記録は1行（最後の件数と日付で更新）
+  const existing = data.searches[slug].find((s) => s.query === query);
+  if (existing) {
+    existing.count = count;
+    existing.searchedOn = day;
+  } else {
+    data.searches[slug].push({ query, count, searchedOn: day });
+  }
+
+  writeFileSync(SEARCHES, JSON.stringify(data, null, 2) + '\n', 'utf8');
+}
+
 const [, , cmd, ...rest] = process.argv;
 
 if (cmd === 'check') {
@@ -79,8 +131,12 @@ if (cmd === 'check') {
 }
 
 if (cmd === 'search') {
-  const query = rest.join(' ');
-  if (!query) die('検索語がありません。 例: node site/pubmed.mjs search "retinol wrinkle randomized"');
+  // --for <スラッグ> … その記事のための検索であることを記録する
+  const forIdx = rest.indexOf('--for');
+  const slug = forIdx >= 0 ? rest[forIdx + 1] : null;
+  const query = (forIdx >= 0 ? [...rest.slice(0, forIdx), ...rest.slice(forIdx + 2)] : rest).join(' ');
+
+  if (!query) die('検索語がありません。 例: node site/pubmed.mjs search "retinol wrinkle randomized" --for retinol-concentration');
 
   const json = JSON.parse(
     await getText(
@@ -88,9 +144,27 @@ if (cmd === 'search') {
     )
   );
   const ids = json.esearchresult?.idlist ?? [];
+  const total = Number(json.esearchresult?.count ?? ids.length);
+
+  // ★ ここが要点です。
+  //
+  //   このブログの芯は「探したが、無かった」です。
+  //   ところが、論文の実在・撤回・タイトル一致は機械で証明しているのに、
+  //   **「探した」だけが、ずっと自己申告でした。**
+  //   サイトで唯一、裏付けの無い部分が、いちばん大事な部分になっていました。
+  //
+  //   だから、**検索を実行した副作用として、機械が自分でログを書きます。**
+  //   エージェントに書かせません。書かせた瞬間、それは自己申告に戻ります。
+  //
+  //   このログは記事のレシートに、**読者がクリックできるリンク**として出ます。
+  //   **読者は30秒で、うちの検索を自分の画面で再実行できます。**
+  //   **このブログを信じなくても、答えが手に入る。** それが狙いです。
+  recordSearch(slug, query, total);
+
   if (!ids.length) {
     console.log(`「${query}」で該当する論文は見つかりませんでした。`);
     console.log('見つからないこと自体が発見です。そう書いてください。');
+    if (slug) console.log(`（この検索は site/searches.json に記録しました。読者が同じ検索を再実行できます）`);
     process.exit(0);
   }
 

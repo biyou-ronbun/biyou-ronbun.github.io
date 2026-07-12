@@ -1705,6 +1705,90 @@ a { color: var(--rose); }
   .corr-list li { flex-direction: column; gap: 4px; }
 }
 
+/* ---------- 同じ検索を、あなたの手で ----------
+   ★ このブロックは控えめにしないこと。
+      「私を信じる必要はありません」と言う場所であり、
+      このブログが読者に渡せる最大のものです。                    */
+
+.redo {
+  margin: 56px 0 0;
+  padding: 26px 28px 22px;
+  border: 1px solid var(--gold);
+  background: var(--bg-wash);
+}
+
+.redo-title {
+  margin: 0 0 12px;
+  font-family: var(--serif);
+  font-size: 16px;
+  letter-spacing: .1em;
+  color: var(--ink);
+}
+
+.redo-lead {
+  margin: 0 0 20px;
+  font-size: 13.5px;
+  line-height: 2;
+  color: var(--ink-soft);
+}
+
+.redo-lead strong { color: var(--ink); font-weight: 500; }
+
+.redo-list { margin: 0 0 18px; padding: 0; list-style: none; }
+
+.redo-list li {
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.redo-list li:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: 0; }
+
+.redo-list a {
+  display: block;
+  margin-bottom: 6px;
+  text-decoration: none;
+}
+
+.redo-list code {
+  display: block;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink);
+  word-break: break-all;
+  transition: border-color .2s ease, color .2s ease;
+}
+
+.redo-list a:hover code { border-color: var(--gold); color: var(--rose); }
+
+.redo-meta {
+  display: block;
+  font-size: 11.5px;
+  letter-spacing: .04em;
+  color: var(--ink-mute);
+}
+
+.redo-meta strong { color: var(--ink-soft); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+.redo-note {
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  font-size: 12.5px;
+  line-height: 1.95;
+  color: var(--ink-mute);
+}
+
+.redo-note strong { color: var(--ink-soft); font-weight: 500; }
+
+@media (max-width: 600px) {
+  .redo { padding: 20px 18px 16px; }
+}
+
 /* ---------- 検証レシート ----------
    ★ 「信頼の記号」に見せないこと。
       金のバッジ、盾のアイコン、チェックマーク——それらは「安心してよい」という合図で、

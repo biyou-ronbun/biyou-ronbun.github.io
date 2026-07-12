@@ -757,6 +757,50 @@ const verified = (() => {
   return JSON.parse(read(p));
 })();
 
+// ---- 同じ検索を、あなたの手で ---------------------------------------------
+//
+// ★ このブログの芯は「探したが、無かった」です。
+//   ところが、論文の実在・撤回・タイトル一致は機械で証明しているのに、
+//   **「探した」だけが、ずっと自己申告でした。**
+//   サイトで唯一、裏付けの無い部分が、いちばん大事な部分になっていました。
+//
+//   そして、ここが「騙されてましたね」が生まれる場所です。**答えをこちらだけが持っているから。**
+//
+//   だから、機械が実際に投げた検索を、そのままリンクにして渡します。
+//   **読者は30秒で、うちの検索を自分の画面で再実行できます。**
+//   **このブログを信じなくても、答えが手に入る。**
+//
+// ★ 検索語をエージェントに書かせないこと。
+//   site/pubmed.mjs が、検索を実行した副作用として自分で書きます。
+//   書かせた瞬間、それは「検索した証拠」ではなく「検索したという主張」に戻ります。
+
+const searches = (() => {
+  const p = join(SITE, 'searches.json');
+  if (!existsSync(p)) return {};
+  return JSON.parse(read(p)).searches ?? {};
+})();
+
+const searchBlock = (slug) => {
+  const list = searches[slug] ?? [];
+  if (!list.length) return '';
+
+  return `<aside class="redo">
+  <p class="redo-title">同じ検索を、あなたの手で</p>
+  <p class="redo-lead">この記事を書くとき、機械が実際に PubMed に投げた検索です。<strong>私を信じる必要はありません。</strong>押せば、あなたの画面で同じ検索が走ります。</p>
+  <ul class="redo-list">
+${list
+  .map(
+    (s) => `    <li>
+      <a href="https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(s.query)}" target="_blank" rel="noopener"><code>${escapeHtml(s.query)}</code></a>
+      <span class="redo-meta">${escapeHtml(s.searchedOn)} 時点で <strong>${s.count} 件</strong></span>
+    </li>`
+  )
+  .join('\n')}
+  </ul>
+  <p class="redo-note">件数は、いま押すと変わっているかもしれません。<strong>論文は毎日増えるからです。</strong>増えていたら、それは私たちが更新すべきだというサインです。<strong>この検索式は、記事より長生きします。</strong></p>
+</aside>`;
+};
+
 const receiptFor = (slug) => {
   const v = verified?.articles?.[slug];
   if (!v || !v.count) return '';
@@ -993,6 +1037,7 @@ for (const a of meta) {
     SHARE: shareBlock(a),
     CORRECTIONS: correctionLog(a.slug),
     SERIES: seriesBlock(a),
+    REDO: searchBlock(a.slug),
     RECEIPT: receiptFor(a.slug),
     PRODUCTS: productBlock(a.slug),
     TAG_LINKS: tagLinks(a, '../'),
@@ -1449,6 +1494,7 @@ if (memberToken && memOn) {
       SHARE: '',
       CORRECTIONS: correctionLog(a.slug),
       SERIES: '',
+      REDO: searchBlock(a.slug),
       RECEIPT: receiptFor(a.slug),
       PRODUCTS: '',
       TAG_LINKS: '',

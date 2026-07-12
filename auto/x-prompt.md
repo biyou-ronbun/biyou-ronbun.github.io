@@ -4,9 +4,20 @@
 
 ## まず読むもの
 
-1. `.claude/agents/x-operator.md` — 文体と型
-2. `docs/style-guide.md` — 薬機法。**§4.7「この試験に参加したのは誰か」は X でも守る**
-3. `CLAUDE.md` — 全員が守るルール
+1. **`benchmark/x-playbook.md` — X で実際に効いた型。★ 毎週 benchmark が更新します**
+2. `.claude/agents/x-operator.md` — 文体と型
+3. `docs/style-guide.md` — 薬機法。**§4.7「この試験に参加したのは誰か」は X でも守る**
+4. `CLAUDE.md` — 全員が守るルール
+
+### ★ `benchmark/x-playbook.md` の使い方
+
+そこには「効いた型」と「避けるべき型」が書いてあります。**効いた型を使ってください。**
+
+**ただし、playbook に書いてある型でも、`auto/verify-x.mjs` の関門を通らないものは使えません。**
+関門のほうが上位です。**「playbook にこう書いてあったから」は、煽りを書く言い訳になりません。**
+
+（playbook が「この煽り方が伸びる」と書いていたら、**それは playbook のほうが間違っています。**
+報告に「playbook にこう書いてあるが、関門と矛盾する」と書いてください）
 
 ## 1. 在庫を数える
 
