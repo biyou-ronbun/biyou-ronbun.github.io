@@ -85,7 +85,9 @@
       "Bash(node count.mjs)",
       "Bash(mkdir -p ideas design shots boards tech/blender tech/ae refs lyrics dev/blender dev/ae dev/pipeline)",
       "Read(//c/Program Files/Blender Foundation/**)",
-      "Read(//c/Program Files/Adobe/**)"
+      "Read(//c/Program Files/Adobe/**)",
+      "Skill(schedule)",
+      "Skill(schedule:*)"
     ],
     "additionalDirectories": [
       "E:\\mv-lab\\tools",
