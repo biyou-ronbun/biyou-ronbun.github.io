@@ -179,13 +179,35 @@ const queue = JSON.parse(readFileSync(QUEUE, 'utf8'));
 const now = new Date();
 
 const pending = queue.posts.filter((p) => p.status === 'pending');
-const due = pending.filter((p) => new Date(p.at) <= now);
+
+// スレッド（連投）の続きは、単独では出さない。
+// 親を出した直後に、同じ実行の中で続けて出す。
+// そうしないと、1時間おきの実行で連投がバラバラの時刻に散らばってしまう。
+const isThreadChild = (p) => Boolean(p.replyToLocalId);
+const childOf = (id) => queue.posts.find((p) => p.status === 'pending' && p.replyToLocalId === id);
+
+const due = pending.filter((p) => !isThreadChild(p) && new Date(p.at) <= now);
+
+// スレッドの長さを数える
+const threadLen = (p) => {
+  let n = 1;
+  let cur = p;
+  while (n < 13) {
+    const c = childOf(cur.id);
+    if (!c) break;
+    n++;
+    cur = c;
+  }
+  return n;
+};
 
 if (showNext) {
-  const next = pending.sort((a, b) => (a.at < b.at ? -1 : 1)).slice(0, 5);
-  console.log(`未投稿: ${pending.length} 件\n`);
-  for (const p of next) {
-    console.log(`${p.at}  ${p.image ? '[画像] ' : ''}${p.text.split('\n')[0]}`);
+  const roots = pending.filter((p) => !isThreadChild(p)).sort((a, b) => (a.at < b.at ? -1 : 1));
+  console.log(`未投稿: ${pending.length} 件（うち独立した投稿 ${roots.length} 件）\n`);
+  for (const p of roots.slice(0, 8)) {
+    const len = threadLen(p);
+    const tag = len > 1 ? `[連投${len}] ` : p.image ? '[画像] ' : '';
+    console.log(`${p.at}  ${tag}${p.text.split('\n')[0]}`);
   }
   process.exit(0);
 }
@@ -195,7 +217,8 @@ if (due.length === 0) {
   process.exit(0);
 }
 
-// 一度にたくさん出すとスパム判定されるので、1回の実行で最大2件まで
+// 一度にたくさん出すとスパム判定されるので、1回の実行で最大2件まで。
+// ただしスレッドの続きは、この2件には数えない（連投は1つのまとまりとして出す）。
 const batch = due.sort((a, b) => (a.at < b.at ? -1 : 1)).slice(0, 2);
 
 if (dry) {
@@ -203,10 +226,20 @@ if (dry) {
   for (const p of batch) {
     console.log('─'.repeat(50));
     console.log(`予定: ${p.at}`);
-    if (p.image) console.log(`画像: ${p.image}`);
-    console.log(`文字数: ${countX(p.text)} / 280`);
-    console.log('');
-    console.log(p.text);
+    const len = threadLen(p);
+    if (len > 1) console.log(`連投: ${len} ポスト`);
+
+    let cur = p;
+    let i = 1;
+    while (cur) {
+      if (len > 1) console.log(`\n  ── ${i}/${len} ──`);
+      if (cur.image) console.log(`  画像: ${cur.image}`);
+      console.log(`  文字数: ${countX(cur.text)} / 280`);
+      console.log('');
+      console.log(cur.text.split('\n').map((l) => '  ' + l).join('\n'));
+      cur = childOf(cur.id);
+      i++;
+    }
   }
   console.log('─'.repeat(50));
   process.exit(0);
@@ -215,36 +248,54 @@ if (dry) {
 const cred = loadEnv();
 let posted = 0;
 
-for (const p of batch) {
+// 1本出す。スレッドの続きがあれば、そのまま繋げて出す。
+async function publish(p, replyToTweetId) {
   const n = countX(p.text);
   if (n > 280) {
-    console.error(`✗ ${p.at}: 文字数超過（${n} / 280）。投稿しません`);
+    console.error(`✗ ${p.id}: 文字数超過（${n} / 280）。投稿しません`);
     p.status = 'failed';
     p.error = `文字数超過 ${n}`;
-    continue;
+    return null;
   }
 
+  let mediaId = null;
+  if (p.image) {
+    const imgPath = join(ROOT, p.image);
+    if (!existsSync(imgPath)) throw new Error(`画像がありません: ${p.image}`);
+    mediaId = await uploadMedia(imgPath, cred);
+  }
+
+  const id = await postTweet(p.text, mediaId, replyToTweetId ?? p.replyTo ?? null, cred);
+
+  p.status = 'posted';
+  p.postedAt = new Date().toISOString();
+  p.tweetId = id;
+
+  console.log(`✓ ${replyToTweetId ? '  └ 続き' : '投稿'}: https://x.com/biyouron/status/${id}`);
+  console.log(`   ${p.text.split('\n')[0]}`);
+  posted++;
+  return id;
+}
+
+for (const p of batch) {
   try {
-    let mediaId = null;
-    if (p.image) {
-      const imgPath = join(ROOT, p.image);
-      if (!existsSync(imgPath)) throw new Error(`画像がありません: ${p.image}`);
-      mediaId = await uploadMedia(imgPath, cred);
+    let parentId = await publish(p, null);
+    if (!parentId) continue;
+
+    // スレッドの続きを、そのまま繋げて出す
+    let parent = p;
+    let guard = 0;
+    while (guard++ < 12) {
+      const child = childOf(parent.id);
+      if (!child) break;
+      parentId = await publish(child, parentId);
+      if (!parentId) break;
+      parent = child;
     }
-
-    const id = await postTweet(p.text, mediaId, p.replyTo ?? null, cred);
-
-    p.status = 'posted';
-    p.postedAt = new Date().toISOString();
-    p.tweetId = id;
-
-    console.log(`✓ 投稿しました: https://x.com/biyouron/status/${id}`);
-    console.log(`  ${p.text.split('\n')[0]}`);
-    posted++;
   } catch (e) {
     p.status = 'failed';
     p.error = e.message;
-    console.error(`✗ ${p.at}: ${e.message}`);
+    console.error(`✗ ${p.id}: ${e.message}`);
   }
 }
 
