@@ -1584,6 +1584,64 @@ a { color: var(--rose); }
   .series { padding: 18px 16px 14px; }
 }
 
+/* ---------- 本文中の内部リンク ---------- */
+
+.inlink {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 1px;
+  transition: color .2s ease, border-color .2s ease;
+}
+
+.inlink:hover { color: var(--rose); border-bottom-color: var(--rose); }
+
+/* ---------- 共有ボタン ----------
+   ★ SNS の公式ボタン（JS の SDK）は使わない。あれは Cookie を置き、読者を追跡する。
+      このサイトは追跡していない。共有のために、その原則を崩す理由はない。
+      ここにあるのは、ただのリンク。押すまで何も起きない。
+   ★ シェア数を出さないこと。「1.2万シェア」は、読む前に判断を作る。      */
+
+.share {
+  margin: 56px 0 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule-soft);
+}
+
+.share-title {
+  margin: 0 0 14px;
+  font-size: 12.5px;
+  letter-spacing: .1em;
+  color: var(--ink-mute);
+}
+
+.share-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.share-list a,
+.share-copy {
+  display: inline-block;
+  padding: 9px 18px;
+  border: 1px solid var(--rule);
+  background: var(--bg-raised);
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 12.5px;
+  letter-spacing: .06em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color .2s ease, color .2s ease;
+}
+
+.share-list a:hover,
+.share-copy:hover { border-color: var(--gold); color: var(--rose); }
+
 /* ---------- 訂正ログ ----------
    ★ 警告色（赤・黄）を使わないこと。
       訂正ログは「危ない」という合図ではない。**起きたことを、起きたとおりに置く場所**。

@@ -72,3 +72,20 @@ jobs:
       - name: 公開する
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # 公開が終わってから、検索エンジンに「更新しました」と伝える。
+  # ★ Google は IndexNow に対応していません（Bing・Yandex のみ）。
+  #   これで劇的に人が増えることはありません。無料で、失敗しても何も壊れないから入れているだけです。
+  notify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: サイトを組み直す（sitemap を得るため）
+        run: node site/build.mjs
+      - name: IndexNow に伝える
+        run: node site/indexnow.mjs
+        continue-on-error: true

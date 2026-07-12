@@ -526,7 +526,12 @@ const jsonLd = (a) => {
 
 const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath, ogSlug, article, noindex }) =>
   fill(tpl.layout, {
-    ROBOTS: noindex ? '\n<meta name="robots" content="noindex, nofollow">' : '',
+    // ★ 指定が無いと、Google は画像を小さくしか出しません（Discover にも載りません）。
+    //   うちの画像は「論文の数値グラフ」です。**小さく出されると、意味が消えます。**
+    //   max-snippet:-1 は、説明文の長さの制限を外す指定（「ここまでは言えません」が切られないように）。
+    ROBOTS: noindex
+      ? '\n<meta name="robots" content="noindex, nofollow">'
+      : '\n<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">',
     GOOGLE_VERIFY: cfg.googleSiteVerification
       ? `\n<meta name="google-site-verification" content="${escapeAttr(cfg.googleSiteVerification)}">`
       : '',
@@ -586,6 +591,105 @@ ${sibs
   )
   .join('\n')}
   </ul>
+</aside>`;
+};
+
+// ---- 本文中の内部リンク（機械が貼る） --------------------------------------
+//
+// 記事どうしが1本も繋がっていませんでした。
+// 読者は「レチノール」の記事を読んでも、うちが「ビタミンC誘導体」も調べたことを知りません。
+//
+// ★ 危ないのは「リンクを増やしたくて、無関係な語に貼る」ことです。
+//   それは読者のためではなく、検索エンジンのための細工になります。
+//
+//   だから、次の制約を機械で守ります。
+//
+//   1. **記事ごとに「呼び出す語」を明示する**（articles.json の linkTerms）。
+//      自動で語を推測しない。推測すると必ず誤爆します
+//   2. **1記事につき、初出の1回だけ。** 同じ語に何度も貼らない
+//   3. **1記事あたり最大4本。** それ以上は、本文がリンクだらけになります
+//   4. **見出し・既存のリンク・参考文献の中には貼らない**
+//   5. 自分自身にはリンクしない
+
+const linkTermMap = meta
+  .filter((m) => m.published && m.linkTerms?.length)
+  .flatMap((m) => m.linkTerms.map((t) => ({ term: t, slug: m.slug, title: m.title })))
+  // 長い語から先に当てる（「飲むヒアルロン酸」が「ヒアルロン酸」に食われないように）
+  .sort((a, b) => b.term.length - a.term.length);
+
+const MAX_INBODY_LINKS = 4;
+
+const addInternalLinks = (html, selfSlug) => {
+  let placed = 0;
+  const used = new Set();
+
+  // 見出し（<h2>..</h2> など）・既存の <a>..</a> の中には入れない。
+  // HTML を「触ってよい部分」と「触ってはいけない部分」に割って、前者だけを書き換える。
+  const parts = html.split(/(<h[1-6][^>]*>[\s\S]*?<\/h[1-6]>|<a\b[\s\S]*?<\/a>|<figure[\s\S]*?<\/figure>)/);
+
+  return parts
+    .map((chunk, i) => {
+      if (i % 2 === 1) return chunk; // 触ってはいけない部分
+      if (placed >= MAX_INBODY_LINKS) return chunk;
+
+      for (const { term, slug, title } of linkTermMap) {
+        if (placed >= MAX_INBODY_LINKS) break;
+        if (slug === selfSlug || used.has(slug)) continue;
+        if (!chunk.includes(term)) continue;
+
+        chunk = chunk.replace(
+          term,
+          `<a class="inlink" href="../articles/${slug}.html" title="${escapeAttr(title)}">${term}</a>`
+        );
+        used.add(slug);
+        placed++;
+      }
+      return chunk;
+    })
+    .join('');
+};
+
+// ---- 共有ボタン -----------------------------------------------------------
+//
+// 読者が「人に教える手段」を、うちは1つも用意していませんでした。
+//
+// ★ SNS の公式ボタン（JavaScript の SDK）は使いません。
+//   あれは Cookie を置き、読者を追跡します。**このサイトは追跡していません**（Cloudflare の
+//   Cookieを使わない計測だけ）。共有ボタンのために、その原則を崩す理由はありません。
+//   ここに置くのは、**ただのリンク**です。押すまで何も起きません。
+//
+// ★ 「シェアしてください」と煽らないこと。
+//   数を出さないこと（「1.2万シェア」は、読む前に判断を作ります）。
+
+const shareBlock = (a) => {
+  const url = `${baseUrl}/articles/${a.slug}.html`;
+  const text = a.title;
+
+  const x = `https://x.com/intent/post?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+  const hatena = `https://b.hatena.ne.jp/entry/s/${url.replace(/^https?:\/\//, '')}`;
+  const line = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}`;
+
+  return `<aside class="share">
+  <p class="share-title">この記事を人に教える</p>
+  <ul class="share-list">
+    <li><a href="${escapeAttr(x)}" target="_blank" rel="noopener nofollow">X で共有</a></li>
+    <li><a href="${escapeAttr(hatena)}" target="_blank" rel="noopener nofollow">はてなブックマーク</a></li>
+    <li><a href="${escapeAttr(line)}" target="_blank" rel="noopener nofollow">LINE で送る</a></li>
+    <li><button type="button" class="share-copy" data-url="${escapeAttr(url)}">リンクをコピー</button></li>
+  </ul>
+<script>
+(function () {
+  var b = document.querySelector('.share-copy');
+  if (!b || !navigator.clipboard) return;
+  b.addEventListener('click', function () {
+    navigator.clipboard.writeText(b.getAttribute('data-url')).then(function () {
+      var t = b.textContent;
+      b.textContent = 'コピーしました';
+      setTimeout(function () { b.textContent = t; }, 1600);
+    });
+  });
+})();
+</script>
 </aside>`;
 };
 
@@ -877,7 +981,7 @@ for (const a of meta) {
   const { body, toc } = withToc(markdownToHtml(read(mdPath)));
 
   const page = fill(tpl.article, {
-    BODY: body,
+    BODY: addInternalLinks(body, a.slug),
     TOC: toc,
     TITLE: escapeHtml(a.title),
     SUBTITLE: escapeHtml(a.subtitle),
@@ -886,6 +990,7 @@ for (const a of meta) {
     DATE: a.date,
     DATE_LABEL: a.date.replace(/-/g, '.'),
     PR_BANNER: prBanner(a.slug),
+    SHARE: shareBlock(a),
     CORRECTIONS: correctionLog(a.slug),
     SERIES: seriesBlock(a),
     RECEIPT: receiptFor(a.slug),
@@ -1341,6 +1446,7 @@ if (memberToken && memOn) {
       DATE: a.date,
       DATE_LABEL: `${a.date.replace(/-/g, '.')} 公開予定`,
       PR_BANNER: '',
+      SHARE: '',
       CORRECTIONS: correctionLog(a.slug),
       SERIES: '',
       RECEIPT: receiptFor(a.slug),
@@ -1568,6 +1674,12 @@ write(
   join(DIST, 'robots.txt'),
   `User-agent: *\nAllow: /\nDisallow: /m/\nSitemap: ${baseUrl}/sitemap.xml\n`
 );
+
+// IndexNow のキーファイル（サイトに置くことで、鍵の所有を証明する仕組み）
+if (cfg.indexNowKey) {
+  write(join(DIST, `${cfg.indexNowKey}.txt`), cfg.indexNowKey);
+  console.log(`  built  ${cfg.indexNowKey}.txt (IndexNow)`);
+}
 console.log('  built  sitemap.xml, robots.txt');
 
 // ---- CSS など ------------------------------------------------------

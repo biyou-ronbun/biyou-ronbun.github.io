@@ -12,7 +12,11 @@
       "シワ"
     ],
     "series": "誰が資金を出したか",
-    "vol": 3
+    "vol": 3,
+    "linkTerms": [
+      "PDRN",
+      "サーモンDNA"
+    ]
   },
   {
     "slug": "turnover-28days",
@@ -27,7 +31,11 @@
       "角質"
     ],
     "series": "出典をたどる",
-    "vol": 1
+    "vol": 1,
+    "linkTerms": [
+      "ターンオーバー",
+      "28日周期"
+    ]
   },
   {
     "slug": "sunscreen-spf",
@@ -43,7 +51,11 @@
       "シミ"
     ],
     "series": "数字の出どころ",
-    "vol": 1
+    "vol": 1,
+    "linkTerms": [
+      "日焼け止め",
+      "SPF"
+    ]
   },
   {
     "slug": "oral-collagen",
@@ -59,7 +71,12 @@
       "乾燥"
     ],
     "series": "誰が資金を出したか",
-    "vol": 1
+    "vol": 1,
+    "linkTerms": [
+      "コラーゲンサプリ",
+      "飲むコラーゲン",
+      "経口コラーゲン"
+    ]
   },
   {
     "slug": "bathing-dryness",
@@ -74,7 +91,11 @@
       "敏感肌"
     ],
     "series": "出典をたどる",
-    "vol": 3
+    "vol": 3,
+    "linkTerms": [
+      "入浴後の保湿",
+      "風呂上がり"
+    ]
   },
   {
     "slug": "retinol-concentration",
@@ -90,7 +111,10 @@
       "敏感肌"
     ],
     "series": "数字の出どころ",
-    "vol": 2
+    "vol": 2,
+    "linkTerms": [
+      "レチノール"
+    ]
   },
   {
     "slug": "vitamin-c-derivatives",
@@ -106,7 +130,10 @@
       "ニキビ"
     ],
     "series": "数字の出どころ",
-    "vol": 3
+    "vol": 3,
+    "linkTerms": [
+      "ビタミンC誘導体"
+    ]
   },
   {
     "slug": "hyaluronic-acid",
@@ -121,7 +148,11 @@
       "ハリ"
     ],
     "series": "誰が資金を出したか",
-    "vol": 2
+    "vol": 2,
+    "linkTerms": [
+      "飲むヒアルロン酸",
+      "経口ヒアルロン酸"
+    ]
   },
   {
     "slug": "skin-fasting",
@@ -136,6 +167,9 @@
       "敏感肌"
     ],
     "series": "出典をたどる",
-    "vol": 2
+    "vol": 2,
+    "linkTerms": [
+      "肌断食"
+    ]
   }
 ]
