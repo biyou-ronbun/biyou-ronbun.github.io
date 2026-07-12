@@ -93,12 +93,25 @@ for (const [key, p] of ledger) {
     const claimsData = JSON.parse(readFileSync(claimsFile, 'utf8'));
     const claims = claimsData.claims ?? [];
 
+    // ★ source-mismatch について（2026-07-13 追加・オーナー承認済み）
+    //
+    //   「出典はある。論文も実在する。だが、その論文は、その主張を言っていない。」
+    //
+    //   これは、うちが最も多く遭遇している状態です。
+    //   例:「飲んだヒアルロン酸が肌に届く」の出典を辿ると、論文は実在する。
+    //      だがそれはラットの実験で、測っていたのは「呼気」だった。
+    //
+    //   これまでは animal-only で処理していましたが、それは**論文の種類**を言っているだけで、
+    //   **「引用が主張を支えていない」という核心を落としていました。**
+    //
+    //   （Wikipedia には、これ専用のタグがあります: {{Failed verification}}）
     const TRACED_WORDS = [
       'human-trial',
       'industry-only',
       'lab-measure-only',
       'invitro-only',
       'animal-only',
+      'source-mismatch',
       'no-source',
     ];
 
@@ -240,7 +253,7 @@ for (const [key, p] of ledger) {
 
     const TRACED_WORDS = [
       'human-trial', 'industry-only', 'lab-measure-only',
-      'invitro-only', 'animal-only', 'no-source',
+      'invitro-only', 'animal-only', 'source-mismatch', 'no-source',
     ];
 
     // 書いた時点で終わる言葉
