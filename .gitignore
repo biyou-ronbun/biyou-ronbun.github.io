@@ -26,6 +26,9 @@ x/
 # 記事のまとめテキスト（articles/ と重複するだけ）
 output/
 
+# 競合の分析メモ。他人を名指しで論評した内部資料であり、公開しない
+benchmark/
+
 # OS が勝手に作るもの
 Thumbs.db
 .DS_Store
