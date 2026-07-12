@@ -373,7 +373,23 @@ if (onSale.length === 0) {
 // Stripe の支払いリンクが1つも入っていなければ、ページも導線も出さない。
 // 「メンバーになる」を押しても何も起きない状態が、いちばん信用を落とす。
 
+// ★ 本名と連絡先は、公開リポジトリに置かない。
+//   特定商取引法で「表示」の義務があるのは、メンバーシップを実際に出したときだけ。
+//   支払いリンクが入るまでは出さないので、それまで名前を晒しておく理由が無い。
+//   手元は auto/.env、GitHub Actions は Secrets から渡す（MEMBER_TOKEN と同じ扱い）。
+
+const secret = (name) => {
+  if (process.env[name]) return process.env[name].trim();
+  const envFile = join(ROOT, 'auto', '.env');
+  if (!existsSync(envFile)) return '';
+  const m = read(envFile).match(new RegExp(`^\\s*${name}\\s*=\\s*(.+)$`, 'm'));
+  return m ? m[1].trim().replace(/^["']|["']$/g, '') : '';
+};
+
 const mem = cfg.membership ?? {};
+mem.legalName = mem.legalName || secret('MEMBER_LEGAL_NAME');
+mem.contactEmail = mem.contactEmail || secret('MEMBER_CONTACT_EMAIL');
+
 const memPlans = (mem.plans ?? []).filter((p) => p.url);
 const memOn = memPlans.length > 0 && Boolean(mem.legalName) && Boolean(mem.contactEmail);
 
@@ -1085,13 +1101,7 @@ console.log(`  built  tag/ (${tags.length} 個)`);
 //   だから、メンバーのページに「隠していません」と書く。
 //   隠していないものを「限定」と呼んで売った瞬間、このブログの武器が壊れる。
 
-const memberToken = (() => {
-  if (process.env.MEMBER_TOKEN) return process.env.MEMBER_TOKEN.trim();
-  const envFile = join(ROOT, 'auto', '.env');
-  if (!existsSync(envFile)) return '';
-  const m = read(envFile).match(/^\s*MEMBER_TOKEN\s*=\s*(.+)$/m);
-  return m ? m[1].trim().replace(/^["']|["']$/g, '') : '';
-})();
+const memberToken = secret('MEMBER_TOKEN');
 
 if (memberToken && memOn) {
   const memos = JSON.parse(read(join(SITE, 'memos.json'))).memos ?? [];
@@ -1301,6 +1311,7 @@ if (memOn) {
         LEGAL_NAME: escapeHtml(mem.legalName),
         CONTACT_EMAIL: escapeHtml(mem.contactEmail),
         PRICE_LIST: priceList,
+        TODAY: today.replace(/^(\d+)-(\d+)-(\d+)$/, (_, y, m, d) => `${y}年${+m}月${+d}日`),
       }),
       headTitle: `特定商取引法に基づく表記 | ${cfg.title}`,
       metaDesc: '特定商取引法に基づく表記',
