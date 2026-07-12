@@ -176,6 +176,7 @@ const tpl = {
   article: read(join(SITE, 'templates', 'article.html')),
   about:   read(join(SITE, 'templates', 'about.html')),
   policy:  read(join(SITE, 'templates', 'policy.html')),
+  privacy: read(join(SITE, 'templates', 'privacy.html')),
   cta:     read(join(SITE, 'templates', 'cta.html')),
 };
 
@@ -330,6 +331,21 @@ write(
 );
 console.log('  built  policy.html');
 
+// ---- プライバシーポリシー（フォームを出す前に必須） -----------------
+
+write(
+  join(DIST, 'privacy.html'),
+  renderPage({
+    content: tpl.privacy,
+    headTitle: `プライバシーポリシー | ${cfg.title}`,
+    metaDesc: 'このサイトが受け取る情報と、その使い道。追跡Cookieも広告配信も使用していません。',
+    canonical: `${baseUrl}/privacy.html`,
+    ogType: 'website',
+    rootPath: '',
+  })
+);
+console.log('  built  privacy.html');
+
 // ---- RSS ---------------------------------------------------------
 
 const escapeXml = (s = '') =>
@@ -368,6 +384,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <url><loc>${baseUrl}/</loc></url>
 <url><loc>${baseUrl}/about.html</loc></url>
 <url><loc>${baseUrl}/policy.html</loc></url>
+<url><loc>${baseUrl}/privacy.html</loc></url>
 ${published
   .map((a) => `<url><loc>${baseUrl}/articles/${a.slug}.html</loc><lastmod>${a.date}</lastmod></url>`)
   .join('\n')}
