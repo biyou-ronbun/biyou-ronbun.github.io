@@ -17,7 +17,7 @@
   "askUrl": "https://forms.gle/V4tNomjBNbHEHbFm9",
 
   "_analyticsToken": "Cloudflare Web Analytics のトークン。Cookieを使わないので同意バナーが要りません。空なら計測タグを出しません。",
-  "analyticsToken": "",
+  "analyticsToken": "d7f8076cb35544d0aaf1a7b284287b89",
 
   "_book": [
     "Kindle で出した本。amazonUrl が空のあいだは、サイトに一切出ません。",
