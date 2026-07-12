@@ -102,7 +102,9 @@
       "WebFetch(domain:coconala.com)",
       "WebFetch(domain:survey.stackoverflow.co)",
       "WebFetch(domain:news.ycombinator.com)",
-      "WebFetch(domain:metr.org)"
+      "WebFetch(domain:metr.org)",
+      "Bash(ls -la /e/note/research/ 2>/dev/null)",
+      "Read(//e/note/research//**)"
     ],
     "additionalDirectories": [
       "E:\\mv-lab\\tools",
@@ -114,7 +116,8 @@
       "e:\\note\\.claude\\agents",
       "E:\\mv-lab\\playbook",
       "e:\\note\\ops",
-      "e:\\note\\docs"
+      "e:\\note\\docs",
+      "e:\\note\\research"
     ]
   }
 }

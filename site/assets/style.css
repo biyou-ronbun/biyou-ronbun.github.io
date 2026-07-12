@@ -758,6 +758,71 @@ a { color: var(--rose); }
   .products { padding: 24px 20px 20px; margin-left: -20px; margin-right: -20px; }
 }
 
+/* ---------- メンバーシップ ---------- */
+
+.plans {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  display: grid;
+  gap: 20px;
+}
+
+.plan {
+  border: 1px solid var(--rule);
+  background: var(--bg-raised);
+  padding: 28px 26px 26px;
+  text-align: center;
+}
+
+.plan-name {
+  display: block;
+  font-family: var(--serif);
+  font-size: 15px;
+  letter-spacing: .2em;
+  text-indent: .2em;
+  color: var(--ink-soft);
+}
+
+.plan-price {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--serif);
+  font-size: 24px;
+  letter-spacing: .04em;
+}
+
+.plan-note {
+  display: block;
+  margin: 14px auto 22px;
+  max-width: 26em;
+  font-size: 13px;
+  line-height: 1.95;
+  color: var(--ink-mute);
+  text-align: left;
+}
+
+.plan-button {
+  display: inline-block;
+  padding: 13px 36px;
+  background: var(--ink);
+  color: var(--bg);
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: .16em;
+  text-indent: .16em;
+  transition: background .25s ease;
+}
+
+.plan-button:hover { background: var(--rose); }
+
+.plans-note {
+  font-size: 11.5px;
+  line-height: 1.95;
+  color: var(--ink-mute);
+  margin: 0 0 1.9em;
+}
+
 /* ---------- 質問箱（読者リストの入口） ---------- */
 
 .cta {

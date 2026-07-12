@@ -213,7 +213,46 @@ const tpl = {
   article: read(join(SITE, 'templates', 'article.html')),
   about:   read(join(SITE, 'templates', 'about.html')),
   privacy: read(join(SITE, 'templates', 'privacy.html')),
+  membership: read(join(SITE, 'templates', 'membership.html')),
+  tokushoho: read(join(SITE, 'templates', 'tokushoho.html')),
   cta:     read(join(SITE, 'templates', 'cta.html')),
+};
+
+// ---- メンバーシップ（支援型） ----------------------------------------
+//
+// Stripe の支払いリンクが1つも入っていなければ、ページも導線も出さない。
+// 「メンバーになる」を押しても何も起きない状態が、いちばん信用を落とす。
+
+const mem = cfg.membership ?? {};
+const memPlans = (mem.plans ?? []).filter((p) => p.url);
+const memOn = memPlans.length > 0 && Boolean(mem.legalName) && Boolean(mem.contactEmail);
+
+if ((mem.plans ?? []).some((p) => p.url) && !memOn) {
+  console.error(
+    '  !! メンバーシップは出しません: legalName（本名）と contactEmail が必要です（特定商取引法）'
+  );
+  process.exitCode = 1;
+}
+
+const membershipPlansHtml = () => {
+  if (!memPlans.length) return '';
+  const cards = memPlans
+    .map(
+      (p) => `    <li class="plan">
+      <span class="plan-name">${escapeHtml(p.name)}</span>
+      <span class="plan-price">月額 ${Number(p.price).toLocaleString('ja-JP')}円</span>
+      <span class="plan-note">${escapeHtml(p.note ?? '')}</span>
+      <a class="plan-button" href="${escapeAttr(p.url)}" target="_blank" rel="noopener">メンバーになる</a>
+    </li>`
+    )
+    .join('\n');
+  return `<h2>プラン</h2>
+
+<ul class="plans">
+${cards}
+</ul>
+
+<p class="plans-note">お支払いは Stripe（決済代行）を通して行われます。カード情報がこのブログに渡ることはありません。いつでも解約できます。</p>`;
 };
 
 // ---- 広告 ---------------------------------------------------------
@@ -297,6 +336,12 @@ const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath 
     ROOT: rootPath,
     ANALYTICS: analytics,
     ADSENSE: adsenseHead,
+    NAV_MEMBERSHIP: memOn
+      ? `      <a href="${rootPath}membership.html">メンバーシップ</a>`
+      : '',
+    FOOTER_MEMBERSHIP: memOn
+      ? `      <a href="${rootPath}membership.html">メンバーシップ</a>\n      <a href="${rootPath}tokushoho.html">特定商取引法に基づく表記</a>`
+      : '',
   });
 
 // ---- 出力先を作り直す -------------------------------------------
@@ -421,6 +466,47 @@ console.log('  built  privacy.html');
 if (cfg.customDomain) {
   write(join(DIST, 'CNAME'), `${cfg.customDomain}\n`);
   console.log(`  built  CNAME (${cfg.customDomain})`);
+}
+
+// ---- メンバーシップ / 特定商取引法 -----------------------------------
+
+if (memOn) {
+  write(
+    join(DIST, 'membership.html'),
+    renderPage({
+      content: tpl.membership.replace('{{MEMBERSHIP_PLANS}}', membershipPlansHtml()),
+      headTitle: `この検証を、続けさせてください | ${cfg.title}`,
+      metaDesc:
+        '記事はこれからも全部無料です。メンバーシップは「この検証を続けてほしい」という支援としていただきます。',
+      canonical: `${baseUrl}/membership.html`,
+      ogType: 'website',
+      rootPath: '',
+    })
+  );
+  console.log('  built  membership.html');
+
+  const priceList = memPlans
+    .map((p) => `${escapeHtml(p.name)}: 月額 ${Number(p.price).toLocaleString('ja-JP')}円`)
+    .join('<br>');
+
+  write(
+    join(DIST, 'tokushoho.html'),
+    renderPage({
+      content: fill(tpl.tokushoho, {
+        LEGAL_NAME: escapeHtml(mem.legalName),
+        CONTACT_EMAIL: escapeHtml(mem.contactEmail),
+        PRICE_LIST: priceList,
+      }),
+      headTitle: `特定商取引法に基づく表記 | ${cfg.title}`,
+      metaDesc: '特定商取引法に基づく表記',
+      canonical: `${baseUrl}/tokushoho.html`,
+      ogType: 'website',
+      rootPath: '',
+    })
+  );
+  console.log('  built  tokushoho.html');
+} else {
+  console.log('  -- メンバーシップは非表示（site/config.json の membership が未設定です）');
 }
 
 // ---- ads.txt（AdSense が要求する所有証明） --------------------------

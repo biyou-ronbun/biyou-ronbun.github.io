@@ -1,0 +1,54 @@
+﻿[16:42:54] ==========================================
+[16:42:54] 記事の自動生成をはじめます
+[16:42:54] ==========================================
+[16:42:54] リポジトリを最新にします
+[16:42:54]   git: error: cannot pull with rebase: You have unstaged changes.
+[16:42:54]   git: error: Please commit or stash them.
+[16:42:55] 待機中のネタ: 9 件
+[16:42:55] Claude に記事を作らせます（10〜20分かかります）
+[16:42:55] 
+[16:52:57] 
+[16:52:57] ---------- Claude の報告 ----------
+[16:52:57] claude.exe : Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdi
+[16:52:57] n explicitly: < /dev/null to skip, or wait longer.
+[16:52:57] At C:\Users\Owner\AppData\Roaming\npm\claude.ps1:14 char:3
+[16:52:57] +   & "$basedir/node_modules/@anthropic-ai/claude-code/bin/claude.exe"  ...
+[16:52:57] +   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[16:52:57]     + CategoryInfo          : NotSpecified: (Warning: no std...or wait longer.:String) [], RemoteException
+[16:52:57]     + FullyQualifiedErrorId : NativeCommandError
+[16:52:57]  
+[16:52:57] Published and verified live at https://biyou-ronbun.com/articles/turnover-28days.html
+[16:52:57] 
+[16:52:57] ## What happened
+[16:52:57] 
+[16:52:57] The article is live. But the most important thing I did was **throw away the existing research card and rebuild it from scratch** — and that changed the article substantially.
+[16:52:57] 
+[16:52:57] The previous card for this topic was written in a session where `WebFetch` was dead, so every paper in it was marked "検索結果の抜粋のみ確認" (search-snippet only). Per your instructions I re-verified every PMID through `site/pubmed.mjs`. Three claims did not survive:
+[16:52:57] 
+[16:52:57] - **Maeda 2017 (角層13.9日, n=14)** — not in PubMed at all, and MDPI returned 403. Dropped entirely.
+[16:52:57] - **Halprin 1972 "40〜56日"** — the paper is real (PMID 4551262), but PubMed shows *No abstract available*. I could not confirm the number, so I don't print it.
+[16:52:57] - **Weinstein & Van Scott 1965 "12日"** — same problem: no abstract, and the full text is paywalled (403).
+[16:52:57] 
+[16:52:57] What *did* verify, straight from real abstracts: **39日** (PMID 6725985), **45日** (PMID 871385), **47〜48日** (PMID 7865480), and Grove & Kligman's **角層20日 / 高齢者+10日, accelerating after 50** (PMID 6827031, funded by NIA/NIH — public money, not cosmetics).
+[16:52:57] 
+[16:52:57] ## The article's spine
+[16:52:57] 
+[16:52:57] The blog-specific angle here turned out to be the failure itself. A PubMed search for a 28-day turnover returns **zero papers**, and the paper everyone cites as the origin is one I could not open. So the article says exactly that, and refuses to name it as the source. It also refuses the tempting counter-move: I do *not* claim "28日は嘘" or "正しくは40日", because 39/45/47–48 don't agree with each other either — Iizuka got 47–48 by *recomputing Weinstein's own data*, which is the most interesting fact in the piece. The one action offered is free: stop judging a product at one month, since that deadline traces back to a number with no findable source.
+[16:52:57] 
+[16:52:57] All six references match PubMed's title/author/year/volume/pages exactly, so the downstream machine check should pass. 6,381 chars, both required sections present.
+[16:52:57] 
+[16:52:57] ## Two things you should know
+[16:52:57] 
+[16:52:57] **I did not commit your uncommitted work.** The repo had in-progress changes (`site/build.mjs`, `config.json`, `membership.html`, `tokushoho.html`, AdSense config). `CLAUDE.md` says to run `git add -A`, but that would have published half-finished membership/特商法 pages. I committed only my four files and left your WIP exactly as it was. It's still sitting there uncommitted.
+[16:52:57] 
+[16:52:57] **A contradiction worth your attention:** `docs/style-guide.md` §4.6 states the blog will never carry ads or affiliates ("恒久的な決定"), yet the recent commits add AdSense and there are uncommitted membership/tokushoho templates. I didn't touch either side of this — but the constitution and the code currently disagree, and only you can decide which one is wrong.
+[16:52:57] 
+[16:52:57] X drafts for the article are in `x/2026-07.md` (still gitignored, unpublished — I have not posted anything).
+[16:52:57] 
+[16:52:57] -----------------------------------
+[16:52:57] 
+[16:52:57] 公開されたか確認します
+[16:52:57] GitHub に push されています
+[16:52:57] 
+[16:52:57] ログ: E:\claude\auto\logs\2026-07-12_1642.log
+[16:52:57] 完了
