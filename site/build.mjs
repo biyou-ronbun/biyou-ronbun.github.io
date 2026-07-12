@@ -552,6 +552,43 @@ const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath,
       : '',
   });
 
+// ---- 連載 -----------------------------------------------------------------
+//
+// 単発の記事より、連載の1回のほうが読まれます（美容メディアの検索1位も連載でした）。
+//
+// ★ 新しいページは1枚も作りません。
+//   タイトルに【連載名 vol.N】を付け、記事の末尾に兄弟回へのリンクを出すだけです。
+//
+//   **連載の一覧ページを作らないこと。** それは「表」であり、却下済みの形です。
+//   （「蓄積を表にして並べる」形は通りません。次に企画を考えるときは「これは表ではないか?」を自問）
+
+const seriesMap = new Map();
+for (const a of meta.filter((m) => m.published && m.series)) {
+  if (!seriesMap.has(a.series)) seriesMap.set(a.series, []);
+  seriesMap.get(a.series).push(a);
+}
+for (const list of seriesMap.values()) list.sort((a, b) => (a.vol ?? 0) - (b.vol ?? 0));
+
+const seriesLabel = (a) => (a.series && a.vol ? `【${a.series} vol.${a.vol}】` : '');
+
+const seriesBlock = (a) => {
+  if (!a.series || !seriesMap.has(a.series)) return '';
+  const sibs = seriesMap.get(a.series).filter((s) => s.slug !== a.slug);
+  if (!sibs.length) return '';
+
+  return `<aside class="series">
+  <p class="series-title">連載「${escapeHtml(a.series)}」の、ほかの回</p>
+  <ul class="series-list">
+${sibs
+  .map(
+    (s) =>
+      `    <li><a href="${s.slug}.html"><span class="series-vol">vol.${s.vol}</span>${escapeHtml(s.title)}</a></li>`
+  )
+  .join('\n')}
+  </ul>
+</aside>`;
+};
+
 // ---- 検証レシート ---------------------------------------------------------
 //
 // うちは毎回 PubMed に問い合わせて、論文の実在・タイトル・撤回を確かめています。
@@ -747,6 +784,7 @@ for (const a of meta) {
     DATE: a.date,
     DATE_LABEL: a.date.replace(/-/g, '.'),
     PR_BANNER: prBanner(a.slug),
+    SERIES: seriesBlock(a),
     RECEIPT: receiptFor(a.slug),
     PRODUCTS: productBlock(a.slug),
     TAG_LINKS: tagLinks(a, '../'),
@@ -786,6 +824,7 @@ const cards = published
   .map((a) =>
     fill(tpl.card, {
       SLUG: a.slug,
+        SERIES_LABEL: seriesLabel(a) ? `<span class="card-series">${escapeHtml(seriesLabel(a))}</span>` : '',
       TITLE: escapeHtml(a.title),
       SUBTITLE: escapeHtml(a.subtitle),
       SUMMARY: escapeHtml(a.summary),
@@ -870,6 +909,7 @@ for (const cat of categories) {
     .map((a) =>
       fill(tpl.card, {
         SLUG: a.slug,
+        SERIES_LABEL: seriesLabel(a) ? `<span class="card-series">${escapeHtml(seriesLabel(a))}</span>` : '',
         TITLE: escapeHtml(a.title),
         SUBTITLE: escapeHtml(a.subtitle),
         SUMMARY: escapeHtml(a.summary),
@@ -1026,6 +1066,7 @@ for (const [tag, items] of tags) {
     .map((a) =>
       fill(tpl.card, {
         SLUG: a.slug,
+        SERIES_LABEL: seriesLabel(a) ? `<span class="card-series">${escapeHtml(seriesLabel(a))}</span>` : '',
         TITLE: escapeHtml(a.title),
         SUBTITLE: escapeHtml(a.subtitle),
         SUMMARY: escapeHtml(a.summary),
@@ -1185,6 +1226,7 @@ if (memberToken && memOn) {
       DATE: a.date,
       DATE_LABEL: `${a.date.replace(/-/g, '.')} 公開予定`,
       PR_BANNER: '',
+      SERIES: '',
       RECEIPT: receiptFor(a.slug),
       PRODUCTS: '',
       TAG_LINKS: '',

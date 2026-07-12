@@ -10,7 +10,9 @@
     "tags": [
       "ハリ",
       "シワ"
-    ]
+    ],
+    "series": "誰が資金を出したか",
+    "vol": 3
   },
   {
     "slug": "turnover-28days",
@@ -23,7 +25,9 @@
     "tags": [
       "くすみ",
       "角質"
-    ]
+    ],
+    "series": "出典をたどる",
+    "vol": 1
   },
   {
     "slug": "sunscreen-spf",
@@ -37,7 +41,9 @@
       "日焼け",
       "シワ",
       "シミ"
-    ]
+    ],
+    "series": "数字の出どころ",
+    "vol": 1
   },
   {
     "slug": "oral-collagen",
@@ -51,7 +57,9 @@
       "シワ",
       "ハリ",
       "乾燥"
-    ]
+    ],
+    "series": "誰が資金を出したか",
+    "vol": 1
   },
   {
     "slug": "bathing-dryness",
@@ -64,7 +72,9 @@
     "tags": [
       "乾燥",
       "敏感肌"
-    ]
+    ],
+    "series": "出典をたどる",
+    "vol": 3
   },
   {
     "slug": "retinol-concentration",
@@ -78,7 +88,9 @@
       "シワ",
       "赤み",
       "敏感肌"
-    ]
+    ],
+    "series": "数字の出どころ",
+    "vol": 2
   },
   {
     "slug": "vitamin-c-derivatives",
@@ -92,7 +104,9 @@
       "シミ",
       "くすみ",
       "ニキビ"
-    ]
+    ],
+    "series": "数字の出どころ",
+    "vol": 3
   },
   {
     "slug": "hyaluronic-acid",
@@ -105,7 +119,9 @@
     "tags": [
       "乾燥",
       "ハリ"
-    ]
+    ],
+    "series": "誰が資金を出したか",
+    "vol": 2
   },
   {
     "slug": "skin-fasting",
@@ -118,6 +134,8 @@
     "tags": [
       "乾燥",
       "敏感肌"
-    ]
+    ],
+    "series": "出典をたどる",
+    "vol": 2
   }
 ]

@@ -1442,6 +1442,63 @@ a { color: var(--rose); }
   .mem-honest { padding: 22px 18px 18px; }
 }
 
+/* ---------- 連載 ----------
+   ★ 一覧ページは作らない。それは「表」で、却下済みの形。
+      ここに出すのは、同じ連載の他の回へのリンクだけ。            */
+
+.series {
+  margin: 56px 0 0;
+  padding: 22px 24px 18px;
+  border-left: 2px solid var(--gold);
+  background: var(--bg-wash);
+}
+
+.series-title {
+  margin: 0 0 12px;
+  font-family: var(--serif);
+  font-size: 13px;
+  letter-spacing: .12em;
+  color: var(--ink-mute);
+}
+
+.series-list { margin: 0; padding: 0; list-style: none; }
+
+.series-list li { margin-bottom: 9px; }
+.series-list li:last-child { margin-bottom: 0; }
+
+.series-list a {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 1.75;
+  transition: color .2s ease;
+}
+
+.series-list a:hover { color: var(--rose); }
+
+.series-vol {
+  flex: 0 0 auto;
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.card-series {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  letter-spacing: .1em;
+  color: var(--ink-mute);
+}
+
+@media (max-width: 600px) {
+  .series { padding: 18px 16px 14px; }
+}
+
 /* ---------- 検証レシート ----------
    ★ 「信頼の記号」に見せないこと。
       金のバッジ、盾のアイコン、チェックマーク——それらは「安心してよい」という合図で、
