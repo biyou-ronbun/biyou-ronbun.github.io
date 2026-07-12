@@ -1,7 +1,11 @@
 // ---------------------------------------------------------------
 //  記事を1冊の電子書籍（EPUB）に束ねる
 //
-//    node site/book.mjs
+//    node site/book.mjs           いちばん新しい draft の巻を作る
+//    node site/book.mjs vol1      巻を指定して作る
+//
+//  本の中身は site/books.json（巻の台帳）に書いてあります。
+//  次の巻をいつ出すかは auto/next-volume.mjs が判定します。
 //
 //  出力: site/dist-book/<ファイル名>.epub
 //        （Kindle ダイレクト・パブリッシング にそのままアップロードできる）
@@ -19,7 +23,7 @@
 //  ★ AI生成コンテンツは KDP への申告義務があります。アップロード時に申告してください。
 // ---------------------------------------------------------------
 
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { deflateRawSync } from 'node:zlib';
@@ -31,7 +35,32 @@ const OUT = join(SITE, 'dist-book');
 const read = (p) => readFileSync(p, 'utf8');
 const cfg = JSON.parse(read(join(SITE, 'config.json')));
 const meta = JSON.parse(read(join(SITE, 'articles.json')));
-const book = JSON.parse(read(join(SITE, 'book.json')));
+const ledger = JSON.parse(read(join(SITE, 'books.json')));
+
+// ---- どの巻を作るか -------------------------------------------------
+// 引数があればその巻。無ければ「まだ KDP に出していない（draft）」の最後の巻。
+
+const wanted = process.argv[2];
+const volumes = ledger.volumes ?? [];
+
+const volume = wanted
+  ? volumes.find((v) => v.id === wanted)
+  : [...volumes].reverse().find((v) => v.status === 'draft');
+
+if (!volume) {
+  if (wanted) {
+    console.error(`site/books.json に「${wanted}」という巻がありません。`);
+    console.error(`ある巻: ${volumes.map((v) => v.id).join(', ') || '（なし）'}`);
+  } else {
+    console.error('まだ KDP に出していない巻（status: draft）がありません。');
+    console.error('巻を指定して作り直すなら: node site/book.mjs vol1');
+    console.error('次の巻を出せるだけ記事が溜まったかを見るなら: node auto/next-volume.mjs');
+  }
+  process.exit(1);
+}
+
+// 台帳の defaults を、巻ごとの設定で上書きする（巻が持っていない項目は defaults を使う）
+const book = { ...(ledger.defaults ?? {}), ...volume };
 
 const esc = (s = '') =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -343,7 +372,7 @@ files.push({
   data: `<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid" xml:lang="ja">
 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
-<dc:identifier id="bookid">${esc(book.id)}</dc:identifier>
+<dc:identifier id="bookid">${esc(book.uuid)}</dc:identifier>
 <dc:title>${esc(book.title)}</dc:title>
 <dc:creator>${esc(book.author)}</dc:creator>
 <dc:language>ja</dc:language>
@@ -360,7 +389,7 @@ ${spine}
 </package>`,
 });
 
-rmSync(OUT, { recursive: true, force: true });
+// 巻ごとにファイル名が違うので、まるごと消さない。前の巻の EPUB は残しておく。
 mkdirSync(OUT, { recursive: true });
 
 const epubPath = join(OUT, `${book.filename}.epub`);
@@ -368,7 +397,7 @@ writeFileSync(epubPath, zip(files));
 
 console.log('');
 console.log('=========================================');
-console.log(`  ${book.title}`);
+console.log(`  ${book.title}（${book.id}）`);
 console.log('=========================================');
 console.log(`  収録: ${chapters.length} 章`);
 chapters.forEach((c, i) => console.log(`    ${i + 1}. ${c.title}`));

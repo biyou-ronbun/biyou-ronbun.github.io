@@ -11,6 +11,10 @@
 
 $ErrorActionPreference = 'Continue'
 
+# ネタ（topics.json の queued）が、この件数以下になったら補充する。
+# 週3本ペースなので、3 なら「尽きる1週間前」に気づけます。
+$ReplenishAt = 3
+
 $Root    = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 $LogDir  = Join-Path $Root 'auto\logs'
 $Stamp   = Get-Date -Format 'yyyy-MM-dd_HHmm'
@@ -148,6 +152,37 @@ if ($left -le $ReplenishAt) {
   }
 } else {
   Log '補充はまだ不要です'
+}
+
+# ---- 次の巻 ------------------------------------------------------
+#
+# Kindle は、このブログで唯一「サイトのPVを分母にしない」収益源です。
+# Amazon の検索が流通を担ってくれるので、読者がゼロでも売れます（ops/monetization.md §15）。
+# だから、記事が溜まったら自動で次の巻を組みます。
+#
+# ★ KDP には個人向けの出版APIがありません。
+#   ここで自動化できるのは「原稿ができる」までです。
+#   アップロードは、オーナーが手でやります（1冊30分）。
+
+Log ''
+Log '次の巻を出せるか確認します'
+$vout = & node (Join-Path $Root 'auto\next-volume.mjs') 2>&1 | Out-String
+$vready = ($LASTEXITCODE -eq 10)
+foreach ($line in ($vout -split "`r?`n")) { if ($line.Trim()) { Log "  $line" } }
+
+if ($vready) {
+  Log ''
+  Log '記事が1冊ぶん溜まりました。次の巻を組みます（5〜10分かかります）'
+  Log ''
+
+  $bp = Get-Content (Join-Path $Root 'auto\book-prompt.md') -Raw -Encoding UTF8
+  $bout = & claude -p $bp --allowed-tools $tools --permission-mode acceptEdits 2>&1 | Out-String
+
+  Log '---------- 本の報告 ----------'
+  foreach ($line in ($bout -split "`r?`n")) { Log $line }
+  Log '------------------------------'
+  Log ''
+  Log '★ オーナーへ: 原稿ができています。KDP にアップロードしてください（手作業。1冊30分）'
 }
 
 Log ''

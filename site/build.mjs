@@ -378,24 +378,35 @@ ${rows}
 
 // ---- 本（Kindle） -----------------------------------------------------
 //
-// Amazon のURLが無ければ出さない。
+// 巻は site/books.json（台帳）に並んでいる。EPUB を作る site/book.mjs と同じファイルを読む。
+// Amazon のURLが入っている巻だけを出す。空の巻は、まだ発売されていないので出さない。
 // 「記事は無料で読める」ことを紹介文に必ず書く。隠して売らない。
 
-const bk = cfg.book ?? {};
-const bookOn = Boolean(bk.amazonUrl);
+const ledger = JSON.parse(read(join(SITE, 'books.json')));
+const onSale = (ledger.volumes ?? []).filter((v) => v.amazonUrl);
+const bookDefaults = ledger.defaults ?? {};
 
-const bookBlock = (rootPath) =>
-  bookOn
-    ? `<aside class="bookbox">
+const bookBlock = () =>
+  onSale.length === 0
+    ? ''
+    : `<aside class="bookbox">
   <p class="bookbox-label">本になりました</p>
-  <p class="bookbox-title">${escapeHtml(bk.title)}</p>
-  <p class="bookbox-sub">${escapeHtml(bk.subtitle)}</p>
-  <p class="bookbox-note"><strong>この本に収めた記事は、すべてこのサイトで無料で読めます。</strong>それでも本にしたのは、まとめて読みたい方のためと、この検証を続けるための費用にするためです。無料で読める場所があることを、隠さずに書いておきます。</p>
-  <p class="bookbox-action"><a class="bookbox-button" href="${escapeAttr(bk.amazonUrl)}" target="_blank" rel="noopener">Kindle で読む（${escapeHtml(bk.price ?? '')}）</a></p>
-</aside>`
-    : '';
+${onSale
+  .map((v) => {
+    const price = v.price ?? bookDefaults.price ?? '';
+    return `  <p class="bookbox-title">${escapeHtml(v.title)}</p>
+  <p class="bookbox-sub">${escapeHtml(v.subtitle ?? '')}</p>
+  <p class="bookbox-action"><a class="bookbox-button" href="${escapeAttr(v.amazonUrl)}" target="_blank" rel="noopener">Kindle で読む（${escapeHtml(price)}）</a></p>`;
+  })
+  .join('\n')}
+  <p class="bookbox-note"><strong>本に収めた記事は、すべてこのサイトで無料で読めます。</strong>それでも本にしたのは、まとめて読みたい方のためと、この検証を続けるための費用にするためです。無料で読める場所があることを、隠さずに書いておきます。</p>
+</aside>`;
 
-if (!bookOn) console.log('  -- 本の紹介は非表示（site/config.json の book.amazonUrl が空です）');
+if (onSale.length === 0) {
+  console.log('  -- 本の紹介は非表示（site/books.json に amazonUrl の入った巻がありません）');
+} else {
+  console.log(`  -- 本の紹介: ${onSale.length} 冊`);
+}
 
 // ---- メンバーシップ（支援型） ----------------------------------------
 //
@@ -596,7 +607,7 @@ for (const a of meta) {
     PAPERS: papersBlock(a.slug),
     PRODUCTS: productBlock(a.slug),
     RELATED: relatedBlock(a.slug, meta.filter((m) => m.published)),
-    BOOK: bookBlock('../'),
+    BOOK: bookBlock(),
     CTA: ctaFor('../'),
     ADSLOT: adSlot(),
     ROOT: '../',
@@ -647,7 +658,7 @@ write(
   renderPage({
     content: tpl.home
       .replace('{{ARTICLE_LIST}}', cards)
-      .replace('{{BOOK}}', bookBlock(''))
+      .replace('{{BOOK}}', bookBlock())
       .replace('{{CTA}}', ctaFor('')),
     headTitle: cfg.title,
     metaDesc: cfg.description,
