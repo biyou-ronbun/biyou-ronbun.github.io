@@ -737,6 +737,59 @@ ${queued.map((q) => `    <li>${escapeHtml(q.theme)}</li>`).join('\n')}
 </aside>`;
 })();
 
+// ---- カードに載せる中身 ----------------------------------------------
+//
+// カードは「読むかどうかを決める場所」です。タイトルと要約だけでは、決められません。
+//
+// ★ ここに出すのは、すべて機械が記事そのものから拾ったものだけです。
+//   カード用に「売り文句」を別途書かせないこと。書かせた瞬間、それは煽り文になります。
+//
+//   答え    … 記事の2番目の見出し（＝答えそのもの。§4.8 で義務にした）
+//   図     … 記事に埋め込まれている論文の数値グラフ（新しく作らない。使い回す）
+//   論文の数 … verified.json（＝PubMed に照会して実在を確認した数）
+//   悩みタグ … articles.json の tags
+
+const cardAnswer = new Map();
+const cardFigure = new Map();
+
+for (const a of meta) {
+  const p = join(ROOT, 'articles', `${a.slug}.md`);
+  if (!existsSync(p)) continue;
+  const md = read(p);
+
+  const heads = [...md.matchAll(/^##\s+(.+)$/gm)].map((m) => m[1].trim());
+  if (heads[1]) cardAnswer.set(a.slug, heads[1]);
+
+  const fig = md.match(/^::figure:([\w-]+)::/m);
+  if (fig) cardFigure.set(a.slug, fig[1]);
+}
+
+// 記事に入っている図を、そのままカードにも出す。
+//
+// ★ カード用の図を新しく作らないこと。記事と違う図をカードに出したら、それは釣りです。
+// ★ ただし matrix（表形式）はカードに出しません。カード1枚に収まらないからです。
+//   縮めて載せると、表の一部だけを見せることになります。**表は、一部だけ見せると嘘になります。**
+const figType = JSON.parse(read(join(SITE, 'figures.json'))).figures ?? {};
+
+const cardFig = (slug) => {
+  const id = cardFigure.get(slug);
+  if (!id || !FIGURES[id]) return '';
+  if (figType[id]?.type === 'matrix') return '';
+  return `      <div class="card-fig">${FIGURES[id]}</div>`;
+};
+
+const cardFacts = (a) => {
+  const bits = [];
+
+  const n = verified?.articles?.[a.slug]?.count;
+  if (n) bits.push(`<span class="fact"><strong>${n}</strong> 本の論文を確認</span>`);
+
+  const own = (a.tags ?? []).filter((t) => tagMap.get(t)?.length >= 2);
+  for (const t of own.slice(0, 3)) bits.push(`<span class="fact-tag">${escapeHtml(t)}</span>`);
+
+  return bits.join('');
+};
+
 // ---- 出力先を作り直す -------------------------------------------
 
 rmSync(DIST, { recursive: true, force: true });
@@ -825,6 +878,9 @@ const cards = published
     fill(tpl.card, {
       SLUG: a.slug,
         SERIES_LABEL: seriesLabel(a) ? `<span class="card-series">${escapeHtml(seriesLabel(a))}</span>` : '',
+        ANSWER: escapeHtml(cardAnswer.get(a.slug) ?? ''),
+        FIGURE: cardFig(a.slug),
+        FACTS: cardFacts(a),
       TITLE: escapeHtml(a.title),
       SUBTITLE: escapeHtml(a.subtitle),
       SUMMARY: escapeHtml(a.summary),
@@ -910,6 +966,9 @@ for (const cat of categories) {
       fill(tpl.card, {
         SLUG: a.slug,
         SERIES_LABEL: seriesLabel(a) ? `<span class="card-series">${escapeHtml(seriesLabel(a))}</span>` : '',
+        ANSWER: escapeHtml(cardAnswer.get(a.slug) ?? ''),
+        FIGURE: cardFig(a.slug),
+        FACTS: cardFacts(a),
         TITLE: escapeHtml(a.title),
         SUBTITLE: escapeHtml(a.subtitle),
         SUMMARY: escapeHtml(a.summary),
@@ -1067,6 +1126,9 @@ for (const [tag, items] of tags) {
       fill(tpl.card, {
         SLUG: a.slug,
         SERIES_LABEL: seriesLabel(a) ? `<span class="card-series">${escapeHtml(seriesLabel(a))}</span>` : '',
+        ANSWER: escapeHtml(cardAnswer.get(a.slug) ?? ''),
+        FIGURE: cardFig(a.slug),
+        FACTS: cardFacts(a),
         TITLE: escapeHtml(a.title),
         SUBTITLE: escapeHtml(a.subtitle),
         SUMMARY: escapeHtml(a.summary),

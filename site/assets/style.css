@@ -275,6 +275,13 @@ a { color: var(--rose); }
   padding: 0;
   display: grid;
   gap: 24px;
+  /* 情報量を上げるため2段組みに。ただし詰め込みすぎない（1枚の最小幅を確保する） */
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .article-list { grid-template-columns: 1fr; }
 }
 
 .card {
@@ -1440,6 +1447,84 @@ a { color: var(--rose); }
 
 @media (max-width: 600px) {
   .mem-honest { padding: 22px 18px 18px; }
+}
+
+/* ---------- カードの中身（情報量を上げる） ----------
+   カードは「読むかどうかを決める場所」。タイトルと要約だけでは決められない。
+   ★ ここに出るのは、すべて記事そのものから機械が拾ったもの。
+      カード用の売り文句は書かせない。書かせた瞬間、それは煽り文になる。   */
+
+/* 答え（記事の2番目の見出し＝答えそのもの） */
+.card-answer {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  background: var(--bg-wash);
+  border-left: 2px solid var(--gold);
+  font-family: var(--serif);
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: var(--ink);
+  letter-spacing: .02em;
+}
+
+.card-answer:empty { display: none; }
+
+/* 論文の数値グラフ。記事に入っている図を、そのまま小さく出す */
+.card-fig {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--rule-soft);
+  background: var(--bg);
+}
+
+.card-fig .fig { margin: 0; }
+.card-fig .fig-title { font-size: 12px; margin-bottom: 10px; letter-spacing: .04em; }
+.card-fig .fig-row { margin-bottom: 5px; }
+.card-fig .fig-label { font-size: 10.5px; }
+.card-fig .fig-value { font-size: 11px; }
+.card-fig .fig-track { height: 8px; }
+.card-fig .fig-bar { height: 8px; }
+.card-fig .fig-note,
+.card-fig .fig-unit { font-size: 10px; }
+.card-fig .fig-key { font-size: 10px; }
+
+/* 出典の長文は、カードでは隠す（記事を開けば出典は必ず出る）。
+   ★ 隠していいのは「記事に必ず書いてある」からです。
+      記事から出典を消すことは、絶対にしません。 */
+.card-fig .fig-source { display: none; }
+
+/* 確かめた論文の本数 / 悩みタグ */
+.card-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule-soft);
+}
+
+.card-facts:empty { display: none; }
+
+.fact {
+  font-size: 11.5px;
+  letter-spacing: .04em;
+  color: var(--ink-mute);
+}
+
+.fact strong {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.fact-tag {
+  padding: 3px 10px;
+  border: 1px solid var(--rule);
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--ink-mute);
 }
 
 /* ---------- 連載 ----------
