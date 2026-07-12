@@ -41,7 +41,9 @@
       "fundingNote": "PubMedの記録に資金提供・COIの記載がない。著者の所属は国立がんセンター（韓国）とモナシュ大学。本文が有料のため、資金提供の有無を一次情報で確認できていない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["oral-collagen"]
+      "articles": [
+        "oral-collagen"
+      ]
     },
     {
       "pmid": "37432180",
@@ -55,7 +57,9 @@
       "fundingNote": "資金提供は萬芳醫院（台北医学大学系列の病院、助成番号 111TMU-WFH-06）。著者の所属は台北医学大学・国立台湾大学ほか。コラーゲン企業の資金ではない",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["oral-collagen"]
+      "articles": [
+        "oral-collagen"
+      ]
     },
     {
       "pmid": "23949208",
@@ -69,7 +73,9 @@
       "fundingNote": "PubMedの記録に資金提供・COIの記載がなく、第1著者（キール大学皮膚科）以外の所属も記録されていない。本文が有料のため確認できていない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["oral-collagen"]
+      "articles": [
+        "oral-collagen"
+      ]
     },
     {
       "pmid": "29949889",
@@ -83,7 +89,9 @@
       "fundingNote": "第1著者 Kim D-U と第2著者 Chung H-C の所属が Newtree（被験製品のメーカー）。第4著者 Sakai Y の所属は Jellice 中央研究所（コラーゲン原料メーカー）",
       "coiNote": "「著者および Newtree Co., Ltd. は、いかなる利益相反もないことを宣言する」と申告しているが、著者2名がその Newtree の所属である",
       "confirmed": "fulltext",
-      "articles": ["oral-collagen"]
+      "articles": [
+        "oral-collagen"
+      ]
     },
     {
       "pmid": "33774639",
@@ -97,7 +105,9 @@
       "fundingNote": "著者6名全員が資生堂グローバルイノベーションセンター（Shiseido Global Innovation Center, 横浜）の所属",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["oral-collagen"]
+      "articles": [
+        "oral-collagen"
+      ]
     },
     {
       "pmid": "35662250",
@@ -111,7 +121,9 @@
       "fundingNote": "著者7名のうち4名（Taga, Tometsuka, Kusubata, Mizuno）がコラーゲンメーカー・ニッピの研究所（Nippi Research Institute of Biomatrix）所属",
       "coiNote": "「著者は競合する利益を有さないことを宣言する」と申告しているが、著者7名中4名がコラーゲンメーカーの研究所の所属である",
       "confirmed": "fulltext",
-      "articles": ["oral-collagen"]
+      "articles": [
+        "oral-collagen"
+      ]
     },
     {
       "pmid": "39149544",
@@ -125,7 +137,9 @@
       "fundingNote": "著者9名のうち5名がコラーゲンメーカー Rousselot BV、2名が受託試験会社 BioTeSys GmbH、2名が Triskelion の社員。COI欄に各社の在籍が明記されている",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["oral-collagen"]
+      "articles": [
+        "oral-collagen"
+      ]
     },
     {
       "pmid": "28244315",
@@ -139,7 +153,9 @@
       "fundingNote": "著者8名のうち5名（Yazaki, Ito, Yamada, Teramoto, Yamaguchi）がファンケル（FANCL Corporation）研究所の所属。残る3名は横浜市立大学",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["oral-collagen"]
+      "articles": [
+        "oral-collagen"
+      ]
     },
     {
       "pmid": "25877232",
@@ -153,7 +169,9 @@
       "fundingNote": "著者6名のうち1名（Reynaud R）の所属が化粧品原料メーカー Soliance。他5名はランス・シャンパーニュ＝アルデンヌ大学。PubMedに資金提供・COIの記載はない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["hyaluronic-acid"]
+      "articles": [
+        "hyaluronic-acid"
+      ]
     },
     {
       "pmid": "22052267",
@@ -167,7 +185,9 @@
       "fundingNote": "PubMedは第1著者（ミュンヘン大学）の所属しか記録しておらず、資金提供・COIの記載もない。共著者 Lersch と Farwick はHA原料メーカー Evonik の所属とされるが、一次情報で確認できていない（本文が有料）",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["hyaluronic-acid"]
+      "articles": [
+        "hyaluronic-acid"
+      ]
     },
     {
       "pmid": "38829483",
@@ -181,7 +201,9 @@
       "fundingNote": "資金提供はインドネシア大学 研究開発局（Directorate of Research and Development, Universitas Indonesia）。著者7名全員がインドネシア大学／チプト・マングンクスモ病院の所属",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["hyaluronic-acid"]
+      "articles": [
+        "hyaluronic-acid"
+      ]
     },
     {
       "pmid": "40911749",
@@ -195,7 +217,9 @@
       "fundingNote": "PubMedに著者の所属・資金提供・COIの記載がいずれもない。本文が有料のため確認できていない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["hyaluronic-acid"]
+      "articles": [
+        "hyaluronic-acid"
+      ]
     },
     {
       "pmid": "28761365",
@@ -209,7 +233,9 @@
       "fundingNote": "著者7名のうち6名がキユーピー株式会社 研究開発本部の所属。COI欄で6名の在籍が明記されている。残る1名は東邦大学医療センター大橋病院",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["hyaluronic-acid"]
+      "articles": [
+        "hyaluronic-acid"
+      ]
     },
     {
       "pmid": "34203487",
@@ -223,7 +249,9 @@
       "fundingNote": "資金提供はキユーピー株式会社。著者7名のうち3名（Oe M, Matsuoka R, Masuda Y）が同社の社員であるとCOI欄に明記されている",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["hyaluronic-acid"]
+      "articles": [
+        "hyaluronic-acid"
+      ]
     },
     {
       "pmid": "25383371",
@@ -237,7 +265,9 @@
       "fundingNote": "著者8名のうち7名がキユーピー株式会社 研究開発本部の所属（責任著者のメールは @kewpie.co.jp）。残る1名は積水メディカル",
       "coiNote": "本文には「利益相反はない」と申告されているが、著者8名中7名がキユーピー株式会社の所属である。PubMedにはCOI欄の記録がない",
       "confirmed": "fulltext",
-      "articles": ["hyaluronic-acid"]
+      "articles": [
+        "hyaluronic-acid"
+      ]
     },
     {
       "pmid": "41422283",
@@ -251,7 +281,9 @@
       "fundingNote": "資金提供はヒアルロン酸製造企業 Contipro a.s.。著者7名のうち6名が同社の社員であるとCOI欄に明記されている",
       "coiNote": "COI欄に「同社は試験デザイン・データ収集・統計解析・結果の解釈・原稿作成・投稿判断に関与していない」と付記されているが、著者7名中6名がその同社の社員である",
       "confirmed": "fulltext",
-      "articles": ["hyaluronic-acid"]
+      "articles": [
+        "hyaluronic-acid"
+      ]
     },
     {
       "pmid": "39807700",
@@ -265,7 +297,9 @@
       "fundingNote": "全文に「本研究に対する特定の資金提供は受けていない」と記載。著者2名は四川華美紫馨医学美容病院（中国）の皮膚科",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["hyaluronic-acid"]
+      "articles": [
+        "hyaluronic-acid"
+      ]
     },
     {
       "pmid": "34980969",
@@ -279,7 +313,9 @@
       "fundingNote": "全文（PMC）で著者は資金提供なし・COIなしと申告。ただしレビューが組み入れた9試験のうち8試験は、試験製品メーカーの資金提供による（うち3件は同一のグローバル化粧品企業）と本文に記載されている",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["retinol-concentration"]
+      "articles": [
+        "retinol-concentration"
+      ]
     },
     {
       "pmid": "35778881",
@@ -293,7 +329,9 @@
       "fundingNote": "資金提供に化粧品企業 Walgreens Boots Alliance（No7 Beauty Company）が含まれる（もう一方は NIHR Manchester BRC）。著者11名のうち3名（Bradley, Loftus, Bell）が No7 Beauty Company の所属",
       "coiNote": "COI欄は「None.（なし）」と申告しているが、資金提供者に化粧品企業 Walgreens Boots Alliance が含まれ、著者3名が同社（No7 Beauty Company）の所属である",
       "confirmed": "fulltext",
-      "articles": ["retinol-concentration"]
+      "articles": [
+        "retinol-concentration"
+      ]
     },
     {
       "pmid": "20078381",
@@ -307,7 +345,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。第1著者の所属は東北大学大学院医学系研究科皮膚科。出版種別に Research Support, Non-U.S. Gov't とあるが、具体的な資金提供元は記録されていない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["retinol-concentration"]
+      "articles": [
+        "retinol-concentration"
+      ]
     },
     {
       "pmid": "25607905",
@@ -321,7 +361,9 @@
       "fundingNote": "PubMedに著者の所属・資金提供・COIの記載がいずれもない。出版種別に Research Support, Non-U.S. Gov't とあるのみ。論文カードは著者3名が同一の化粧品企業の研究者と推定しつつ「確認できず」と記録している",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["retinol-concentration"]
+      "articles": [
+        "retinol-concentration"
+      ]
     },
     {
       "pmid": "39128883",
@@ -335,7 +377,9 @@
       "fundingNote": "資金提供は No7 Beauty Company（化粧品企業）。著者7名のうち2名（O'Connor C, Bell M）が同社の所属",
       "coiNote": "「著者は既知の利益相反を有さないことを宣言する」と申告しているが、資金提供元は No7 Beauty Company であり、著者2名が同社の所属である",
       "confirmed": "fulltext",
-      "articles": ["retinol-concentration"]
+      "articles": [
+        "retinol-concentration"
+      ]
     },
     {
       "pmid": "39184919",
@@ -349,7 +393,9 @@
       "fundingNote": "PubMedに資金提供の記載がない。著者6名の所属はパジャジャラン大学・ムラワルマン大学（インドネシア）、熊本大学。COI欄は「著者は利益相反を有さない」と申告",
       "coiNote": "",
       "confirmed": "bibliographic",
-      "articles": ["retinol-concentration"]
+      "articles": [
+        "retinol-concentration"
+      ]
     },
     {
       "pmid": "32428912",
@@ -363,7 +409,9 @@
       "fundingNote": "資金はウッチ医科大学（ポーランド）の助成。著者3名の所属もいずれも同大学薬学部で、企業所属の著者はいない。ただし試験に用いた化粧品の製剤化は Dr Koziej 社が担当している（資金提供者でも著者の所属先でもない）",
       "coiNote": "著者は「COIなし」と申告。PubMedの記録にはCOI欄そのものがない",
       "confirmed": "fulltext",
-      "articles": ["retinol-concentration"]
+      "articles": [
+        "retinol-concentration"
+      ]
     },
     {
       "pmid": "31222977",
@@ -377,7 +425,9 @@
       "fundingNote": "資金提供はウッチ医科大学（Uniwersytet Medyczny w Łodzi、助成番号 502-03/3-066-02/502-34-094）。著者2名の所属も同大学薬学部で、企業所属の著者はいない",
       "coiNote": "PubMedの記録にCOIの記載がない",
       "confirmed": "abstract",
-      "articles": ["retinol-concentration"]
+      "articles": [
+        "retinol-concentration"
+      ]
     },
     {
       "pmid": "23732711",
@@ -391,7 +441,10 @@
       "fundingNote": "論文カードは資金提供をオーストラリア国立保健医療研究評議会（NHMRC）と記録している。PubMedのGrant欄には記載がない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["sunscreen-spf", "skin-fasting"]
+      "articles": [
+        "sunscreen-spf",
+        "skin-fasting"
+      ]
     },
     {
       "pmid": "10475183",
@@ -405,7 +458,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。第1著者の所属はクイーンズランド医学研究所。同じナンボア試験の別報（PMID 23732711）は公的資金と記録されているが、この論文自体の資金提供の記載は確認できていない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["sunscreen-spf"]
+      "articles": [
+        "sunscreen-spf"
+      ]
     },
     {
       "pmid": "21135266",
@@ -419,7 +474,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。第1著者の所属はクイーンズランド医学研究所。同じナンボア試験の別報だが、この論文自体の資金提供の記載は確認できていない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["sunscreen-spf"]
+      "articles": [
+        "sunscreen-spf"
+      ]
     },
     {
       "pmid": "19962787",
@@ -433,7 +490,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。著者の所属は建国大学校医科大学（韓国）皮膚科。出版種別に Research Support, Non-U.S. Gov't とあるのみ",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["sunscreen-spf"]
+      "articles": [
+        "sunscreen-spf"
+      ]
     },
     {
       "pmid": "29291958",
@@ -447,7 +506,9 @@
       "fundingNote": "著者6名のうち4名（Williams JD, Maitra P, Atillasoy E, Wu MM）が Johnson & Johnson Consumer Inc. の所属。PubMedにCOI欄の記録はない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["sunscreen-spf"]
+      "articles": [
+        "sunscreen-spf"
+      ]
     },
     {
       "pmid": "34387824",
@@ -461,7 +522,9 @@
       "fundingNote": "PubMedに資金提供の記載がない。著者3名の所属はヘンリー・フォード病院皮膚科。COI欄で著者 Lim HW が Incyte・L'Oreal・Pfizer 等の治験共同研究者、Pierre Fabre・ISDIN・La Roche-Posay・Beiersdorf 等のコンサルタントであることを申告している（この論文自体への資金提供ではない）",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["sunscreen-spf"]
+      "articles": [
+        "sunscreen-spf"
+      ]
     },
     {
       "pmid": "30945275",
@@ -475,7 +538,9 @@
       "fundingNote": "資金提供はオーストラリア国立保健医療研究評議会（National Health and Medical Research Council）。著者の所属は QIMR バーグホファー医学研究所、オーストラリア国立大学",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["sunscreen-spf"]
+      "articles": [
+        "sunscreen-spf"
+      ]
     },
     {
       "pmid": "12077052",
@@ -489,7 +554,9 @@
       "fundingNote": "PubMedに著者の所属・資金提供・COIの記載がいずれもない",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["sunscreen-spf"]
+      "articles": [
+        "sunscreen-spf"
+      ]
     },
     {
       "pmid": "11712033",
@@ -503,7 +570,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。著者の所属はニューカッスル総合病院 地域医学物理部門",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["sunscreen-spf"]
+      "articles": [
+        "sunscreen-spf"
+      ]
     },
     {
       "pmid": "33318091",
@@ -517,7 +586,9 @@
       "fundingNote": "PubMedに資金提供の記載がない。著者の所属はカルガリー大学・オタワ大学。COI欄で著者 Burbidge T が AbbVie・Celgene・Janssen・Leo Pharmaceuticals・Lilly からの謝金を申告している（この論文自体への資金提供ではない）",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["sunscreen-spf"]
+      "articles": [
+        "sunscreen-spf"
+      ]
     },
     {
       "pmid": "31058986",
@@ -531,7 +602,9 @@
       "fundingNote": "著者の大半が米国食品医薬品局（FDA）医薬品評価研究センターの研究者。出版種別は Research Support, N.I.H., Extramural。COI欄は「None reported」",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["sunscreen-spf"]
+      "articles": [
+        "sunscreen-spf"
+      ]
     },
     {
       "pmid": "20924436",
@@ -545,7 +618,9 @@
       "fundingNote": "論文カードは全文（PMC）で資金提供元を The Boots Company（化粧品企業。共著者の雇用主）と確認している。第1著者の所属は Skinexigence SAS。PubMedにはGrant欄・COI欄の記録がない",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["sunscreen-spf"]
+      "articles": [
+        "sunscreen-spf"
+      ]
     },
     {
       "pmid": "33026578",
@@ -559,7 +634,9 @@
       "fundingNote": "全文に「資金提供・スポンサーは受けていない」と明記。著者の所属はチューリッヒ大学病院・バーゼル大学病院ほか。ただし複数の著者が製薬企業（AbbVie, Novartis, Eli Lilly, Celgene, Amgen, Sanofi 他）とのアドバイザリー・講演・治験の関係を開示している",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["skin-fasting"]
+      "articles": [
+        "skin-fasting"
+      ]
     },
     {
       "pmid": "10086859",
@@ -573,7 +650,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。第1著者の所属はコペンハーゲン大学ゲントフテ病院皮膚科",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["skin-fasting"]
+      "articles": [
+        "skin-fasting"
+      ]
     },
     {
       "pmid": "32087126",
@@ -587,7 +666,9 @@
       "fundingNote": "PubMedのGrant欄は Wellcome Trust および Department of Health（英国）。論文カードは英国 NIHR Health Technology Assessment と記録している。著者の所属はノッティンガム大学ほかの英国の大学・NHS",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["skin-fasting"]
+      "articles": [
+        "skin-fasting"
+      ]
     },
     {
       "pmid": "31189482",
@@ -601,7 +682,9 @@
       "fundingNote": "資金提供は米国国立衛生研究所（NIAMS NIH HHS）。著者の所属はカリフォルニア大学サンディエゴ校ほか。論文カードは EU Horizon 2020 の助成と Bruker による機器提供も記録している",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["skin-fasting"]
+      "articles": [
+        "skin-fasting"
+      ]
     },
     {
       "pmid": "35335373",
@@ -615,7 +698,9 @@
       "fundingNote": "著者3名全員がスキンケア製品企業 Ego Pharmaceuticals Pty Ltd. の Department of Scientific Affairs 所属",
       "coiNote": "「著者は利益相反を有さないことを宣言する」と申告しているが、著者3名全員がスキンケア製品企業 Ego Pharmaceuticals の所属である",
       "confirmed": "fulltext",
-      "articles": ["skin-fasting"]
+      "articles": [
+        "skin-fasting"
+      ]
     },
     {
       "pmid": "35053992",
@@ -629,7 +714,9 @@
       "fundingNote": "全文に「本研究は外部資金を受けていない」と記載。著者の所属はグラナダ大学、ビルヘン・デ・ラス・ニエベス大学病院",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["bathing-dryness"]
+      "articles": [
+        "bathing-dryness"
+      ]
     },
     {
       "pmid": "34455630",
@@ -643,7 +730,9 @@
       "fundingNote": "資金提供は Siriraj Grant for Research Development and Medical Education（マヒドン大学シリラート病院）。著者3名全員が同大学の所属",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["bathing-dryness"]
+      "articles": [
+        "bathing-dryness"
+      ]
     },
     {
       "pmid": "19706087",
@@ -657,7 +746,9 @@
       "fundingNote": "資金提供は米国国立衛生研究所（NCRR NIH HHS / NHLBI NIH HHS / PHS HHS）。論文カードは NIH（NCRR）GCRC grant M01 RR00827 と記録している。著者の所属はカリフォルニア大学サンフランシスコ校",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["bathing-dryness"]
+      "articles": [
+        "bathing-dryness"
+      ]
     },
     {
       "pmid": "34743412",
@@ -671,7 +762,9 @@
       "fundingNote": "資金提供は常盤薬品工業（TOKIWA Pharmaceutical Co., Ltd.）。著者4名のうち3名（Murakami Y, Saya Y, Matsunaka H）が同社の社員であるとCOI欄に明記されている",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["bathing-dryness"]
+      "articles": [
+        "bathing-dryness"
+      ]
     },
     {
       "pmid": "18199943",
@@ -685,7 +778,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。著者の所属はサウサンプトン大学 看護・助産学部。出版種別に Research Support, Non-U.S. Gov't とあるのみ",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["bathing-dryness"]
+      "articles": [
+        "bathing-dryness"
+      ]
     },
     {
       "pmid": "25073884",
@@ -699,7 +794,9 @@
       "fundingNote": "第1著者 Takagi Y の所属は花王株式会社（Kao Corporation, Tokyo）。PubMedに資金提供・COIの記載はなく、他5名の所属も記録されていない。出版種別に Research Support, Non-U.S. Gov't とあるのみ",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["bathing-dryness"]
+      "articles": [
+        "bathing-dryness"
+      ]
     },
     {
       "pmid": "25423895",
@@ -713,7 +810,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。第1著者の所属は埼玉医科大学総合医療センター皮膚科",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["bathing-dryness"]
+      "articles": [
+        "bathing-dryness"
+      ]
     },
     {
       "pmid": "37128827",
@@ -727,7 +826,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。著者2名の所属はポルト大学医学部、サン・ジョアン大学病院センター",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["vitamin-c-derivatives"]
+      "articles": [
+        "vitamin-c-derivatives"
+      ]
     },
     {
       "pmid": "10522500",
@@ -741,7 +842,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。著者の所属は Beeson Aesthetic Surgery Institute（米国）。出版種別に Research Support, Non-U.S. Gov't とあるのみ",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["vitamin-c-derivatives"]
+      "articles": [
+        "vitamin-c-derivatives"
+      ]
     },
     {
       "pmid": "11207686",
@@ -755,7 +858,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。第1著者 Pinnell SR の所属はデューク大学メディカルセンター。論文カードは、著者 Pinnell が外用ビタミンC製剤の開発に深く関わった研究者であると記録している",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["vitamin-c-derivatives"]
+      "articles": [
+        "vitamin-c-derivatives"
+      ]
     },
     {
       "pmid": "8543691",
@@ -769,7 +874,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。第1著者の所属は北里大学医学部皮膚科で、他11名の所属は記録されていない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["vitamin-c-derivatives"]
+      "articles": [
+        "vitamin-c-derivatives"
+      ]
     },
     {
       "pmid": "20367669",
@@ -783,7 +890,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。第1著者の所属はマイアミ大学皮膚科。出版種別に Research Support, Non-U.S. Gov't とあるのみで、具体的な資金提供元は記録されていない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["vitamin-c-derivatives"]
+      "articles": [
+        "vitamin-c-derivatives"
+      ]
     },
     {
       "pmid": "34679221",
@@ -797,7 +906,9 @@
       "fundingNote": "資金提供は Les Laboratories Pierre Fabre。著者10名全員が Pierre Fabre Dermo-cosmétique（化粧品企業）の研究所に所属",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["vitamin-c-derivatives"]
+      "articles": [
+        "vitamin-c-derivatives"
+      ]
     },
     {
       "pmid": "11896774",
@@ -811,7 +922,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。第1著者の所属は Dermatology Associates of San Diego County（米国の私設皮膚科）",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["vitamin-c-derivatives"]
+      "articles": [
+        "vitamin-c-derivatives"
+      ]
     },
     {
       "pmid": "18603326",
@@ -825,7 +938,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。著者の所属はデューク大学メディカルセンター皮膚科（Pinnell SR を含む）。出版種別に Research Support, Non-U.S. Gov't とあるのみ",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["vitamin-c-derivatives"]
+      "articles": [
+        "vitamin-c-derivatives"
+      ]
     },
     {
       "pmid": "16185284",
@@ -839,7 +954,9 @@
       "fundingNote": "資金提供は米国国立がん研究所／国立衛生研究所（NCI NIH HHS、grant R43CA83538）。著者の所属はデューク大学メディカルセンターほか",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["vitamin-c-derivatives"]
+      "articles": [
+        "vitamin-c-derivatives"
+      ]
     },
     {
       "pmid": "17291309",
@@ -853,7 +970,9 @@
       "fundingNote": "PubMedに著者の所属・資金提供・COIの記載がいずれもない。アブストラクトも非掲載で、内容を確認できていない",
       "coiNote": "",
       "confirmed": "bibliographic",
-      "articles": ["vitamin-c-derivatives"]
+      "articles": [
+        "vitamin-c-derivatives"
+      ]
     },
     {
       "pmid": "29104718",
@@ -867,7 +986,9 @@
       "fundingNote": "COI欄に「本研究に資金提供はなかった（No funding was provided for this study）」と明記。著者2名は英国の皮膚科医",
       "coiNote": "",
       "confirmed": "fulltext",
-      "articles": ["vitamin-c-derivatives"]
+      "articles": [
+        "vitamin-c-derivatives"
+      ]
     },
     {
       "pmid": "5837896",
@@ -881,7 +1002,9 @@
       "fundingNote": "PubMedに著者の所属・資金提供・COIの記載がいずれもない（1965年の論文）。要旨も掲載されておらず、全文は有料で未確認",
       "coiNote": "",
       "confirmed": "bibliographic",
-      "articles": ["turnover-28days"]
+      "articles": [
+        "turnover-28days"
+      ]
     },
     {
       "pmid": "4551262",
@@ -895,7 +1018,9 @@
       "fundingNote": "PubMedに著者の所属・資金提供・COIの記載がいずれもない。要旨も掲載されていない",
       "coiNote": "",
       "confirmed": "bibliographic",
-      "articles": ["turnover-28days"]
+      "articles": [
+        "turnover-28days"
+      ]
     },
     {
       "pmid": "871385",
@@ -909,7 +1034,9 @@
       "fundingNote": "PubMedに著者の所属・資金提供・COIの記載がいずれもない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["turnover-28days"]
+      "articles": [
+        "turnover-28days"
+      ]
     },
     {
       "pmid": "6725985",
@@ -923,7 +1050,9 @@
       "fundingNote": "PubMedに著者の所属・資金提供・COIの記載がいずれもない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["turnover-28days"]
+      "articles": [
+        "turnover-28days"
+      ]
     },
     {
       "pmid": "7865480",
@@ -937,7 +1066,9 @@
       "fundingNote": "PubMedに資金提供・COIの記載がない。著者の所属は旭川医科大学皮膚科",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["turnover-28days"]
+      "articles": [
+        "turnover-28days"
+      ]
     },
     {
       "pmid": "6827031",
@@ -951,7 +1082,9 @@
       "fundingNote": "資金提供は米国国立老化研究所／国立衛生研究所（NIA NIH HHS、grant AG00788）。化粧品会社の資金ではない",
       "coiNote": "",
       "confirmed": "abstract",
-      "articles": ["turnover-28days"]
+      "articles": [
+        "turnover-28days"
+      ]
     },
     {
       "pmid": "42430369",
@@ -965,7 +1098,9 @@
       "fundingNote": "論文の申告は「本研究に特定の資金提供は受けていない」。一方、同じ論文の著者所属欄で、5名中3名（Ye R・Du L・Hu F）が UNISKIN Research Institute on Skin Aging, Inertia Shanghai Biotechnology Co., Ltd. および DermaHealth Shanghai Biotechnology Co., Ltd. の所属と記載されている",
       "coiNote": "「The authors declare no conflicts of interest.」と申告。所属欄との食い違いは、この論文自身の中で確認できる。塗るPDRN化粧品のヒト試験として確認できた唯一の論文",
       "confirmed": "fulltext",
-      "articles": ["pdrn-salmon-dna"]
+      "articles": [
+        "pdrn-salmon-dna"
+      ]
     },
     {
       "pmid": "25473210",
@@ -979,7 +1114,9 @@
       "fundingNote": "撤回通知によれば、資金提供元は当初「地域のイノベーションセンターの助成」と記載されていたが、実際にはそのフィラーを製造する企業の資金だった",
       "coiNote": "論文は「全著者に金銭的関与なし」と申告。しかし著者 Kim I の所属は Pharmaresearch Products R&D Center（Rejuranのメーカー）と同じ論文に印刷されている。J Korean Med Sci. 2016;31(2):330（PMID 26839493）で撤回。理由は「利益相反の誤った開示と、資金提供元の誤った通知による瑕疵ある出版」。なお要旨自体に「主要・副次の客観的な評価項目で2群間に統計学的有意差はなかった」と記載",
       "confirmed": "abstract",
-      "articles": ["pdrn-salmon-dna"]
+      "articles": [
+        "pdrn-salmon-dna"
+      ]
     },
     {
       "pmid": "26839493",
@@ -993,7 +1130,9 @@
       "fundingNote": "撤回通知そのものに資金提供の記載はない",
       "coiNote": "撤回理由の本文:「The board concluded that the article was an impaired publication of conflict of interest by wrong disclosure and incorrect notification of funding sponsor.」共著者1名が当該フィラー製造企業のR&Dセンター勤務であったことが開示されていなかった。責任著者は申し立てを受け入れた（2016年1月22日承認）",
       "confirmed": "fulltext",
-      "articles": ["pdrn-salmon-dna"]
+      "articles": [
+        "pdrn-salmon-dna"
+      ]
     },
     {
       "pmid": "39313949",
@@ -1007,7 +1146,9 @@
       "fundingNote": "資金提供は「This work was funded by DexLevo, Inc.」（比較対象のPCLフィラー側の企業）",
       "coiNote": "「The authors declare no conflicts of interest.」と申告しつつ、資金提供元は DexLevo 社。RETRACTION: J Cosmet Dermatol. 2026;25(3):e70794 で撤回。撤回の理由は確認できなかった",
       "confirmed": "abstract",
-      "articles": ["pdrn-salmon-dna"]
+      "articles": [
+        "pdrn-salmon-dna"
+      ]
     },
     {
       "pmid": "32248707",
@@ -1021,7 +1162,9 @@
       "fundingNote": "PubMedの記録に資金提供・COIの記載がない。著者11名の所属はすべて大学病院（慶熙大学、蔚山大学 峨山医療院）で、企業所属者はいない。ただし資金提供の有無を一次情報で確認できていない",
       "coiNote": "今回開いたPDRN/PNのヒト試験の中で、著者に企業所属者がいない唯一の試験。結果はVAS・GAISの改善に2群間で有意差なし",
       "confirmed": "abstract",
-      "articles": ["pdrn-salmon-dna"]
+      "articles": [
+        "pdrn-salmon-dna"
+      ]
     },
     {
       "pmid": "35209068",
@@ -1035,7 +1178,9 @@
       "fundingNote": "資金提供は I'll Global Inc. Co.。著者 Chung MS の所属が I'll Global Co., Inc.（同社）",
       "coiNote": "「The authors have no conflict of interest to declare.」と申告。資金提供元の記載と、著者の所属が同一企業である点は、同じ論文の中で確認できる。「塗るPDRN」の根拠としてしばしば引用されるが、ヒト試験ではない",
       "confirmed": "abstract",
-      "articles": ["pdrn-salmon-dna"]
+      "articles": [
+        "pdrn-salmon-dna"
+      ]
     },
     {
       "pmid": "41892958",
@@ -1049,7 +1194,9 @@
       "fundingNote": "著者4名全員が原料メーカー Lucas Meyer Cosmetics およびその関連会社の社員",
       "coiNote": "「The authors are employees of Lucas Meyer Cosmetics and its affiliates and declare no conflict of interest.」——雇用関係を明記したうえで「利益相反なし」と申告している。所属を隠していない点で、この記事で扱った他の論文と異なる",
       "confirmed": "abstract",
-      "articles": ["pdrn-salmon-dna"]
+      "articles": [
+        "pdrn-salmon-dna"
+      ]
     },
     {
       "pmid": "39486723",
@@ -1063,7 +1210,25 @@
       "fundingNote": "PubMedの記録に資金提供の記載がない。著者の所属は淡江大学（台湾）とテイグエン大学（ベトナム）で、企業所属者はいない",
       "coiNote": "「The authors declare no conflict of interest.」",
       "confirmed": "abstract",
-      "articles": ["pdrn-salmon-dna"]
+      "articles": [
+        "pdrn-salmon-dna"
+      ]
+    },
+    {
+      "pmid": "31066077",
+      "title": "A new case of allergic contact dermatitis caused by 3-o-ethyl ascorbic acid in facial antiageing cosmetics.",
+      "journal": "Contact Dermatitis",
+      "year": 2019,
+      "design": "症例報告",
+      "evidenceType": "human-case-report",
+      "subjects": "1人（症例報告。頻度も原因の証明もない）",
+      "fundingType": "none",
+      "fundingNote": "資金提供の記載なし。著者3名はモンペリエ大学皮膚科・INSERM U1058（フランス）。企業所属者なし",
+      "coiNote": "利益相反の記載なし。要旨がPubMedに掲載されていないため、症例の詳細は確認できていない",
+      "confirmed": "bibliographic",
+      "articles": [
+        "vitamin-c-derivatives"
+      ]
     }
   ]
 }
