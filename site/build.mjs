@@ -527,6 +527,9 @@ const jsonLd = (a) => {
 const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath, ogSlug, article, noindex }) =>
   fill(tpl.layout, {
     ROBOTS: noindex ? '\n<meta name="robots" content="noindex, nofollow">' : '',
+    GOOGLE_VERIFY: cfg.googleSiteVerification
+      ? `\n<meta name="google-site-verification" content="${escapeAttr(cfg.googleSiteVerification)}">`
+      : '',
     OG_IMAGE: ogImage(ogSlug),
     JSONLD: jsonLd(article),
     CONTENT: content,

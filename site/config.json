@@ -14,6 +14,15 @@
   "askUrl": "https://forms.gle/V4tNomjBNbHEHbFm9",
   "_analyticsToken": "Cloudflare Web Analytics のトークン。Cookieを使わないので同意バナーが要りません。空なら計測タグを出しません。",
   "analyticsToken": "d7f8076cb35544d0aaf1a7b284287b89",
+
+  "_googleSiteVerification": [
+    "Google Search Console の所有権確認（HTMLタグ方式）のコード。",
+    "content=\"...\" の中身だけを入れます。空なら何も出しません。",
+    "",
+    "★ DNS（Cloudflare の TXT レコード）で確認したなら、ここは空のままで構いません。",
+    "  DNS のほうが確実です（サイトのビルドに依存しないため）。"
+  ],
+  "googleSiteVerification": "",
   "_book": [
     "本（Kindle）の設定は、ここではなく site/books.json に移しました。",
     "巻が増えていくので、1冊ぶんの枠では足りなくなったためです。",
