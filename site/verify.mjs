@@ -165,6 +165,85 @@ for (const [key, p] of ledger) {
   }
 }
 
+// ---- ニュースの検査 --------------------------------------------------
+//
+// このコーナーは、他人の発表を扱います。書き方を1つ間違えると、
+// 名誉毀損にも、薬機法違反にも、ただの叩き記事にもなります。
+// 機械で止められるものは、機械で止めます。
+
+{
+  const newsFile = join(SITE, 'news.json');
+  if (existsSync(newsFile)) {
+    const newsData = JSON.parse(readFileSync(newsFile, 'utf8'));
+    const items = (newsData.items ?? []).filter((n) => n.status === 'published');
+
+    const TRACED_WORDS = [
+      'human-trial', 'industry-only', 'lab-measure-only',
+      'invitro-only', 'animal-only', 'no-source',
+    ];
+
+    // 書いた時点で終わる言葉
+    const FATAL = [
+      '嘘', 'デタラメ', 'でたらめ', '詐欺', 'インチキ', 'ぼったくり',
+      '騙して', 'だまして', '悪質', '許せない', 'ひどい',
+    ];
+
+    // 断定（根拠が無いことを根拠に、逆方向に断定するのも捏造）
+    const OVERREACH = [
+      '効かない', '効果はない', '効果がない', '無意味', '意味がない',
+      '買うべきではない', 'やめるべき', '避けるべき',
+    ];
+
+    for (const n of items) {
+      const text = `${n.title ?? ''} ${n.claim ?? ''} ${n.found ?? ''} ${n.note ?? ''}`;
+
+      for (const w of FATAL) {
+        if (text.includes(w)) {
+          failures.push(
+            `ニュース ${n.id}: 書いてはいけない言葉が入っています →「${w}」\n` +
+              `      他人の発表を扱うコーナーです。事実だけを書き、断罪しないこと`
+          );
+        }
+      }
+      for (const w of OVERREACH) {
+        if (text.includes(w)) {
+          failures.push(
+            `ニュース ${n.id}: 断定が入っています →「${w}」\n` +
+              `      「出典が見つからない」は「効かない」ではありません`
+          );
+        }
+      }
+      for (const w of FORBIDDEN) {
+        if (text.includes(w)) {
+          failures.push(`ニュース ${n.id}: 薬機法でアウトな表現 →「${w}」`);
+        }
+      }
+
+      if (!TRACED_WORDS.includes(n.traced)) {
+        failures.push(
+          `ニュース ${n.id}: traced が「${n.traced}」です。使えるのは ${TRACED_WORDS.join(' / ')} のみ`
+        );
+      }
+      if (!n.sourceUrl) {
+        failures.push(
+          `ニュース ${n.id}: sourceUrl がありません。\n` +
+            `      出どころを示せないニュースは、このブログでは扱えません`
+        );
+      }
+      if (!n.found) {
+        failures.push(`ニュース ${n.id}: found（辿った先で見つかったもの）がありません`);
+      }
+      // 出典が見つかったと言うなら、PMID を出すこと
+      if (n.traced !== 'no-source' && (n.pmids ?? []).length === 0) {
+        failures.push(
+          `ニュース ${n.id}: traced が「${n.traced}」なのに PMID が1つもありません。\n` +
+            `      辿り着いたと言うなら、辿り着いた先を示すこと`
+        );
+      }
+    }
+  }
+}
+
 // ---- 商品（アフィリエイト）の検査 ---------------------------------
 //
 // 薬機法66条は「何人も」が対象。効能を書いた瞬間、罰せられるのは

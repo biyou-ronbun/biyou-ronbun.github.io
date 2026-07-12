@@ -830,6 +830,83 @@ ${g.items
   console.log(`  built  check.html (${payload.length} 件の言説)`);
 }
 
+// ---- ニュースを、論文で確かめる -------------------------------------------
+//
+// ニュースを「紹介」するのではなく、ニュースで主張されていることの出典を辿る。
+// ニュースそのものは他所のほうが速い。うちが出せるのは「確かめた」だけ。
+//
+// ★ 商品名・会社名は事実として書いてよいが、叩かない。
+//   「嘘」「デタラメ」と書いた時点で、このブログは終わる。
+
+{
+  const newsData = JSON.parse(read(join(SITE, 'news.json')));
+  const items = (newsData.items ?? [])
+    .filter((n) => n.status === 'published')
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
+
+  const TRACED_LABEL = {
+    'human-trial': 'ヒトの臨床試験まで辿れました',
+    'industry-only': 'ヒト試験はありますが、メーカー資金のものしか見つかりませんでした',
+    'lab-measure-only': 'ヒトで測ってはいますが、肌の見た目や症状は測っていません',
+    'invitro-only': '培養細胞・摘出皮膚の実験しか見つかりませんでした',
+    'animal-only': '動物実験しか見つかりませんでした',
+    'no-source': '出典が見つかりませんでした',
+  };
+
+  const html = items.length
+    ? items
+        .map(
+          (n) => `<article class="news-item is-${escapeAttr(n.traced)}">
+  <p class="news-date"><time datetime="${escapeAttr(n.date)}">${escapeHtml(n.date.replace(/-/g, '.'))}</time></p>
+  <h2 class="news-title">${escapeHtml(n.title)}</h2>
+
+  <p class="news-what"><span class="news-tag">発表されたこと</span>${escapeHtml(n.claim)}</p>
+  ${
+    n.sourceUrl
+      ? `<p class="news-source">出どころ: <a href="${escapeAttr(n.sourceUrl)}" target="_blank" rel="noopener nofollow">${escapeHtml(n.sourceName ?? n.sourceUrl)}</a></p>`
+      : ''
+  }
+
+  <p class="news-traced">${escapeHtml(TRACED_LABEL[n.traced] ?? n.traced)}</p>
+  <p class="news-found">${escapeHtml(n.found)}</p>
+  ${n.note ? `<p class="news-note">ここまでは言えません: ${escapeHtml(n.note)}</p>` : ''}
+
+  ${
+    (n.pmids ?? []).length
+      ? `<p class="news-pmids">確かめた論文: ${n.pmids
+          .map(
+            (p) =>
+              `<a href="https://pubmed.ncbi.nlm.nih.gov/${escapeAttr(p)}/" target="_blank" rel="noopener">PMID ${escapeHtml(p)}</a>`
+          )
+          .join(' / ')}</p>`
+      : '<p class="news-pmids">確かめた論文: <strong>見つかりませんでした</strong></p>'
+  }
+  ${
+    n.article
+      ? `<p class="news-link"><a href="articles/${escapeAttr(n.article)}.html">この話を詳しく書いた記事へ</a></p>`
+      : ''
+  }
+</article>`
+        )
+        .join('\n')
+    : `<p class="news-empty">まだ検証したニュースはありません。<br>週に数回、新しく発表されたことの出典を辿って、ここに追加します。</p>`;
+
+  write(
+    join(DIST, 'news.html'),
+    renderPage({
+      content: read(join(SITE, 'templates', 'news.html')).replace('{{NEWS_ITEMS}}', html),
+      headTitle: `ニュースを、論文で確かめる | ${cfg.title}`,
+      metaDesc:
+        '新しい成分、新しい商品、SNSで広まる手順。そのたびに生まれる「◯◯に効く」という主張の出典を辿った記録です。',
+      canonical: `${baseUrl}/news.html`,
+      ogType: 'website',
+      rootPath: '',
+      ogSlug: '_home',
+    })
+  );
+  console.log(`  built  news.html (${items.length} 件)`);
+}
+
 // ---- 404 ---------------------------------------------------------------
 
 write(
@@ -916,6 +993,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>${baseUrl}/</loc></url>
 <url><loc>${baseUrl}/about.html</loc></url>
+<url><loc>${baseUrl}/news.html</loc></url>
 <url><loc>${baseUrl}/check.html</loc></url>
 <url><loc>${baseUrl}/contact.html</loc></url>
 <url><loc>${baseUrl}/privacy.html</loc></url>
