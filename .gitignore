@@ -32,6 +32,14 @@ output/
 # 競合の分析メモ。他人を名指しで論評した内部資料であり、公開しない
 benchmark/
 
+# ★★★ X の API の鍵。これが公開されるとアカウントを乗っ取られます ★★★
+auto/.env
+*.env
+.env
+
+# 自動実行のログ
+auto/logs/
+
 # OS が勝手に作るもの
 Thumbs.db
 .DS_Store
