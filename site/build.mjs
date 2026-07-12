@@ -274,8 +274,9 @@ ${items.map((it) => `    <li><a href="#${it.id}">${escapeHtml(it.label)}</a></li
 //
 // ★ 効く・効かないは1文字も書きません。事実だけを並べます。
 
-const papersData = JSON.parse(read(join(SITE, 'papers.json')));
-const papers = papersData.papers;
+// 論文台帳（site/papers.json）は、サイトには出しません（オーナーの判断）。
+// ただしデータは残しています。site/verify.mjs が、記事の引用論文が
+// 台帳に載っているかを検査するのに使っています（記録の抜けを防ぐため）。
 
 const FUNDING_LABEL = {
   industry: '企業',
@@ -291,47 +292,6 @@ const CONFIRMED_LABEL = {
   bibliographic: '書誌のみ',
 };
 
-const paperRow = (p) => `      <tr>
-        <td class="pap-title">
-          <a href="https://pubmed.ncbi.nlm.nih.gov/${escapeAttr(p.pmid)}/" target="_blank" rel="noopener">${escapeHtml(p.title)}</a>
-          <span class="pap-meta">${escapeHtml(p.journal)} ${p.year}　PMID: ${escapeHtml(p.pmid)}</span>
-          ${p.design ? `<span class="pap-meta">${escapeHtml(p.design)}${p.subjects ? ' / ' + escapeHtml(p.subjects) : ''}</span>` : ''}
-        </td>
-        <td class="pap-fund">
-          <span class="pap-tag is-${escapeAttr(p.fundingType)}">${escapeHtml(FUNDING_LABEL[p.fundingType])}</span>
-          ${p.fundingNote ? `<span class="pap-meta">${escapeHtml(p.fundingNote)}</span>` : ''}
-          ${p.coiNote ? `<span class="pap-coi">申告との食い違い: ${escapeHtml(p.coiNote)}</span>` : ''}
-        </td>
-        <td class="pap-conf">${escapeHtml(CONFIRMED_LABEL[p.confirmed])}</td>
-      </tr>`;
-
-const papersBlock = (slug) => {
-  const items = papers.filter((p) => (p.articles ?? []).includes(slug));
-  if (!items.length) return '';
-
-  const coiCount = items.filter((p) => p.coiNote && p.coiNote.trim()).length;
-  const industry = items.filter((p) => p.fundingType === 'industry').length;
-
-  return `<aside class="papers">
-  <p class="papers-title">この記事が開いた論文</p>
-  <p class="papers-lead">${items.length}本を1本ずつ開き、著者の所属と資金提供元を確かめました。<strong>効く・効かないの評価は、ここには書きません。</strong>書くのは「誰が金を出したか」と「どこまで確認できたか」だけです。${
-    industry > 0 ? `<br>このうち<strong>${industry}本が企業の資金または社員の関与</strong>を確認しました。` : ''
-  }${
-    coiCount > 0
-      ? `<strong>${coiCount}本は、「利益相反なし」と申告しながら、著者がその業界の企業に所属していました。</strong>`
-      : ''
-  }</p>
-  <div class="table-scroll">
-    <table class="papers-table">
-      <thead><tr><th>論文</th><th>誰が金を出したか</th><th>確認範囲</th></tr></thead>
-      <tbody>
-${items.map(paperRow).join('\n')}
-      </tbody>
-    </table>
-  </div>
-  <p class="papers-note">論文名を押すと PubMed が開きます。<strong>この表は、あなたが自分で確かめるためのものです。</strong> 私たちの結論を信じてもらうためではありません。<a href="../papers.html">このブログが開いた論文の全台帳へ</a></p>
-</aside>`;
-};
 
 // ---- 関連記事 ---------------------------------------------------------
 //
@@ -604,7 +564,6 @@ for (const a of meta) {
     DATE: a.date,
     DATE_LABEL: a.date.replace(/-/g, '.'),
     PR_BANNER: prBanner(a.slug),
-    PAPERS: papersBlock(a.slug),
     PRODUCTS: productBlock(a.slug),
     RELATED: relatedBlock(a.slug, meta.filter((m) => m.published)),
     BOOK: bookBlock(),
@@ -781,152 +740,6 @@ write(
 );
 console.log('  built  search.json');
 
-// ---- 論文台帳のページ ---------------------------------------------------
-
-{
-  const total = papers.length;
-  const industry = papers.filter((p) => p.fundingType === 'industry').length;
-  const unverified = papers.filter((p) => p.fundingType === 'unverified').length;
-  const coi = papers.filter((p) => p.coiNote && p.coiNote.trim());
-
-  const sorted = [...papers].sort((a, b) => (a.year < b.year ? 1 : -1));
-
-  const content = `<article class="post">
-  <header class="post-header">
-    <h1 class="post-title">このブログが開いた論文</h1>
-    <p class="post-subtitle">${total}本。誰が金を出したかと、どこまで確認できたかの記録</p>
-  </header>
-
-  <div class="post-body">
-
-<p>このブログは、記事を1本書くために、論文を5本から10本読みます。読んだ論文は、1本ずつ PubMed で開き、<strong>著者の所属</strong>と<strong>資金提供元</strong>を確かめています。</p>
-
-<p>その記録が、これです。<strong>効く・効かないの評価は、1文字も書いていません。</strong> 書いてあるのは、次の3つだけです。</p>
-
-<ul>
-<li><strong>どんな論文か</strong>（研究の種類・被験者）</li>
-<li><strong>誰が金を出したか</strong></li>
-<li><strong>どこまで確認できたか</strong>（全文を読めたのか、要旨だけなのか）</li>
-</ul>
-
-<h2>いま分かっていること</h2>
-
-<div class="papers-stats">
-  <div class="stat"><span class="stat-num">${total}</span><span class="stat-label">開いた論文</span></div>
-  <div class="stat"><span class="stat-num">${industry}</span><span class="stat-label">企業の資金または社員の関与</span></div>
-  <div class="stat"><span class="stat-num">${unverified}</span><span class="stat-label">資金提供元を確認できず</span></div>
-  <div class="stat is-alert"><span class="stat-num">${coi.length}</span><span class="stat-label">「利益相反なし」と申告しながら、著者が業界企業に所属</span></div>
-</div>
-
-<p><strong>資金提供元を確認できなかった論文が ${unverified}本（${Math.round((unverified / total) * 100)}%）あります。</strong> これは「きれいな論文」という意味ではありません。<strong>PubMed に資金提供や利益相反の記載が無く、本文が有料で確認できなかった、という意味です。</strong> 古い論文と、有料の雑誌ほど、身元が分かりません。それも含めて、正直に書いておきます。</p>
-
-<h2>「利益相反なし」と申告していた論文</h2>
-
-<p>下の${coi.length}本は、論文に<strong>「利益相反はありません」と書かれています。</strong> しかし著者の所属を見ると、その業界の企業でした。</p>
-
-<p><strong>これは捏造だという話ではありません。</strong> 申告の書式が緩い、という話です。ただ、<strong>「利益相反なし」という一文だけを読んで安心するのは危険だ</strong>ということは、はっきり言えます。<strong>著者の所属まで見てください。</strong> PubMed で無料で見られます。</p>
-
-<ul class="papers-coi-list">
-${coi
-  .map(
-    (p) => `  <li>
-    <a href="https://pubmed.ncbi.nlm.nih.gov/${escapeAttr(p.pmid)}/" target="_blank" rel="noopener">${escapeHtml(p.title)}</a>
-    <span class="pap-meta">${escapeHtml(p.journal)} ${p.year}　PMID: ${escapeHtml(p.pmid)}</span>
-    <span class="pap-coi">${escapeHtml(p.coiNote)}</span>
-  </li>`
-  )
-  .join('\n')}
-</ul>
-
-<h2>全台帳</h2>
-
-<div class="finder">
-  <label class="finder-search">
-    <span class="sr-only">論文を検索</span>
-    <input type="search" id="pq" placeholder="論文名・雑誌名・企業名で探す（例: Newtree、資生堂、Nutrients）" autocomplete="off">
-  </label>
-  <div class="finder-cats" id="pcats"></div>
-  <p class="finder-count" id="pcount"></p>
-</div>
-
-<div class="table-scroll">
-  <table class="papers-table" id="ptable">
-    <thead><tr><th>論文</th><th>誰が金を出したか</th><th>確認範囲</th></tr></thead>
-    <tbody>
-${sorted.map(paperRow).join('\n')}
-    </tbody>
-  </table>
-</div>
-
-<script>
-(function () {
-  var input = document.getElementById('pq');
-  var table = document.getElementById('ptable');
-  var cats = document.getElementById('pcats');
-  var count = document.getElementById('pcount');
-  if (!input || !table) return;
-
-  var rows = Array.prototype.slice.call(table.querySelectorAll('tbody tr'));
-  var active = null;
-
-  var filters = [
-    ['企業', 'is-industry'],
-    ['公的資金', 'is-public'],
-    ['独立', 'is-independent'],
-    ['資金提供なし', 'is-none'],
-    ['確認できず', 'is-unverified'],
-  ];
-
-  filters.forEach(function (f) {
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'finder-cat';
-    b.textContent = f[0];
-    b.addEventListener('click', function () {
-      active = active === f[1] ? null : f[1];
-      Array.prototype.forEach.call(cats.children, function (c) {
-        c.classList.toggle('is-on', c === b && active !== null);
-      });
-      apply();
-    });
-    cats.appendChild(b);
-  });
-
-  function apply() {
-    var q = input.value.trim().toLowerCase();
-    var shown = 0;
-    rows.forEach(function (tr) {
-      var okQ = !q || tr.textContent.toLowerCase().indexOf(q) >= 0;
-      var okF = !active || tr.querySelector('.pap-tag.' + active);
-      var show = okQ && okF;
-      tr.hidden = !show;
-      if (show) shown++;
-    });
-    count.textContent = (q || active) ? shown + ' 本' : '';
-  }
-
-  input.addEventListener('input', apply);
-})();
-</script>
-
-  </div>
-</article>`;
-
-  write(
-    join(DIST, 'papers.html'),
-    renderPage({
-      content,
-      headTitle: `このブログが開いた論文 | ${cfg.title}`,
-      metaDesc: `${total}本の論文を1本ずつ開き、著者の所属と資金提供元を確かめた記録。「利益相反なし」と申告しながら著者が業界企業に所属していた論文が${coi.length}本ありました。`,
-      canonical: `${baseUrl}/papers.html`,
-      ogType: 'website',
-      rootPath: '',
-      ogSlug: '_home',
-    })
-  );
-  console.log(`  built  papers.html (${total} 本 / 食い違い ${coi.length} 件)`);
-}
-
 // ---- 404 ---------------------------------------------------------------
 
 write(
@@ -1013,7 +826,6 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>${baseUrl}/</loc></url>
 <url><loc>${baseUrl}/about.html</loc></url>
-<url><loc>${baseUrl}/papers.html</loc></url>
 <url><loc>${baseUrl}/contact.html</loc></url>
 <url><loc>${baseUrl}/privacy.html</loc></url>
 ${categories.map((c) => `<url><loc>${baseUrl}/category/${catSlug(c)}.html</loc></url>`).join('\n')}
