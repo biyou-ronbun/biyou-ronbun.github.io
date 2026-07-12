@@ -176,7 +176,6 @@ const tpl = {
   article: read(join(SITE, 'templates', 'article.html')),
   about:   read(join(SITE, 'templates', 'about.html')),
   privacy: read(join(SITE, 'templates', 'privacy.html')),
-  adsPolicy: read(join(SITE, 'templates', 'ads-policy.html')),
   cta:     read(join(SITE, 'templates', 'cta.html')),
 };
 
@@ -194,10 +193,10 @@ const adsenseHead = adsOn
   : '';
 
 // 記事末尾にだけ置く。本文に差し込む「自動広告」は使わない。
-const adSlot = (rootPath) =>
+const adSlot = () =>
   adsOn
     ? `<aside class="adbox">
-  <p class="adbox-label">広告　<a href="${rootPath}ads-policy.html">化粧品・サプリ・美容医療の広告はブロックしています</a></p>
+  <p class="adbox-label">広告</p>
   <ins class="adsbygoogle" style="display:block" data-ad-client="${ads.adsenseClientId}" data-ad-format="auto" data-full-width-responsive="true"></ins>
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </aside>`
@@ -213,13 +212,8 @@ const adsDisclosure = adsOn
 
 <p>Google が広告 Cookie を使用することにより、ユーザーは <a href="https://adssettings.google.com/" target="_blank" rel="noopener">広告設定</a> でパーソナライズ広告を無効にできます。また <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener">www.aboutads.info</a> から、第三者配信事業者の Cookie を無効にすることもできます。</p>
 
-<p><strong>ただし、このサイトでは化粧品・サプリメント・美容医療・ダイエットの広告カテゴリをブロックしています。</strong> 何をブロックしているかの一覧は <a href="{{ROOT}}ads-policy.html">広告について</a> に公開しています。</p>`
+<p><strong>なお、このサイトでは化粧品・サプリメント・美容医療・ダイエットの広告カテゴリをブロックしています。</strong> 検証している業界の広告を、その検証記事の横に出さないためです。</p>`
   : `<p>広告配信事業者による Cookie（Google AdSense 等）は、現在このサイトでは使用していません。</p>`;
-
-const listHtml = (items, empty) =>
-  items && items.length
-    ? `<ul>\n${items.map((i) => `<li>${escapeHtml(i)}</li>`).join('\n')}\n</ul>`
-    : `<p>${escapeHtml(empty)}</p>`;
 
 const baseUrl = cfg.baseUrl.replace(/\/+$/, '');
 
@@ -289,7 +283,7 @@ for (const a of meta) {
     DATE: a.date,
     DATE_LABEL: a.date.replace(/-/g, '.'),
     CTA: ctaFor('../'),
-    ADSLOT: adSlot('../'),
+    ADSLOT: adSlot(),
     ROOT: '../',
   });
 
@@ -374,27 +368,6 @@ write(
 );
 console.log('  built  privacy.html');
 
-// ---- 広告について（ブロックリストを公開するページ） ------------------
-
-write(
-  join(DIST, 'ads-policy.html'),
-  renderPage({
-    content: fill(tpl.adsPolicy, {
-      BLOCKED_CATEGORIES: listHtml(ads.blockedCategories, 'ブロック設定はまだ登録されていません。'),
-      BLOCKED_ADVERTISERS: listHtml(
-        ads.blockedAdvertisers,
-        '現在、個別にブロックしている広告主はありません。記事で研究の資金提供元として名前が出た企業が現れ次第、ここに追記します。'
-      ),
-    }),
-    headTitle: `広告について | ${cfg.title}`,
-    metaDesc: 'このサイトが広告でブロックしているカテゴリと広告主の一覧。化粧品・サプリメント・美容医療の広告は表示しません。',
-    canonical: `${baseUrl}/ads-policy.html`,
-    ogType: 'website',
-    rootPath: '',
-  })
-);
-console.log('  built  ads-policy.html');
-
 // ---- ads.txt（AdSense が要求する所有証明） --------------------------
 
 if (adsOn) {
@@ -403,37 +376,6 @@ if (adsOn) {
   console.log('  built  ads.txt');
 }
 
-// ---- RSS ---------------------------------------------------------
-
-const escapeXml = (s = '') =>
-  String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-const rfc822 = (d) => new Date(`${d}T00:00:00Z`).toUTCString();
-const newest = [...published].sort((a, b) => (a.date < b.date ? 1 : -1))[0].date;
-
-const rss = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0"><channel>
-<title>${escapeXml(cfg.title)}</title>
-<link>${baseUrl}/</link>
-<description>${escapeXml(cfg.description)}</description>
-<language>ja</language>
-<lastBuildDate>${rfc822(newest)}</lastBuildDate>
-${published
-  .map(
-    (a) => `<item>
-  <title>${escapeXml(a.title)}</title>
-  <link>${baseUrl}/articles/${a.slug}.html</link>
-  <guid>${baseUrl}/articles/${a.slug}.html</guid>
-  <pubDate>${rfc822(a.date)}</pubDate>
-  <description>${escapeXml(a.summary)}</description>
-</item>`
-  )
-  .join('\n')}
-</channel></rss>
-`;
-write(join(DIST, 'feed.xml'), rss);
-console.log('  built  feed.xml');
-
 // ---- サイトマップ / robots ----------------------------------------
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -441,7 +383,6 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <url><loc>${baseUrl}/</loc></url>
 <url><loc>${baseUrl}/about.html</loc></url>
 <url><loc>${baseUrl}/privacy.html</loc></url>
-<url><loc>${baseUrl}/ads-policy.html</loc></url>
 ${published
   .map((a) => `<url><loc>${baseUrl}/articles/${a.slug}.html</loc><lastmod>${a.date}</lastmod></url>`)
   .join('\n')}
