@@ -33,7 +33,7 @@
     "手順: ①IDを入れる → ②審査に出す → ③通ったらブロック設定 → ④showAdUnits を true"
   ],
   "ads": {
-    "adsenseClientId": "",
+    "adsenseClientId": "ca-pub-7734546695481260",
     "showAdUnits": false,
     "blockedCategories": [
       "薬品・サプリメント（Drugs & supplements）",

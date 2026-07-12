@@ -95,7 +95,9 @@
       "Bash(mkdir -p /e/note/.claude/agents /e/note/research /e/note/products /e/note/x /e/note/ops /e/note/docs)",
       "PowerShell(Start-Process \"https://github.com/apps/claude/installations/new\")",
       "Bash(node tools/fetch.mjs)",
-      "Bash(node tools/credits.mjs)"
+      "Bash(node tools/credits.mjs)",
+      "Bash(cd /e/note && find . -type f | sort && echo \"---\" && wc -l CLAUDE.md .claude/agents/*.md | tail -9)",
+      "Read(//e/note/**)"
     ],
     "additionalDirectories": [
       "E:\\mv-lab\\tools",
