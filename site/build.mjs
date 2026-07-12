@@ -213,6 +213,7 @@ const tpl = {
   article: read(join(SITE, 'templates', 'article.html')),
   about:   read(join(SITE, 'templates', 'about.html')),
   privacy: read(join(SITE, 'templates', 'privacy.html')),
+  contact: read(join(SITE, 'templates', 'contact.html')),
   membership: read(join(SITE, 'templates', 'membership.html')),
   tokushoho: read(join(SITE, 'templates', 'tokushoho.html')),
   cta:     read(join(SITE, 'templates', 'cta.html')),
@@ -578,6 +579,22 @@ if (cfg.customDomain) {
   console.log(`  built  CNAME (${cfg.customDomain})`);
 }
 
+// ---- お問い合わせ -----------------------------------------------------
+
+write(
+  join(DIST, 'contact.html'),
+  renderPage({
+    content: fill(tpl.contact, { ASK_URL: escapeAttr(cfg.askUrl ?? '') }),
+    headTitle: `お問い合わせ | ${cfg.title}`,
+    metaDesc:
+      '調べてほしいこと、記事の誤りの指摘、取材のご依頼。化粧品メーカー・美容メディアからの監修や執筆はお受けしていません。',
+    canonical: `${baseUrl}/contact.html`,
+    ogType: 'website',
+    rootPath: '',
+  })
+);
+console.log('  built  contact.html');
+
 // ---- メンバーシップ / 特定商取引法 -----------------------------------
 
 if (memOn) {
@@ -633,6 +650,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>${baseUrl}/</loc></url>
 <url><loc>${baseUrl}/about.html</loc></url>
+<url><loc>${baseUrl}/contact.html</loc></url>
 <url><loc>${baseUrl}/privacy.html</loc></url>
 ${published
   .map((a) => `<url><loc>${baseUrl}/articles/${a.slug}.html</loc><lastmod>${a.date}</lastmod></url>`)
