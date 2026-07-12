@@ -532,6 +532,105 @@ const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath,
       : '',
   });
 
+// ---- 悩みから探す（タグ） -------------------------------------------------
+//
+// うちのカテゴリ（塗る / 飲む / 習慣）は「対象の分類」であって、読者の悩みではない。
+// 読者は「塗るもの」を探して来ない。「毛穴」「乾燥」で来る。
+//
+// ★ 必ず守る2本の線がある（越えたら、このサイトは別物になる）
+//
+//   1. タグページに、記事へのリンク以外を1文字も書かない
+//      → 解説を書き始めた瞬間、それは「成分辞典」になる（企画として却下済み）
+//
+//   2. タグは「読者の言葉」だけ。「こちらの判定」をタグにしない
+//      → 「根拠なし」「動物実験」をタグにした瞬間、それは糾弾リストになる（却下済み）
+//
+// タグの語彙は下の固定リストだけ。articles.json の tags にこれ以外を書いたら、
+// site/verify.mjs が公開を止める。
+
+const TAG_VOCAB = [
+  '乾燥', '毛穴', 'シワ', 'シミ', 'ニキビ', '敏感肌', '赤み',
+  'ハリ', 'くすみ', '日焼け', 'たるみ', '角質', 'テカリ',
+];
+
+const tagSlug = (t) =>
+  ({
+    乾燥: 'kansou', 毛穴: 'keana', シワ: 'shiwa', シミ: 'shimi',
+    ニキビ: 'nikibi', 敏感肌: 'binkan', 赤み: 'akami', ハリ: 'hari',
+    くすみ: 'kusumi', 日焼け: 'hiyake', たるみ: 'tarumi',
+    角質: 'kakushitsu', テカリ: 'tekari',
+  }[t] ?? encodeURIComponent(t));
+
+// 記事が2本以上あるタグにだけページを作る。
+// 1本しかないタグのページは、リンクが1本あるだけの空ページになる。
+const tagMap = new Map();
+for (const a of meta.filter((m) => m.published)) {
+  for (const t of a.tags ?? []) {
+    if (!TAG_VOCAB.includes(t)) continue;
+    if (!tagMap.has(t)) tagMap.set(t, []);
+    tagMap.get(t).push(a);
+  }
+}
+const tags = [...tagMap.entries()].filter(([, items]) => items.length >= 2);
+
+// トップページに出す入口。ここも、リンク以外は書かない。
+const tagNav = tags.length
+  ? `<nav class="tagnav">
+  <p class="tagnav-title">悩みから探す</p>
+  <ul class="tagnav-list">
+${tags
+  .sort((a, b) => b[1].length - a[1].length)
+  .map(
+    ([t, items]) =>
+      `    <li><a href="tag/${tagSlug(t)}.html">${escapeHtml(t)}<span class="tagnav-n">${items.length}</span></a></li>`
+  )
+  .join('\n')}
+  </ul>
+</nav>`
+  : '';
+
+// 記事の下に出す導線
+const tagLinks = (a, rootPath) => {
+  const own = (a.tags ?? []).filter((t) => tagMap.get(t)?.length >= 2);
+  if (!own.length) return '';
+  return `<p class="tag-links">この記事は次の悩みに関わります: ${own
+    .map(
+      (t) =>
+        `<a class="tag-chip" href="${rootPath}tag/${tagSlug(t)}.html">${escapeHtml(t)}</a>`
+    )
+    .join(' ')}</p>`;
+};
+
+// ---- 次に調べること -----------------------------------------------------
+//
+// 完成したものだけを並べるサイトには、明日また来る理由がありません。
+// 「次に何を調べるか」を先に見せることで、読者に予定ができます。
+//
+// ★ 結論は書きません（まだ調べていないので、書けるわけがない）。
+//   書くのは「これから調べる」という予定だけです。
+
+const nextTopics = (() => {
+  const topicsFile = join(ROOT, 'topics.json');
+  if (!existsSync(topicsFile)) return '';
+
+  const t = JSON.parse(read(topicsFile));
+  const queued = (t.topics ?? []).filter((x) => x.status === 'queued').slice(0, 5);
+  if (!queued.length) return '';
+
+  return `<aside class="next">
+  <p class="next-title">次に調べること</p>
+  <p class="next-lead">平日は毎日、1本ずつ調べています。<strong>結果がどうなるかは、調べ終わるまで分かりません。</strong>「根拠が見つかりませんでした」で終わることもあります。</p>
+  <ol class="next-list">
+${queued.map((q) => `    <li>${escapeHtml(q.theme)}</li>`).join('\n')}
+  </ol>
+  ${
+    cfg.askUrl
+      ? `<p class="next-ask">調べてほしいことがあれば、<a href="${escapeAttr(cfg.askUrl)}" target="_blank" rel="noopener">ここから送ってください</a>。読者から届いたものを、最優先で調べます。</p>`
+      : ''
+  }
+</aside>`;
+})();
+
 // ---- 出力先を作り直す -------------------------------------------
 
 rmSync(DIST, { recursive: true, force: true });
@@ -565,6 +664,7 @@ for (const a of meta) {
     DATE_LABEL: a.date.replace(/-/g, '.'),
     PR_BANNER: prBanner(a.slug),
     PRODUCTS: productBlock(a.slug),
+    TAG_LINKS: tagLinks(a, '../'),
     RELATED: relatedBlock(a.slug, meta.filter((m) => m.published)),
     BOOK: bookBlock(),
     CTA: ctaFor('../'),
@@ -617,6 +717,8 @@ write(
   renderPage({
     content: tpl.home
       .replace('{{ARTICLE_LIST}}', cards)
+      .replace('{{TAGS}}', tagNav)
+      .replace('{{NEXT}}', nextTopics)
       .replace('{{BOOK}}', bookBlock())
       .replace('{{CTA}}', ctaFor('')),
     headTitle: cfg.title,
@@ -830,6 +932,53 @@ ${g.items
   console.log(`  built  check.html (${payload.length} 件の言説)`);
 }
 
+// ---- 悩みから探す（タグページ） -------------------------------------------
+// 語彙・tagMap・tagLinks の定義は、記事ページより前（上）にある。
+
+for (const [tag, items] of tags) {
+  const cards = items
+    .sort((a, b) => (a.date < b.date ? 1 : -1))
+    .map((a) =>
+      fill(tpl.card, {
+        SLUG: a.slug,
+        TITLE: escapeHtml(a.title),
+        SUBTITLE: escapeHtml(a.subtitle),
+        SUMMARY: escapeHtml(a.summary),
+        CATEGORY: escapeHtml(a.category),
+        DATE: a.date,
+        DATE_LABEL: a.date.replace(/-/g, '.'),
+        ROOT: '../',
+      })
+    )
+    .join('');
+
+  // ★ ここに解説を書かないこと。記事へのリンクだけを置く。
+  const content = `<section class="hero is-narrow">
+  <p class="hero-lead">「${escapeHtml(tag)}」に関わる記事</p>
+  <p class="hero-body">${items.length} 本あります。</p>
+</section>
+
+<ul class="article-list">
+${cards}
+</ul>
+
+<p class="back-to-index"><a class="back-link" href="../index.html">すべての記事へ</a></p>`;
+
+  write(
+    join(DIST, 'tag', `${tagSlug(tag)}.html`),
+    renderPage({
+      content,
+      headTitle: `「${tag}」に関わる記事 | ${cfg.title}`,
+      metaDesc: `${cfg.title}の「${tag}」に関わる記事の一覧です。`,
+      canonical: `${baseUrl}/tag/${tagSlug(tag)}.html`,
+      ogType: 'website',
+      rootPath: '../',
+      ogSlug: '_home',
+    })
+  );
+}
+console.log(`  built  tag/ (${tags.length} 個)`);
+
 // ---- ニュースを、論文で確かめる -------------------------------------------
 //
 // ニュースを「紹介」するのではなく、ニュースで主張されていることの出典を辿る。
@@ -998,6 +1147,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <url><loc>${baseUrl}/contact.html</loc></url>
 <url><loc>${baseUrl}/privacy.html</loc></url>
 ${categories.map((c) => `<url><loc>${baseUrl}/category/${catSlug(c)}.html</loc></url>`).join('\n')}
+${tags.map(([t]) => `<url><loc>${baseUrl}/tag/${tagSlug(t)}.html</loc></url>`).join('\n')}
 ${published
   .map((a) => `<url><loc>${baseUrl}/articles/${a.slug}.html</loc><lastmod>${a.date}</lastmod></url>`)
   .join('\n')}

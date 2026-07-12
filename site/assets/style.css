@@ -1323,6 +1323,140 @@ a { color: var(--rose); }
   .stat-num { font-size: 30px; }
 }
 
+/* ---------- 悩みから探す（トップ） ---------- */
+
+.tagnav {
+  margin: 0 0 40px;
+  padding: 26px 28px 22px;
+  background: var(--bg-raised);
+  border: 1px solid var(--rule-soft);
+}
+
+.tagnav-title {
+  margin: 0 0 16px;
+  font-family: var(--serif);
+  font-size: 14px;
+  letter-spacing: .16em;
+  color: var(--ink-soft);
+}
+
+.tagnav-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tagnav-list a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 9px 16px;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: .08em;
+  transition: border-color .2s ease, color .2s ease;
+}
+
+.tagnav-list a:hover { border-color: var(--gold); color: var(--rose); }
+
+.tagnav-n {
+  font-size: 11px;
+  color: var(--ink-mute);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 600px) {
+  .tagnav { padding: 20px 18px 16px; }
+  .tagnav-list { gap: 8px; }
+  .tagnav-list a { padding: 8px 13px; font-size: 13px; }
+}
+
+/* ---------- 悩みタグ ---------- */
+
+.tag-links {
+  margin: 48px 0 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule-soft);
+  font-size: 12.5px;
+  color: var(--ink-mute);
+  letter-spacing: .04em;
+}
+
+.tag-chip {
+  display: inline-block;
+  margin: 0 4px;
+  padding: 5px 14px;
+  border: 1px solid var(--rule);
+  background: var(--bg-raised);
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: .08em;
+  transition: border-color .2s ease, color .2s ease;
+}
+
+.tag-chip:hover { border-color: var(--gold); color: var(--rose); }
+
+/* ---------- 次に調べること ---------- */
+
+.next {
+  margin: 64px 0 0;
+  padding: 32px 30px 28px;
+  background: var(--bg-wash);
+  border-left: 2px solid var(--gold);
+}
+
+.article-list + .next { margin-top: 8px; }
+
+.next-title {
+  margin: 0 0 14px;
+  font-family: var(--serif);
+  font-size: 17px;
+  letter-spacing: .1em;
+}
+
+.next-lead {
+  margin: 0 0 20px;
+  font-size: 13px;
+  line-height: 2;
+  color: var(--ink-soft);
+}
+
+.next-lead strong { color: var(--ink); font-weight: 500; }
+
+.next-list {
+  margin: 0 0 20px;
+  padding-left: 1.5em;
+}
+
+.next-list li {
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--ink);
+}
+
+.next-list li::marker { color: var(--gold); }
+
+.next-ask {
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  font-size: 12.5px;
+  line-height: 1.95;
+  color: var(--ink-mute);
+}
+
+@media (max-width: 600px) {
+  .next { padding: 24px 20px 20px; margin-left: -20px; margin-right: -20px; }
+}
+
 /* ---------- 関連記事 ---------- */
 
 .related {
