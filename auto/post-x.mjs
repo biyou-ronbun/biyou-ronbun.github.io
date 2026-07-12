@@ -245,6 +245,26 @@ if (dry) {
   process.exit(0);
 }
 
+// ---- 関門。ここを通らないものは、1本も出さない ----------------------
+//
+// 記事は verify.mjs が止められます。X には、その関門がありませんでした。
+// そして X の投稿は記事より危ない。取り消せず、短いので「ここまでは言えません」が
+// 削られやすく、伸ばそうとすると断定に寄る力が働くからです。
+//
+// ★ 1本でも落ちたら、その回は何も出しません（落ちた1本だけを飛ばさない）。
+//   「悪い1本を黙って飛ばして、良い1本だけ出す」は、問題を見えなくするだけです。
+
+{
+  const { execFileSync } = await import('node:child_process');
+  try {
+    execFileSync(process.execPath, [join(ROOT, 'auto', 'verify-x.mjs')], { stdio: 'inherit' });
+  } catch {
+    console.error('');
+    console.error('検査に落ちたので、この回は1本も投稿しません。');
+    process.exit(1);
+  }
+}
+
 const cred = loadEnv();
 let posted = 0;
 
