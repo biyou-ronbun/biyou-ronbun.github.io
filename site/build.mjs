@@ -508,8 +508,9 @@ const jsonLd = (a) => {
   return `<script type="application/ld+json">${JSON.stringify(data)}</script>`;
 };
 
-const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath, ogSlug, article }) =>
+const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath, ogSlug, article, noindex }) =>
   fill(tpl.layout, {
+    ROBOTS: noindex ? '\n<meta name="robots" content="noindex, nofollow">' : '',
     OG_IMAGE: ogImage(ogSlug),
     JSONLD: jsonLd(article),
     CONTENT: content,
@@ -637,6 +638,20 @@ rmSync(DIST, { recursive: true, force: true });
 mkdirSync(DIST, { recursive: true });
 
 // ---- 記事ページ --------------------------------------------------
+//
+// 記事が公開されない条件は2つ。
+//
+//   ① published: false        … 寝かせる（出す予定が無い）
+//   ② date が未来の日付        … まだ公開日が来ていない
+//
+// ②は「先出し」の仕組みです。公開日の数日前に書き上げておくと、その間だけ
+// メンバーのページに出ます。公開日が来たら、自動で全員に出ます。
+//
+// ★ 新しい仕組みを足していないことに注意。日付を見ているだけです。
+//   「先出し用のフラグ」を作ると、立てっぱなしのまま忘れられて事故になります。
+
+// 日本時間の「今日」。ビルドが動く場所（GitHub は UTC）に結果が左右されないようにする。
+const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
 
 const published = [];
 const heldBack = [];
@@ -650,6 +665,7 @@ for (const a of meta) {
     continue;
   }
   if (!a.published) { heldBack.push(a.slug); continue; }
+  if (a.date > today) { heldBack.push(a.slug); continue; } // 公開日がまだ来ていない
 
   const { body, toc } = withToc(markdownToHtml(read(mdPath)));
 
@@ -1056,6 +1072,176 @@ console.log(`  built  tag/ (${tags.length} 個)`);
   console.log(`  built  news.html (${items.length} 件)`);
 }
 
+// ---- メンバーのページ（推測できないURL） ---------------------------------
+//
+// 静的サイトなのでログイン認証は持てない。だから「推測できないURL」を鍵の代わりにする。
+//
+// ★ URL は公開リポジトリに置かない。
+//   環境変数 MEMBER_TOKEN から読む（手元は auto/.env、GitHub Actions は Secrets）。
+//   ここに直接書いた瞬間、鍵を玄関に貼ることになる。
+//
+// ★ そして、この鍵は「隠し情報の鍵」ではない。
+//   記事も検証メモもソースコードも、すべて公開リポジトリにある。探せば見つかる。
+//   だから、メンバーのページに「隠していません」と書く。
+//   隠していないものを「限定」と呼んで売った瞬間、このブログの武器が壊れる。
+
+const memberToken = (() => {
+  if (process.env.MEMBER_TOKEN) return process.env.MEMBER_TOKEN.trim();
+  const envFile = join(ROOT, 'auto', '.env');
+  if (!existsSync(envFile)) return '';
+  const m = read(envFile).match(/^\s*MEMBER_TOKEN\s*=\s*(.+)$/m);
+  return m ? m[1].trim().replace(/^["']|["']$/g, '') : '';
+})();
+
+if (memberToken && memOn) {
+  const memos = JSON.parse(read(join(SITE, 'memos.json'))).memos ?? [];
+  const papers = existsSync(join(SITE, 'papers.json'))
+    ? JSON.parse(read(join(SITE, 'papers.json'))).papers ?? []
+    : [];
+  const topics = existsSync(join(ROOT, 'topics.json'))
+    ? JSON.parse(read(join(ROOT, 'topics.json'))).topics ?? []
+    : [];
+
+  const queued = topics.filter((t) => t.status === 'queued');
+
+  // ① 先出し。公開日がまだ来ていない記事を、本文ごとメンバーにだけ出す。
+  const upcoming = heldBack
+    .map((slug) => meta.find((m) => m.slug === slug))
+    .filter((a) => a && a.published && a.date > today)
+    .sort((a, b) => (a.date < b.date ? -1 : 1));
+
+  for (const a of upcoming) {
+    const { body, toc } = withToc(markdownToHtml(read(join(ROOT, 'articles', `${a.slug}.md`))));
+    const page = fill(tpl.article, {
+      BODY: body,
+      TOC: toc,
+      TITLE: escapeHtml(a.title),
+      SUBTITLE: escapeHtml(a.subtitle),
+      CATEGORY: escapeHtml(a.category),
+      CATEGORY_SLUG: catSlug(a.category),
+      DATE: a.date,
+      DATE_LABEL: `${a.date.replace(/-/g, '.')} 公開予定`,
+      PR_BANNER: '',
+      PRODUCTS: '',
+      TAG_LINKS: '',
+      RELATED: '',
+      BOOK: '',
+      CTA: '',
+      ADSLOT: '',
+      ROOT: '../../',
+    });
+    write(
+      join(DIST, 'm', memberToken, `${a.slug}.html`),
+      renderPage({
+        content: page,
+        headTitle: `${a.title} | ${cfg.title}`,
+        metaDesc: a.summary,
+        canonical: `${baseUrl}/articles/${a.slug}.html`,
+        ogType: 'article',
+        rootPath: '../../',
+        ogSlug: '_home',
+        noindex: true,
+      })
+    );
+  }
+
+  const preview = upcoming.length
+    ? `<ol class="mem-list">
+${upcoming
+  .map(
+    (a) => `    <li><a href="${a.slug}.html"><strong>${escapeHtml(a.title)}</strong></a>${
+      a.subtitle ? `<br><span class="mem-sub">${escapeHtml(a.subtitle)}</span>` : ''
+    }<br><span class="mem-sub">${a.date.replace(/-/g, '.')} 公開予定</span></li>`
+  )
+  .join('\n')}
+</ol>
+<p class="mem-note">公開日が来たら、この記事は自動で全員に出ます。読めるのが数日早いだけです。それ以上のことは約束していません。</p>`
+    : `<p class="mem-empty">いまはありません。書き上がった記事は、そのまま公開しています。溜めていません。</p>`;
+
+  // ② 記事にならなかった検証メモ
+  const memoList = memos.length
+    ? memos
+        .map(
+          (m) => `  <li class="memo">
+    <p class="memo-theme">${escapeHtml(m.theme)}</p>
+    <p class="memo-why"><span class="memo-label">記事にしなかった理由</span>${escapeHtml(m.why)}</p>
+    ${m.note ? `<p class="memo-note">${escapeHtml(m.note)}</p>` : ''}
+    <p class="memo-date">${escapeHtml(m.date ?? '')}</p>
+  </li>`
+        )
+        .join('\n')
+    : `  <li class="mem-empty">まだありません。空振りが出たら、ここに正直に積んでいきます。</li>`;
+
+  // ③ 舞台裏の数字（すべて機械が数えたもの。手で書かない）
+  const backstage = `<table class="mem-table">
+  <tbody>
+    <tr><th>公開した記事</th><td>${published.length} 本</td></tr>
+    <tr><th>PubMed に実在を確認した論文</th><td>${papers.length} 本</td></tr>
+    <tr><th>これから調べるテーマ</th><td>${queued.length} 件</td></tr>
+    <tr><th>記事にならなかったテーマ</th><td>${memos.length} 件</td></tr>
+  </tbody>
+</table>
+<p class="mem-note">この表の数字は、すべて機械が数えたものです。手で書き足していません。数えられなかったものは「未計測」と書きます。0 とは書きません。</p>`;
+
+  const content = `<section class="hero is-narrow">
+  <p class="hero-lead">メンバーのページ</p>
+  <p class="hero-body">支援していただき、ありがとうございます。この検証が続いているのは、あなたのおかげです。</p>
+</section>
+
+<section class="mem-honest">
+  <p class="mem-honest-title">最初に、正直に書いておきます。</p>
+  <p>このページに、<strong>鍵のかかった情報はありません。</strong>記事も、下の検証メモも、このサイトを作っているプログラムも、すべて GitHub で公開しています。探せば、お金を払わなくても見つかります。</p>
+  <p><strong>あなたが払っているのは、隠された情報へのアクセス権ではありません。</strong>この検証が来月も続くための費用です。それ以上のものを売るつもりはありません。「限定」と称して、実は誰でも読めるものを売る——それをやった時点で、このブログを読む理由が無くなります。</p>
+  <p class="mem-honest-url">なお、このページのURLは、他の人に転送できてしまいます。<strong>技術的に防いでいません。</strong>共有しないでください、とだけお願いします。</p>
+</section>
+
+<h2>次に出る記事</h2>
+${preview}
+
+<h2>記事にならなかったもの</h2>
+<p class="mem-lead">調べたけれど、記事にしなかったテーマです。<strong>空振りを隠すと、当たりの信用が無くなります。</strong>だから残します。</p>
+<ul class="memos">
+${memoList}
+</ul>
+
+<h2>これから調べること</h2>
+${
+  queued.length
+    ? `<ol class="mem-list">
+${queued.map((q) => `    <li>${escapeHtml(q.theme)}</li>`).join('\n')}
+</ol>`
+    : '<p class="mem-empty">いまは空です。</p>'
+}
+${
+  mem.voteUrl
+    ? `<p class="mem-vote"><a class="plan-button" href="${escapeAttr(mem.voteUrl)}" target="_blank" rel="noopener">次に調べるテーマに投票する</a></p>`
+    : '<p class="mem-empty">投票の受付は準備中です。</p>'
+}
+
+<h2>舞台裏の数字</h2>
+${backstage}
+
+<p class="back-to-index"><a class="back-link" href="../../index.html">サイトへ戻る</a></p>`;
+
+  write(
+    join(DIST, 'm', memberToken, 'index.html'),
+    renderPage({
+      content,
+      headTitle: `メンバーのページ | ${cfg.title}`,
+      metaDesc: 'メンバー向けのページです。',
+      canonical: `${baseUrl}/m/${memberToken}/`,
+      ogType: 'website',
+      rootPath: '../../',
+      ogSlug: '_home',
+      noindex: true,
+    })
+  );
+  console.log(`  built  m/*/ (メンバーのページ)`);
+} else if (memOn) {
+  console.error('  !! メンバーのページを作れません: MEMBER_TOKEN が未設定です（auto/.env）');
+  process.exitCode = 1;
+}
+
 // ---- 404 ---------------------------------------------------------------
 
 write(
@@ -1154,7 +1340,11 @@ ${published
 </urlset>
 `;
 write(join(DIST, 'sitemap.xml'), sitemap);
-write(join(DIST, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${baseUrl}/sitemap.xml\n`);
+// メンバーのページは検索させない（sitemap にも入れない。noindex も head に入れてある）
+write(
+  join(DIST, 'robots.txt'),
+  `User-agent: *\nAllow: /\nDisallow: /m/\nSitemap: ${baseUrl}/sitemap.xml\n`
+);
 console.log('  built  sitemap.xml, robots.txt');
 
 // ---- CSS など ------------------------------------------------------
@@ -1167,5 +1357,12 @@ console.log('  built  assets/');
 console.log('');
 console.log(`DONE. ${published.length} 本を公開 -> site/dist`);
 if (heldBack.length) {
-  console.log(`寝かせ中（articles.json の published:false）: ${heldBack.join(', ')}`);
+  const sleeping = heldBack.filter((s) => !meta.find((m) => m.slug === s)?.published);
+  const upcoming = heldBack.filter((s) => meta.find((m) => m.slug === s)?.published);
+  if (upcoming.length) {
+    console.log(`公開待ち（日付が来たら自動で出ます・いまはメンバーのページのみ）: ${upcoming.join(', ')}`);
+  }
+  if (sleeping.length) {
+    console.log(`寝かせ中（articles.json の published:false）: ${sleeping.join(', ')}`);
+  }
 }

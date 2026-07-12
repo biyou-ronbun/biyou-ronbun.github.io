@@ -6,6 +6,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # 毎日ビルドし直す。
+  # 公開日を先の日付にしてある記事（＝メンバーへの先出し）を、
+  # 公開日が来たら push が無くても全員に出すため。
+  schedule:
+    - cron: '0 21 * * *' # UTC 21:00 = 日本時間 6:00
 
 permissions:
   contents: read
@@ -34,8 +39,12 @@ jobs:
       - name: 論文の実在とタイトルを PubMed で検証する
         run: node site/verify.mjs
 
+      # MEMBER_TOKEN はメンバーのページのURL（＝鍵）。公開リポジトリには置けないので
+      # GitHub の Secrets から渡す。空なら、メンバーのページは作られないだけ。
       - name: サイトをビルドする
         run: node site/build.mjs
+        env:
+          MEMBER_TOKEN: ${{ secrets.MEMBER_TOKEN }}
 
       # Pages の有効化そのものは site/setup-github.mjs が最初の1回だけ行う。
       # ここで enablement: true を使うと、Actions のトークンには

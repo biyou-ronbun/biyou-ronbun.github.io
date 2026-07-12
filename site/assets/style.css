@@ -1323,6 +1323,125 @@ a { color: var(--rose); }
   .stat-num { font-size: 30px; }
 }
 
+/* ---------- メンバーのページ ---------- */
+
+.mem-honest {
+  margin: 0 0 48px;
+  padding: 28px 30px 24px;
+  background: var(--bg-wash);
+  border-left: 2px solid var(--gold);
+}
+
+.mem-honest p {
+  margin: 0 0 14px;
+  font-size: 14px;
+  line-height: 2.05;
+  color: var(--ink-soft);
+}
+
+.mem-honest p:last-child { margin-bottom: 0; }
+.mem-honest strong { color: var(--ink); font-weight: 500; }
+
+.mem-honest-title {
+  font-family: var(--serif);
+  font-size: 16px !important;
+  letter-spacing: .08em;
+  color: var(--ink) !important;
+}
+
+.mem-honest-url {
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  font-size: 13px !important;
+  color: var(--ink-mute) !important;
+}
+
+.mem-lead {
+  margin: 0 0 20px;
+  font-size: 14px;
+  line-height: 2;
+  color: var(--ink-soft);
+}
+
+.mem-list { margin: 0 0 40px; padding-left: 1.5em; }
+.mem-list li { margin-bottom: 12px; line-height: 1.9; }
+.mem-list li::marker { color: var(--gold); }
+.mem-sub { font-size: 13px; color: var(--ink-mute); }
+
+.mem-empty {
+  margin: 0 0 40px;
+  padding: 18px 20px;
+  background: var(--bg-raised);
+  border: 1px solid var(--rule-soft);
+  font-size: 13.5px;
+  line-height: 1.95;
+  color: var(--ink-mute);
+  list-style: none;
+}
+
+.memos { margin: 0 0 40px; padding: 0; list-style: none; }
+
+.memo {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+.memo-theme {
+  margin: 0 0 10px;
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.memo-why, .memo-note {
+  margin: 0 0 8px;
+  font-size: 13.5px;
+  line-height: 1.95;
+  color: var(--ink-soft);
+}
+
+.memo-label {
+  display: inline-block;
+  margin-right: 10px;
+  padding: 2px 9px;
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: var(--ink-mute);
+}
+
+.memo-date { margin: 0; font-size: 11.5px; color: var(--ink-mute); }
+
+.mem-table {
+  width: 100%;
+  margin: 0 0 14px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.mem-table th, .mem-table td {
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--rule-soft);
+  text-align: left;
+}
+
+.mem-table th { font-weight: 400; color: var(--ink-soft); }
+.mem-table td { text-align: right; font-variant-numeric: tabular-nums; }
+
+.mem-note {
+  margin: 0 0 40px;
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: var(--ink-mute);
+}
+
+.mem-vote { margin: 0 0 40px; }
+
+@media (max-width: 600px) {
+  .mem-honest { padding: 22px 18px 18px; }
+}
+
 /* ---------- 悩みから探す（トップ） ---------- */
 
 .tagnav {
