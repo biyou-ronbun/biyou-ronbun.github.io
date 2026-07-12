@@ -97,7 +97,12 @@
       "Bash(node tools/fetch.mjs)",
       "Bash(node tools/credits.mjs)",
       "Bash(cd /e/note && find . -type f | sort && echo \"---\" && wc -l CLAUDE.md .claude/agents/*.md | tail -9)",
-      "Read(//e/note/**)"
+      "Read(//e/note/**)",
+      "Read(//e/note/.claude/agents/**)",
+      "WebFetch(domain:coconala.com)",
+      "WebFetch(domain:survey.stackoverflow.co)",
+      "WebFetch(domain:news.ycombinator.com)",
+      "WebFetch(domain:metr.org)"
     ],
     "additionalDirectories": [
       "E:\\mv-lab\\tools",
