@@ -29,6 +29,11 @@ jobs:
         with:
           node-version: 20
 
+      # ここが関門。1本でも捏造・薬機法違反があれば、ここで公開が止まる。
+      # 記事を人間が読まずに公開する以上、機械が代わりに保証する。
+      - name: 論文の実在とタイトルを PubMed で検証する
+        run: node site/verify.mjs
+
       - name: サイトをビルドする
         run: node site/build.mjs
 

@@ -55,7 +55,15 @@
       "WebFetch(domain:adsense.google.com)",
       "Bash(npm test *)",
       "Bash(curl -sS -v -m 20 https://kaerimi-proxy.kaerimi.workers.dev/health)",
-      "Bash(node -e \"require\\('dns'\\).resolve4\\('kaerimi-proxy.kaerimi.workers.dev',\\(e,a\\)=>console.log\\(e?\\('DNS: '+e.code\\):\\('DNS: '+a.join\\(', '\\)\\)\\)\\)\")"
+      "Bash(node -e \"require\\('dns'\\).resolve4\\('kaerimi-proxy.kaerimi.workers.dev',\\(e,a\\)=>console.log\\(e?\\('DNS: '+e.code\\):\\('DNS: '+a.join\\(', '\\)\\)\\)\\)\")",
+      "Bash(curl -s \"https://kaerimi-proxy.kaerimi.workers.dev/debug/models\")",
+      "Bash(curl -s https://kaerimi-proxy.kaerimi.workers.dev/debug/probe?models=__TRACKED_VAR__)",
+      "PowerShell(Start-Process \"https://dash.cloudflare.com/\")",
+      "WebFetch(domain:docs.x.com)",
+      "WebFetch(domain:developer.x.com)",
+      "WebFetch(domain:devcommunity.x.com)",
+      "WebFetch(domain:help.x.com)",
+      "Bash(node \"C:/Users/Owner/AppData/Local/Temp/claude/e--claude/1d107a12-9117-41e9-94ab-7fbca572ecb4/scratchpad/oauth-test.mjs\")"
     ],
     "additionalDirectories": [
       "E:\\mv-lab\\tools",
