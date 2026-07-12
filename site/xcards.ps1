@@ -66,9 +66,16 @@ function WrapText($g, $text, $font, $maxWidth) {
 }
 
 $made = 0
+$skipped = 0
+
+# 作り直したいときは -Force を付ける
+$force = $args -contains '-Force'
 
 foreach ($c in $data.cards) {
   $out = Join-Path $OutDir ($c.slug + '.jpg')
+
+  # 既にある画像は作り直さない（毎回作り直すと、無駄なコミットが増える）
+  if ((Test-Path $out) -and -not $force) { $skipped++; continue }
 
   $bmp = New-Object System.Drawing.Bitmap($W, $H)
   $g   = [System.Drawing.Graphics]::FromImage($bmp)
@@ -216,5 +223,5 @@ foreach ($c in $data.cards) {
 }
 
 Write-Output ''
-Write-Output ("数字の画像: {0} 枚" -f $made)
+Write-Output ("数字の画像: {0} 枚を新規作成、{1} 枚は既にありました" -f $made, $skipped)
 Write-Output ("出力先: {0}" -f $OutDir)

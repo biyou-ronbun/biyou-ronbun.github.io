@@ -83,18 +83,33 @@ Log '-----------------------------------'
 
 # ---- 結果の確認 --------------------------------------------------
 
-# 新しい記事の OGP 画像（X に貼ったときのリンクカードの画像）を作る。
+# 画像を作る。Claude は JSON を書くだけで、画像そのものはここで作る。
+#   - OGP画像   … X に記事URLを貼ったときのリンクカードの画像
+#   - 数字の画像 … X の単発ポストに添える、論文の数字を1枚にしたもの
 # Claude が push した後だと画像が入らないので、ここで作って追加コミットする。
+
 Log ''
 Log 'OGP画像を作ります（新しい記事のぶん）'
 & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root 'site\ogp.ps1') 2>&1 |
   ForEach-Object { Log "  $_" }
 
-$newImages = git status --porcelain -- site/assets/ogp
+Log '数字の画像を作ります（新しいカードのぶん）'
+& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Root 'site\xcards.ps1') 2>&1 |
+  ForEach-Object { Log "  $_" }
+
+# X の予定表が壊れていないか確認する。壊れたまま放置すると、以降の投稿が全部止まる。
+Log 'X の予定表を検証します'
+$check = & node -e "const q=require('./x/queue.json'); const p=q.posts.filter(x=>x.status==='pending'); console.log('OK: 未投稿 '+p.length+' 件');" 2>&1 | Out-String
+Log "  $($check.Trim())"
+if ($LASTEXITCODE -ne 0) {
+  Log '  !! x/queue.json が壊れています。以降の X 投稿が止まります。直してください'
+}
+
+$newImages = git status --porcelain -- site/assets/ogp x/cards
 if ($newImages) {
-  Log 'OGP画像を追加でコミットします'
-  git add site/assets/ogp 2>&1 | Out-Null
-  git commit -q -m "OGP画像を追加" 2>&1 | ForEach-Object { Log "  git: $_" }
+  Log '画像を追加でコミットします'
+  git add site/assets/ogp x/cards 2>&1 | Out-Null
+  git commit -q -m "OGP画像と数字の画像を追加" 2>&1 | ForEach-Object { Log "  git: $_" }
   git push origin main 2>&1 | ForEach-Object { Log "  git: $_" }
 }
 
