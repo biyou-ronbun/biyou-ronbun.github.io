@@ -223,15 +223,20 @@ const tpl = {
 // この順番を守ること。逆にすると、検証した業界の広告が検証記事の横に出る。
 
 const ads = cfg.ads ?? {};
-const adsOn = Boolean(ads.adsenseClientId);
 
-const adsenseHead = adsOn
+// ①審査用のコード。<head> に入る。これだけでは広告は出ない。
+const adsCodeOn = Boolean(ads.adsenseClientId);
+
+// ②実際の広告枠。ブロック設定を済ませてから true にする。
+const adUnitsOn = adsCodeOn && ads.showAdUnits === true;
+
+const adsenseHead = adsCodeOn
   ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ads.adsenseClientId}" crossorigin="anonymous"></script>`
   : '';
 
 // 記事末尾にだけ置く。本文に差し込む「自動広告」は使わない。
 const adSlot = () =>
-  adsOn
+  adUnitsOn
     ? `<aside class="adbox">
   <p class="adbox-label">広告</p>
   <ins class="adsbygoogle" style="display:block" data-ad-client="${ads.adsenseClientId}" data-ad-format="auto" data-full-width-responsive="true"></ins>
@@ -239,8 +244,10 @@ const adSlot = () =>
 </aside>`
     : '';
 
-// プライバシーポリシーの開示文。広告を入れた瞬間に必要になる文面。
-const adsDisclosure = adsOn
+// プライバシーポリシーの開示文。
+// 広告枠がまだ無くても、審査用コードを置いた時点で Cookie は使われる。
+// だから adUnitsOn ではなく adsCodeOn で判定する（開示は早いほうに倒す）。
+const adsDisclosure = adsCodeOn
   ? `<h2>広告について</h2>
 
 <p>このサイトは、第三者配信の広告サービス <strong>Google AdSense</strong> を利用しています。</p>
@@ -418,7 +425,7 @@ if (cfg.customDomain) {
 
 // ---- ads.txt（AdSense が要求する所有証明） --------------------------
 
-if (adsOn) {
+if (adsCodeOn) {
   const pub = ads.adsenseClientId.replace(/^ca-/, '');
   write(join(DIST, 'ads.txt'), `google.com, ${pub}, DIRECT, f08c47fec0942fa0\n`);
   console.log('  built  ads.txt');

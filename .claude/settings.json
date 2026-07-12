@@ -87,12 +87,27 @@
       "Read(//c/Program Files/Blender Foundation/**)",
       "Read(//c/Program Files/Adobe/**)",
       "Skill(schedule)",
-      "Skill(schedule:*)"
+      "Skill(schedule:*)",
+      "Read(//e/mv-lab/tools/**)",
+      "Bash(node tools/fetch.mjs \"ytsearch5:VTuber オリジナルMV\")",
+      "Bash(node tools/fetch.mjs 'ytsearch15:VTuber オリジナルMV' 'ytsearch15:バーチャルシンガー オリジナルMV' 'ytsearch12:VTuber 歌ってみた MV アニメーション' 'ytsearch12:VTuber オリジナル曲 3DCG MV' 'ytsearch10:VTuber リリックビデオ' 'ytsearch12:hololive original MV' 'ytsearch12:にじさんじ オリジナルMV')",
+      "PowerShell(Start-Process \"https://claude.ai/code/onboarding?magic=github-app-setup\")",
+      "Bash(mkdir -p /e/note/.claude/agents /e/note/research /e/note/products /e/note/x /e/note/ops /e/note/docs)",
+      "PowerShell(Start-Process \"https://github.com/apps/claude/installations/new\")",
+      "Bash(node tools/fetch.mjs)",
+      "Bash(node tools/credits.mjs)"
     ],
     "additionalDirectories": [
       "E:\\mv-lab\\tools",
       "E:\\mv-lab",
-      "E:\\mv-lab\\.claude\\agents"
+      "E:\\mv-lab\\.claude\\agents",
+      "E:\\mv-lab\\ops",
+      "E:\\mv-lab\\data",
+      "e:\\note",
+      "e:\\note\\.claude\\agents",
+      "E:\\mv-lab\\playbook",
+      "e:\\note\\ops",
+      "e:\\note\\docs"
     ]
   }
 }

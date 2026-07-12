@@ -19,9 +19,22 @@
   "_analyticsToken": "Cloudflare Web Analytics のトークン。Cookieを使わないので同意バナーが要りません。空なら計測タグを出しません。",
   "analyticsToken": "",
 
-  "_ads": "広告（Google AdSense）。adsenseClientId が空のあいだは、広告タグもCookieの開示文も一切出ません。審査に通り、下のブロック設定を管理画面で全部済ませてから、はじめてIDを入れること。順番を逆にすると、監査した業界の広告が監査記事の横に出ます。",
+  "_ads": [
+    "広告（Google AdSense）。2段構えにしてある。",
+    "",
+    "  adsenseClientId … 審査用のコード。<head> に入る。審査を受けるには必要。",
+    "                    これだけでは広告は出ない（広告枠を置かないため）。",
+    "                    ただし Cookie は使われるので、プライバシーポリシーの開示文はここでONになる。",
+    "",
+    "  showAdUnits ……… 実際の広告枠。true にした瞬間、記事末尾に広告が出る。",
+    "                    **管理画面でカテゴリのブロック設定を全部済ませてから true にすること。**",
+    "                    順番を逆にすると、検証した業界の広告が検証記事の横に出る。",
+    "",
+    "手順: ①IDを入れる → ②審査に出す → ③通ったらブロック設定 → ④showAdUnits を true"
+  ],
   "ads": {
     "adsenseClientId": "",
+    "showAdUnits": false,
     "blockedCategories": [
       "薬品・サプリメント（Drugs & supplements）",
       "美容整形・美容医療（Cosmetic procedures & body modification）",
