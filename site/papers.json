@@ -352,6 +352,34 @@
       "articles": ["retinol-concentration"]
     },
     {
+      "pmid": "32428912",
+      "title": "A Clinical Anti-Ageing Comparative Study of 0.3 and 0.5% Retinol Serums: A Clinically Controlled Trial",
+      "journal": "Skin pharmacology and physiology",
+      "year": 2020,
+      "design": "ランダム化比較試験（顔の左右で 0.3% と 0.5% を比べる split-face 試験）",
+      "evidenceType": "rct",
+      "subjects": "ボランティア37人・12週間（先行して基剤のみの試験を28人・8週間）",
+      "fundingType": "independent",
+      "fundingNote": "資金はウッチ医科大学（ポーランド）の助成。著者3名の所属もいずれも同大学薬学部で、企業所属の著者はいない。ただし試験に用いた化粧品の製剤化は Dr Koziej 社が担当している（資金提供者でも著者の所属先でもない）",
+      "coiNote": "著者は「COIなし」と申告。PubMedの記録にはCOI欄そのものがない",
+      "confirmed": "fulltext",
+      "articles": ["retinol-concentration"]
+    },
+    {
+      "pmid": "31222977",
+      "title": "Randomized parallel control trial checking the efficacy and impact of two concentrations of retinol in the original formula on the aging skin condition: Pilot study",
+      "journal": "Journal of cosmetic dermatology",
+      "year": 2020,
+      "design": "ランダム化比較試験（顔の左右で 0.15% と 0.3% を比べる split-face のパイロット試験）",
+      "evidenceType": "rct",
+      "subjects": "2施設で計40人（n=20、n=20）・8週間",
+      "fundingType": "independent",
+      "fundingNote": "資金提供はウッチ医科大学（Uniwersytet Medyczny w Łodzi、助成番号 502-03/3-066-02/502-34-094）。著者2名の所属も同大学薬学部で、企業所属の著者はいない",
+      "coiNote": "PubMedの記録にCOIの記載がない",
+      "confirmed": "abstract",
+      "articles": ["retinol-concentration"]
+    },
+    {
       "pmid": "23732711",
       "title": "Sunscreen and prevention of skin aging: a randomized trial",
       "journal": "Annals of internal medicine",

@@ -146,6 +146,46 @@ if (cmd === 'search') {
   const ids = json.esearchresult?.idlist ?? [];
   const total = Number(json.esearchresult?.count ?? ids.length);
 
+  // ★★ 地雷。ここを外すと、この仕組み全体が嘘になります。
+  //
+  //   PubMed は、認識できない語を **エラーにせず、黙って無視して「0件」を返します。**
+  //
+  //     randomized[pt]  →  phrasesnotfound: ["randomized"]  →  count: 0
+  //     "randomized controlled trial"[pt]  →  12 件
+  //
+  //   **同じことを聞いているのに、書き方を1つ間違えると 0 件になります。**
+  //   そして 0 件は、うちにとって「探したが無かった」という最も強い証拠です。
+  //
+  //   **つまり、検索式を書き損じるだけで、偽の証拠を製造できてしまいます。**
+  //   この仕組みが防ぐはずだった、まさにその罪です。
+  //
+  //   （2026-07-13、記事8本の検索を記録する作業で、実際にこれを踏みかけました。
+  //     指示書に書いてあった検索式の例そのものが、この地雷でした）
+  //
+  //   だから、PubMed が「その語は知らない」と言ったら、**記録せずに落とします。**
+  const notFound = json.esearchresult?.errorlist?.phrasesnotfound ?? [];
+  const ignored = json.esearchresult?.warninglist?.phrasesignored ?? [];
+
+  if (notFound.length || ignored.length) {
+    console.error('');
+    console.error('  ✗ PubMed が、検索式の一部を理解できませんでした。記録しません。');
+    console.error('');
+    if (notFound.length) console.error(`    知らない語: ${notFound.join(', ')}`);
+    if (ignored.length) console.error(`    無視した語: ${ignored.join(', ')}`);
+    console.error('');
+    console.error('  ★ PubMed は、知らない語をエラーにせず、黙って無視して結果を返します。');
+    console.error('    そのまま記録すると、**「探したが見つからなかった」という偽の証拠**になります。');
+    console.error('');
+    console.error('  よくある間違い:');
+    console.error('    ✗ randomized[pt]                      → 0 件（語を知らないため）');
+    console.error('    ○ "randomized controlled trial"[pt]   → 正しく返る');
+    console.error('    ✗ "PA++++"[tiab]                      → PubMed は + を落とすので、検索不能');
+    console.error('');
+    console.error('  検索式を直して、もう一度実行してください。');
+    console.error('');
+    process.exit(1);
+  }
+
   // ★ ここが要点です。
   //
   //   このブログの芯は「探したが、無かった」です。

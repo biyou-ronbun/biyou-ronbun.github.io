@@ -93,9 +93,28 @@
 
 レビューが言っているのは「質の高い試験がまだ無い」であって、「レチノールは無意味だ」ではありません。逆方向に断定するのも、同じ誤りです。
 
-**2. 「何%から始めるべきか」を比べた試験は、見つかりませんでした。**
+**2. 濃度を比べた試験は、ありました。ここは、この記事の前の版が間違っていました。**
 
-0.1%開始と0.3%開始のどちらが続けやすいか、という比較試験は存在しません。「0.3%以下が良さそうだ」は、上の結果からの推論であって、直接の臨床データではありません。
+訂正します。この記事は当初、「濃度を比べた試験は見つかりませんでした」と書いていました。**実際に検索式を立てて投げてみたら、そうではありませんでした。**
+
+```
+retinol[tiab] AND (concentration[tiab] OR dose[tiab] OR "dose-response"[tiab])
+  AND (wrinkle[tiab] OR wrinkles[tiab] OR photoaging[tiab] OR photoageing[tiab])
+  AND ("randomized controlled trial"[pt] OR "clinical trial"[pt])
+```
+
+**5件返り、うち2件は、濃度を顔の左右で直接比べたランダム化試験でした。** どちらもポーランド・ウッチ医科大学の同じグループのものです。
+
+- **0.15% vs 0.3%**（40人・8週間）……顔の左右で有意な差は出ませんでした。低いほうが劣るという結果にはなっていません（参考文献8）
+- **0.3% vs 0.5%**（37人・12週間）……見た目はどちらの側も改善。ただし**刺激症状は0.5%側のほうが頻度も強さも上でした**（参考文献3）
+
+つまり「0.3%以下で十分そうだ」は、他の試験からの推論ではなく、**この2本の直接比較から出てきた話**でした。前の版の「見つかりませんでした」は、こちらの検索が下手だっただけです。**探し方が悪くて見つからなかったものを「無い」と書くのは、このブログが最も避けなければならない失敗です。** 見つけた以上、そう書きます。
+
+この検索は、**記事の末尾から、あなたの画面で再実行できます。** 5件返ってくること、そのうち2件が濃度の直接比較試験であることを、ご自分で確かめてください。**私を信じる必要はありません。** ——というより、**信じなかった読者のほうが、こちらより先に正解にたどり着いていた**のが、この項目です。
+
+そのうえで、**まだ言えないことは残ります。** この2本が比べたのは「効果と刺激」であって、**「どちらが続けやすいか」ではありません。** 脱落率も継続率も比べていません。「初心者は0.1%から」という定番の助言そのものを検証した試験は、やはり見つかりませんでした。
+
+なお、この2本は、この記事に出てくる試験のなかでは珍しく、**化粧品メーカーではなく大学（ウッチ医科大学）の資金**で行われています。著者に企業の所属者もいません。ただし0.3% vs 0.5%のほうは、試験に使った化粧品の製剤化を Dr Koziej 社が担当しています。資金は出していませんが、無関係でもありません。そこまで含めて書いておきます。
 
 **3. 「週2回から始めて、慣らしていく」を検証した試験も、見つかりませんでした。**
 
@@ -107,9 +126,21 @@
 
 **5. 「レチノールとビタミンC / AHA / BHA は併用NG」——臨床試験の根拠は、見つかりませんでした。**
 
+ここも、検索式を出します。
+
+```
+(retinol[tiab] OR retinoid[tiab] OR retinoids[tiab]) AND ("vitamin C"[tiab] OR "ascorbic acid"[tiab])
+  AND (irritation[tiab] OR incompatibility[tiab] OR inactivation[tiab] OR concomitant[tiab] OR simultaneous[tiab])
+  AND ("randomized controlled trial"[pt] OR "clinical trial"[pt])
+```
+
+**返ってきたのは0件でした。** これは「中身が違うものが返ってきた」のではありません。**1本も返ってきませんでした。**
+
 検索して出てくるのは化粧品ブランドのブログとまとめサイトばかりで、一次情報にたどり着けません。定番の「併用NGリスト」は、少なくとも今回の調査範囲では、エビデンスに支えられていません。
 
-**6. そして、ここまで挙げた試験は、ほぼすべてに化粧品メーカーの資金または関与があります。**（日本人の試験は資金提供元を確認できませんでした。だから「業界資金だ」とも書きません）
+この検索も、**記事の末尾から、あなたの画面で再実行できます。** 0件であることを、ご自分で確かめてください。**私を信じる必要はありません。** ただし——上の項目2で書いたとおり、**こちらの検索が下手で見落とす可能性は、常にあります。** 見つけた方は、教えてください。すぐ書き直します。
+
+**6. そして、ここまで挙げた試験の多くに、化粧品メーカーの資金または関与があります。**（例外が、上の濃度比較2本です。ウッチ医科大学のグループによるもので、企業所属の著者がいません。日本人の試験は資金提供元を確認できませんでした。だから「業界資金だ」とも書きません）
 
 ただ、ひとつだけ言えることがあります。**「高濃度で副作用が増える」という結果は、高濃度品を売りたいメーカーにとって不都合な結果です。** 都合の悪い方向に出たデータは、比較的信用できます。
 
@@ -171,8 +202,9 @@
 
 1. Spierings NMK. Evidence for the Efficacy of Over-the-counter Vitamin A Cosmetic Products in the Improvement of Facial Skin Aging: A Systematic Review. J Clin Aesthet Dermatol. 2021;14(9):33-40.（PMID: 34980969）
 2. Mellody KT, Bradley EJ, Mambwe B, et al. Multifaceted amelioration of cutaneous photoageing by (0.3%) retinol. Int J Cosmet Sci. 2022;44(6):625-635.（PMID: 35778881）
-3. Zasada M, Budzisz E, Erkiert-Polguj A. A Clinical Anti-Ageing Comparative Study of 0.3 and 0.5% Retinol Serums: A Clinically Controlled Trial. Skin Pharmacol Physiol. 2020;33(2):102-116.（doi:10.1159/000508168）
+3. Zasada M, Budzisz E, Erkiert-Polguj A. A Clinical Anti-Ageing Comparative Study of 0.3 and 0.5% Retinol Serums: A Clinically Controlled Trial. Skin Pharmacol Physiol. 2020;33(2):102-116.（PMID: 32428912）
 4. Kikuchi K, Suetake T, Kumasaka N, Tagami H. Improvement of photoaged facial skin in middle-aged Japanese females by topical retinol (vitamin A alcohol): a vehicle-controlled, double-blind study. J Dermatolog Treat. 2009;20(5):276-281.（PMID: 20078381）
 5. Babcock M, Mehta RC, Makino ET. A Randomized, Double-blind, Split-face Study Comparing the Efficacy and Tolerability of Three Retinol-based Products vs. Three Tretinoin-based Products in Subjects With Moderate to Severe Facial Photodamage. J Drugs Dermatol. 2015;14(1):24-30.（PMID: 25607905）
 6. Mambwe B, Mellody KT, Kiss O, et al. Cosmetic retinoid use in photoaged skin: A review of the compounds, their use and mechanisms of action. Int J Cosmet Sci. 2025;47(1):45-57.（PMID: 39128883）
 7. Narsa AC, Suhandi C, Afidika J, et al. A Comprehensive Review of the Strategies to Reduce Retinoid-Induced Skin Irritation in Topical Formulation. Dermatol Res Pract. 2024;2024:5551774.（PMID: 39184919）
+8. Zasada M, Budzisz E. Randomized parallel control trial checking the efficacy and impact of two concentrations of retinol in the original formula on the aging skin condition: Pilot study. J Cosmet Dermatol. 2020;19(2):437-443.（PMID: 31222977）

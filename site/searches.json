@@ -23,6 +23,92 @@
         "count": 4,
         "searchedOn": "2026-07-12"
       }
+    ],
+    "hyaluronic-acid": [
+      {
+        "query": "\"hyaluronic acid\"[tiab] AND (oral[tiab] OR ingestion[tiab]) AND skin[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 12,
+        "searchedOn": "2026-07-12"
+      },
+      {
+        "query": "(\"hyaluronic acid\"[tiab] OR hyaluronan[tiab]) AND (oral[tiab] OR ingest*[tiab] OR dietary[tiab]) AND (dermis[tiab] OR \"skin biopsy\"[tiab] OR \"skin tissue\"[tiab] OR \"skin concentration\"[tiab]) AND humans[mh]",
+        "count": 11,
+        "searchedOn": "2026-07-12"
+      }
+    ],
+    "oral-collagen": [
+      {
+        "query": "(collagen[tiab] AND (peptide[tiab] OR hydrolysate[tiab])) AND (oral[tiab] OR ingestion[tiab] OR ingested[tiab]) AND (\"skin biopsy\"[tiab] OR dermis[tiab] OR \"skin tissue\"[tiab] OR \"human skin\"[tiab]) AND humans[mh]",
+        "count": 12,
+        "searchedOn": "2026-07-12"
+      }
+    ],
+    "skin-fasting": [
+      {
+        "query": "\"skin fasting\"[tiab]",
+        "count": 0,
+        "searchedOn": "2026-07-12"
+      },
+      {
+        "query": "(moisturizer[tiab] OR emollient[tiab] OR moisturiser[tiab]) AND (discontinuation[tiab] OR cessation[tiab] OR withdrawal[tiab] OR abstinence[tiab]) AND skin[tiab] AND (\"clinical trial\"[pt] OR \"randomized controlled trial\"[pt])",
+        "count": 8,
+        "searchedOn": "2026-07-12"
+      }
+    ],
+    "retinol-concentration": [
+      {
+        "query": "retinol[tiab] AND (concentration[tiab] OR dose[tiab] OR \"dose-response\"[tiab]) AND (wrinkle[tiab] OR wrinkles[tiab] OR photoaging[tiab] OR photoageing[tiab]) AND (\"randomized controlled trial\"[pt] OR \"clinical trial\"[pt])",
+        "count": 5,
+        "searchedOn": "2026-07-12"
+      },
+      {
+        "query": "(retinol[tiab] OR retinoid[tiab] OR retinoids[tiab]) AND (\"vitamin C\"[tiab] OR \"ascorbic acid\"[tiab]) AND (irritation[tiab] OR incompatibility[tiab] OR inactivation[tiab] OR concomitant[tiab] OR simultaneous[tiab]) AND (\"randomized controlled trial\"[pt] OR \"clinical trial\"[pt])",
+        "count": 0,
+        "searchedOn": "2026-07-12"
+      }
+    ],
+    "vitamin-c-derivatives": [
+      {
+        "query": "(\"ascorbyl phosphate\"[tiab] OR \"ascorbyl glucoside\"[tiab] OR \"ethyl ascorbic acid\"[tiab] OR \"ascorbyl tetraisopalmitate\"[tiab] OR \"vitamin C derivative\"[tiab] OR \"vitamin C derivatives\"[tiab]) AND (conversion[tiab] OR hydrolysis[tiab] OR bioconversion[tiab] OR metabolized[tiab] OR enzymatic[tiab]) AND skin[tiab]",
+        "count": 13,
+        "searchedOn": "2026-07-12"
+      },
+      {
+        "query": "(\"3-O-ethyl ascorbic acid\"[tiab] OR \"ethyl ascorbic acid\"[tiab]) AND (skin[tiab] OR facial[tiab] OR melasma[tiab] OR wrinkle[tiab] OR pigmentation[tiab])",
+        "count": 15,
+        "searchedOn": "2026-07-12"
+      }
+    ],
+    "sunscreen-spf": [
+      {
+        "query": "sunscreen[tiab] AND (\"SPF 50\"[tiab] OR \"SPF50\"[tiab] OR \"sun protection factor 50\"[tiab]) AND (wrinkle[tiab] OR wrinkles[tiab] OR photoaging[tiab] OR photoageing[tiab] OR \"skin aging\"[tiab])",
+        "count": 20,
+        "searchedOn": "2026-07-12"
+      },
+      {
+        "query": "(\"protection grade of UVA\"[tiab] OR \"persistent pigment darkening\"[tiab] OR \"UVA protection factor\"[tiab]) AND sunscreen[tiab] AND (wrinkle[tiab] OR wrinkles[tiab] OR photoaging[tiab] OR photoageing[tiab] OR \"skin aging\"[tiab])",
+        "count": 10,
+        "searchedOn": "2026-07-12"
+      }
+    ],
+    "bathing-dryness": [
+      {
+        "query": "(\"three minute\"[tiab] OR \"3 minutes\"[tiab] OR \"3-minute\"[tiab]) AND (moisturizer*[tiab] OR emollient*[tiab]) AND (bath*[tiab] OR shower*[tiab])",
+        "count": 1,
+        "searchedOn": "2026-07-12"
+      },
+      {
+        "query": "(moisturizer[tiab] OR emollient[tiab] OR \"moisturizing cream\"[tiab]) AND (timing[tiab] OR \"immediately after\"[tiab] OR delayed[tiab] OR interval[tiab]) AND (bath[tiab] OR bathing[tiab] OR shower[tiab]) AND skin[tiab]",
+        "count": 16,
+        "searchedOn": "2026-07-12"
+      }
+    ],
+    "pdrn-salmon-dna": [
+      {
+        "query": "(PDRN[tiab] OR polydeoxyribonucleotide[tiab] OR polynucleotide[tiab] OR \"salmon DNA\"[tiab]) AND (topical[tiab] OR cream[tiab] OR serum[tiab] OR transdermal[tiab]) AND skin[tiab] AND (\"randomized controlled trial\"[pt] OR \"clinical trial\"[pt])",
+        "count": 0,
+        "searchedOn": "2026-07-12"
+      }
     ]
   }
 }
