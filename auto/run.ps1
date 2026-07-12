@@ -113,6 +113,43 @@ if ($newImages) {
   git push origin main 2>&1 | ForEach-Object { Log "  git: $_" }
 }
 
+# ---- ネタの補充 --------------------------------------------------
+#
+# ネタ（topics.json の queued）が尽きると、次回から記事が1本も作れなくなります。
+# 尽きてから気づくと、そのぶんの自動生成が丸ごと失われるので、
+# 残りが少なくなった時点で、先に補充しておきます。
+#
+# 補充のときも PubMed に当てて「論文が存在するテーマか」を確かめます。
+# 論文の無いテーマを行列に入れると、その番で記事が書けず、結局そこで止まるからです。
+
+Log ''
+$topics = Get-Content (Join-Path $Root 'topics.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+$left = @($topics.topics | Where-Object { $_.status -eq 'queued' }).Count
+Log "残りのネタ: $left 件"
+
+if ($left -le $ReplenishAt) {
+  Log "ネタが $ReplenishAt 件以下になりました。補充します（5〜10分かかります）"
+  Log ''
+
+  $rp = Get-Content (Join-Path $Root 'auto\replenish-prompt.md') -Raw -Encoding UTF8
+  $rout = & claude -p $rp --allowed-tools $tools --permission-mode acceptEdits 2>&1 | Out-String
+
+  Log '---------- 補充の報告 ----------'
+  foreach ($line in ($rout -split "`r?`n")) { Log $line }
+  Log '--------------------------------'
+
+  # 補充が失敗して topics.json が壊れていないか、機械で確かめる。
+  # 壊れたまま放置すると、以降の自動生成が全部止まります。
+  $check = & node -e "const t=require('./topics.json'); const q=t.topics.filter(x=>x.status==='queued'); const s=t.topics.map(x=>x.slug); if(new Set(s).size!==s.length) throw new Error('slug 重複'); console.log(q.length);" 2>&1 | Out-String
+  if ($LASTEXITCODE -ne 0) {
+    Log "!! topics.json が壊れています。次回の自動生成が止まります。直してください: $($check.Trim())"
+  } else {
+    Log "補充後のネタ: $($check.Trim()) 件"
+  }
+} else {
+  Log '補充はまだ不要です'
+}
+
 Log ''
 Log '公開されたか確認します'
 

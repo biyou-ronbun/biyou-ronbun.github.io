@@ -26,6 +26,13 @@ const ROOT = dirname(SITE);
 
 const meta = JSON.parse(readFileSync(join(SITE, 'articles.json'), 'utf8'));
 const products = JSON.parse(readFileSync(join(SITE, 'products.json'), 'utf8'));
+const papersData = JSON.parse(readFileSync(join(SITE, 'papers.json'), 'utf8'));
+
+// 論文台帳に載っている PMID
+const ledger = new Map(papersData.papers.map((p) => [String(p.pmid), p]));
+
+const FUNDING_WORDS = ['industry', 'public', 'independent', 'none', 'unverified'];
+const CONFIRMED_WORDS = ['fulltext', 'abstract', 'bibliographic'];
 
 const failures = [];
 const warnings = [];
@@ -45,6 +52,34 @@ const FORBIDDEN = [
   'ニキビが治る', 'アトピーが治る',
   '医師も推奨', '医師が推奨',
 ];
+
+// ---- 論文台帳の検査 -------------------------------------------------
+//
+// 記事が引用した論文は、必ず台帳（site/papers.json）に載っていること。
+// 載せ忘れると、その論文の身元調査の記録が失われる。
+// 「調査したのに記録していない」は、このブログでは調査していないのと同じ。
+
+for (const [key, p] of ledger) {
+  if (!FUNDING_WORDS.includes(p.fundingType)) {
+    failures.push(
+      `台帳 PMID ${key}: fundingType が「${p.fundingType}」です。` +
+        `使えるのは ${FUNDING_WORDS.join(' / ')} のみ（自由記述にすると数えられなくなります）`
+    );
+  }
+  if (!CONFIRMED_WORDS.includes(p.confirmed)) {
+    failures.push(
+      `台帳 PMID ${key}: confirmed が「${p.confirmed}」です。使えるのは ${CONFIRMED_WORDS.join(' / ')} のみ`
+    );
+  }
+  // 台帳は評価をしない。効く・効かないを書いた時点で、それは台帳ではなく記事です。
+  const judgement = ['効果あり', '効果なし', '効かない', '有効', '無効', 'おすすめ'];
+  const text = `${p.fundingNote ?? ''} ${p.coiNote ?? ''} ${p.design ?? ''}`;
+  for (const w of judgement) {
+    if (text.includes(w)) {
+      failures.push(`台帳 PMID ${key}: 評価が書かれています →「${w}」。台帳は事実だけを書く場所です`);
+    }
+  }
+}
 
 // ---- 商品（アフィリエイト）の検査 ---------------------------------
 //
@@ -187,6 +222,22 @@ for (const a of meta) {
   const chars = body.replace(/\s/g, '').length;
   if (chars < 2000) {
     failures.push(`${a.slug}: 本文が ${chars} 字しかありません（最低2,000字）`);
+  }
+
+  // 5. 引用した論文が、全部 台帳（papers.json）に載っているか
+  //    載せ忘れると、その論文の身元調査の記録が失われる
+  for (const { pmid } of pmids) {
+    const rec = ledger.get(pmid);
+    if (!rec) {
+      failures.push(
+        `${a.slug}: PMID ${pmid} が論文台帳（site/papers.json）にありません。\n` +
+          `      調査したのに記録していないのは、このブログでは調査していないのと同じです`
+      );
+    } else if (!(rec.articles ?? []).includes(a.slug)) {
+      failures.push(
+        `${a.slug}: PMID ${pmid} は台帳にありますが、articles にこの記事のスラッグが入っていません`
+      );
+    }
   }
 
   // --- 薬機法の検査 ---
