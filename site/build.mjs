@@ -368,6 +368,15 @@ write(
 );
 console.log('  built  privacy.html');
 
+// ---- CNAME（独自ドメインを GitHub Pages に伝えるファイル） ------------
+//
+// これが dist に無いと、公開のたびに独自ドメインの設定が外れることがある。
+
+if (cfg.customDomain) {
+  write(join(DIST, 'CNAME'), `${cfg.customDomain}\n`);
+  console.log(`  built  CNAME (${cfg.customDomain})`);
+}
+
 // ---- ads.txt（AdSense が要求する所有証明） --------------------------
 
 if (adsOn) {
