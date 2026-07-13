@@ -235,14 +235,30 @@ for (const a of meta) {
   const figId = md.match(/^::figure:([\w-]+)::/m)?.[1];
   const fig = figId ? figures[figId] : null;
 
+  // 図の型は4つある（bar / grouped / matrix / ladder）。
+  // ★ bar しか対応していなかったので、matrix と ladder のデータが**空で出ていた。**
+  //   （note に「**皮膚の水分量** … （空）」という記事を出してしまった）
+  const figRow = (r) => {
+    // matrix: 2列の対比（企業の資金あり / なし）
+    if (Array.isArray(r.cells)) {
+      const cells = r.cells.map((c, i) => `${fig.cols?.[i] ?? ''}: ${c.text}`).join(' ／ ');
+      return `- **${r.label}** … ${cells}`;
+    }
+    // ladder: 順位（数量ではない）
+    if (r.name) {
+      return `- **${r.name}**${r.note ? ` … ${r.note}` : ''}`;
+    }
+    // grouped: 複数の値
+    if (Array.isArray(r.values)) {
+      return `- **${r.label}** … ${r.values.join(' / ')}`;
+    }
+    // bar
+    return `- **${r.label}** … ${r.display ?? r.value ?? ''}`;
+  };
+
   const figText = fig
     ? `### ${fig.title}\n\n` +
-      (fig.rows ?? [])
-        .map((r) => {
-          const v = r.display ?? (Array.isArray(r.values) ? r.values.join(' / ') : r.value);
-          return `- **${r.label}** … ${v ?? ''}`;
-        })
-        .join('\n') +
+      (fig.rows ?? []).map(figRow).join('\n') +
       // unit は「日（「28日」を実測した論文は…）」のように、単位＋注記が混ざっている。
       // そのまま出すと「日（…）」で始まって意味が通らないので、分けて出す。
       (fig.unit
@@ -430,6 +446,39 @@ ${checkText}
   }
 
   writeFileSync(join(OUT, `${a.slug}.md`), body, 'utf8');
+
+  // ---- note 用の平文版 ------------------------------------------------
+  //
+  // ★ **note は Markdown を解釈しません。**
+  //   貼っても「#」「**」がそのまま文字として出ます。実際に出してしまいました。
+  //   （note のエディタは、書きながら「# 」と打つと見出しになる方式で、
+  //     Markdown をまとめて貼っても変換されません）
+  //
+  //   だから、note には「記号を落とした平文」を渡します。
+  //   見出しは ■ で示し、太字は落とし、リンクはURLそのまま（note が自動でリンクにします）。
+  //
+  //   ★ 1行目はタイトルです。**note の「タイトル」欄に、1行目だけを貼ってください。**
+
+  const noteText = body
+    .split('\n')
+    .map((line) => {
+      if (/^#\s/.test(line)) return line.replace(/^#\s+/, ''); // タイトル（1行目）
+      if (/^###\s/.test(line)) return '□ ' + line.replace(/^###\s+/, '').replace(/\*\*/g, '');
+      if (/^##\s/.test(line)) return '■ ' + line.replace(/^##\s+/, '').replace(/\*\*/g, '');
+      if (/^```/.test(line)) return ''; // コードの囲みは落とす（中身の検索式は残る）
+      if (/^---$/.test(line)) return '';
+      // [文字](URL) → 文字（URL）
+      return line
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1\n$2')
+        .replace(/\*\*/g, '')
+        .replace(/^-\s+/, '・');
+    })
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  mkdirSync(join(ROOT, 'output', 'syndicate-note'), { recursive: true });
+  writeFileSync(join(ROOT, 'output', 'syndicate-note', `${a.slug}.txt`), noteText, 'utf8');
   console.log(
     `  ${a.slug}.md  （${body.length} 字 / 図:${fig ? '○' : '×'} / 生かし方:${daily ? '○' : '×'} / 検索式:${s.length}）`
   );
