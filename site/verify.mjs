@@ -494,7 +494,10 @@ const productUrls = [];
 // ★ 価格を取り直す対象。**products.json には価格を書かない。**
 //   価格は変わる。書けば、いつか嘘になる。
 const priceTargets = [];
-const prices = {}; // slug → { name, price, volume, perMl, at } または { name, failed: true }
+// ★ キーは「スラッグ + 商品名」。**スラッグだけにすると、同じ記事の2点目が1点目を上書きする。**
+//   商品を1点ずつしか置いていなかったので、長いあいだ表に出なかったバグ。
+const prices = {}; // `${slug}::${name}` → { price, volume, perMl, at } または { failed: true }
+const priceKey = (slug, name) => `${slug}::${name}`;
 
 for (const [slug, entry] of Object.entries(products)) {
   if (slug.startsWith('_')) continue;
@@ -944,7 +947,7 @@ if (priceTargets.length) {
         html.match(/data-price="(\d+)"/);
 
       if (!pm) {
-        prices[t.slug] = { name: t.name, failed: true };
+        prices[priceKey(t.slug, t.name)] = { name: t.name, failed: true };
         warnings.push(
           `${t.slug}: 商品「${t.name}」の価格を**取得できませんでした**。\n` +
             `      （「0円」ではありません。**数えられなかった**のです。混同しないこと）`
@@ -953,16 +956,16 @@ if (priceTargets.length) {
       }
 
       const price = Number(pm[1]);
-      prices[t.slug] = {
+      prices[priceKey(t.slug, t.name)] = {
         name: t.name,
         price,
         volume: t.volume,
         perMl: Math.round((price / t.volume) * 10) / 10,
         at: new Date().toISOString().slice(0, 10),
       };
-      console.log(`  ${String(price).padStart(6)}円 / ${String(t.volume).padStart(4)}mL = ${prices[t.slug].perMl} 円/mL  ${t.name.slice(0, 30)}`);
+      console.log(`  ${String(price).padStart(6)}円 / ${String(t.volume).padStart(4)}mL = ${prices[priceKey(t.slug, t.name)].perMl} 円/mL  ${t.name.slice(0, 30)}`);
     } catch (e) {
-      prices[t.slug] = { name: t.name, failed: true };
+      prices[priceKey(t.slug, t.name)] = { name: t.name, failed: true };
       warnings.push(
         `${t.slug}: 商品「${t.name}」の価格を**取得できませんでした** — ${e.message}\n` +
           `      （「0円」ではありません。**数えられなかった**のです）`

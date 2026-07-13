@@ -201,9 +201,12 @@ const products = JSON.parse(read(join(SITE, 'products.json')));
 //     **書けば、いつか嘘になります。**
 //     取れなかった商品は、単価を出さずに末尾に置きます（「0円」とは書きません）。
 
+// ★ キーは「スラッグ + 商品名」。
+//   スラッグだけにすると、**同じ記事の2点目が1点目を上書きします。**
+//   （商品を1点ずつしか置いていなかったので、長いあいだ表に出なかったバグ）
 const priceOf = (slug, name) => {
-  const p = verified?.prices?.[slug];
-  if (!p || p.failed || p.name !== name) return null;
+  const p = verified?.prices?.[`${slug}::${name}`];
+  if (!p || p.failed) return null;
   return p;
 };
 

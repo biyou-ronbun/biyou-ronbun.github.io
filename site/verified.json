@@ -9,37 +9,44 @@
     "**論文の内容が正しいかどうかは、機械には判定できません。** 医師の監修もありません。",
     "そう書いてあることが、この仕組みの価値です。"
   ],
-  "verifiedAt": "2026-07-13T13:15:27.789Z",
+  "verifiedAt": "2026-07-13T13:19:37.837Z",
   "prices": {
-    "sunscreen-spf": {
+    "sunscreen-spf::スキンアクア スーパーモイスチャーUVジェル 110g": {
       "name": "スキンアクア スーパーモイスチャーUVジェル 110g",
       "price": 818,
       "volume": 110,
       "perMl": 7.4,
       "at": "2026-07-13"
     },
-    "retinol-concentration": {
+    "sunscreen-spf::麗白 ハトムギ UVミルキージェル 250ml×3個セット": {
+      "name": "麗白 ハトムギ UVミルキージェル 250ml×3個セット",
+      "price": 2546,
+      "volume": 750,
+      "perMl": 3.4,
+      "at": "2026-07-13"
+    },
+    "retinol-concentration::COSRX RX ザ・レチノール 0.3 クリーム 20ml": {
       "name": "COSRX RX ザ・レチノール 0.3 クリーム 20ml",
       "price": 2800,
       "volume": 20,
       "perMl": 140,
       "at": "2026-07-13"
     },
-    "vitamin-c-derivatives": {
+    "vitamin-c-derivatives::Paula's Choice C15 スーパーブースター 20ml": {
       "name": "Paula's Choice C15 スーパーブースター 20ml",
       "price": 9900,
       "volume": 20,
       "perMl": 495,
       "at": "2026-07-13"
     },
-    "hyaluronic-acid": {
+    "hyaluronic-acid::肌ラボ 極潤ヒアルロン液 化粧水 170mL": {
       "name": "肌ラボ 極潤ヒアルロン液 化粧水 170mL",
       "price": 857,
       "volume": 170,
       "perMl": 5,
       "at": "2026-07-13"
     },
-    "bathing-dryness": {
+    "bathing-dryness::ヴァセリン アドバンスドリペア ボディローション 400ml 2個セット": {
       "name": "ヴァセリン アドバンスドリペア ボディローション 400ml 2個セット",
       "price": 2100,
       "volume": 800,
