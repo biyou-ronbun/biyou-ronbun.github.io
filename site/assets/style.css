@@ -2961,3 +2961,99 @@ a { color: var(--rose); }
   .hp-item { grid-template-columns: 72px 1fr; gap: 14px; }
   .hp-name { font-size: 14.5px; }
 }
+
+/* ---------- 記事冒頭の「根拠の内訳」 ----------
+   ★ 数えただけ。新しい主張は1つも作っていない。
+     8,000字の壁の前に、まず数字を1枚。 */
+
+.evc {
+  margin: 28px 0 0;
+  padding: 26px 26px 22px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ink);
+  background: var(--bg-raised);
+}
+
+.evc-title {
+  margin: 0 0 20px;
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: .08em;
+}
+
+.evc-stats {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.evc-stats li { text-align: center; }
+
+.evc-n {
+  display: block;
+  font-family: var(--serif);
+  font-size: 30px;
+  line-height: 1;
+}
+.evc-n.is-mark { position: relative; }
+.evc-n.is-mark::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 2px;
+  background: var(--ink);
+}
+
+.evc-l {
+  display: block;
+  margin-top: 9px;
+  font-size: 10.5px;
+  line-height: 1.5;
+  letter-spacing: .04em;
+  color: var(--ink-mute);
+}
+
+.evc-bars {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 20px 0 0;
+  border-top: 1px solid var(--rule-soft);
+  display: grid;
+  gap: 9px;
+}
+
+.evc-bar-row {
+  display: grid;
+  grid-template-columns: 118px 1fr 26px;
+  align-items: center;
+  gap: 10px;
+  font-size: 11.5px;
+}
+.evc-bar-l { color: var(--ink-mute); letter-spacing: .02em; }
+.evc-bar-track { height: 8px; background: var(--bg-wash); border: 1px solid var(--rule-soft); }
+.evc-bar-fill { display: block; height: 100%; background: var(--rule); }
+.evc-bar-fill.is-mark { background: var(--ink); }
+.evc-bar-v { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-soft); }
+
+.evc-note {
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule-soft);
+  font-size: 11.5px;
+  line-height: 1.85;
+  color: var(--ink-mute);
+}
+.evc-note a { margin-left: 6px; text-underline-offset: 3px; }
+
+@media (max-width: 600px) {
+  .evc { padding: 22px 18px 18px; margin-left: -20px; margin-right: -20px; }
+  .evc-stats { grid-template-columns: repeat(2, 1fr); gap: 20px 10px; }
+  .evc-n { font-size: 26px; }
+  .evc-bar-row { grid-template-columns: 96px 1fr 24px; font-size: 10.5px; }
+}

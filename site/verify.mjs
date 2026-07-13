@@ -909,6 +909,44 @@ if (productUrls.length) {
 //
 // ★ 取れなかったら「取得失敗」。**0 と書かない。**（CLAUDE.md 第4条）
 
+// ★★ 取れなかったときは、**前回取れた価格を残す。**
+//
+//   GitHub Actions の上では、楽天が価格を返しません（IPで弾かれています）。
+//   そこで毎回「取得失敗」にすると、**手元では単価が出て、公開では消える**という
+//   気味の悪い状態になります（実際になりました）。
+//
+//   ★ 前回の値を残し、**その値を取った日付を、そのまま読者に見せます。**
+//     「2026-07-13 に機械が取得。価格は変わります」と書いてあれば、嘘ではありません。
+//
+//   ★ 値が無いのに 0 を書くことは、しません。**「取得失敗」と「0円」は別の事実です。**
+const prevPrices = (() => {
+  try {
+    return JSON.parse(readFileSync(join(SITE, 'verified.json'), 'utf8')).prices ?? {};
+  } catch {
+    return {};
+  }
+})();
+
+// 取れなかったとき。**前回の値があれば残す。無ければ「取得失敗」。0 とは書かない。**
+const keepPrev = (t, why) => {
+  const key = priceKey(t.slug, t.name);
+  const prev = prevPrices[key];
+  if (prev && !prev.failed) {
+    prices[key] = prev;
+    warnings.push(
+      `${t.slug}: 商品「${t.name}」の価格を取得できませんでした（${why}）。\n` +
+        `      **前回の値（${prev.at} 時点、${prev.perMl} 円/mL）を残します。**\n` +
+        `      読者には取得日も出しているので、嘘にはなりません。`
+    );
+  } else {
+    prices[key] = { name: t.name, failed: true };
+    warnings.push(
+      `${t.slug}: 商品「${t.name}」の価格を**取得できませんでした**（${why}）。前回の値もありません。\n` +
+        `      （「0円」ではありません。**数えられなかった**のです。混同しないこと）`
+    );
+  }
+};
+
 if (priceTargets.length) {
   console.log(`商品 ${priceTargets.length} 点の価格を、いま取り直します...`);
 
@@ -947,11 +985,7 @@ if (priceTargets.length) {
         html.match(/data-price="(\d+)"/);
 
       if (!pm) {
-        prices[priceKey(t.slug, t.name)] = { name: t.name, failed: true };
-        warnings.push(
-          `${t.slug}: 商品「${t.name}」の価格を**取得できませんでした**。\n` +
-            `      （「0円」ではありません。**数えられなかった**のです。混同しないこと）`
-        );
+        keepPrev(t, '価格の欄が見つかりませんでした');
         continue;
       }
 
@@ -965,11 +999,7 @@ if (priceTargets.length) {
       };
       console.log(`  ${String(price).padStart(6)}円 / ${String(t.volume).padStart(4)}mL = ${prices[priceKey(t.slug, t.name)].perMl} 円/mL  ${t.name.slice(0, 30)}`);
     } catch (e) {
-      prices[priceKey(t.slug, t.name)] = { name: t.name, failed: true };
-      warnings.push(
-        `${t.slug}: 商品「${t.name}」の価格を**取得できませんでした** — ${e.message}\n` +
-          `      （「0円」ではありません。**数えられなかった**のです）`
-      );
+      keepPrev(t, e.message);
     }
   }
 }

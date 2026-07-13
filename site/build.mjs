@@ -376,12 +376,19 @@ ${items.map((it) => `    <li><a href="#${it.id}">${escapeHtml(it.label)}</a></li
 //   2. **JSON-LD の citation**（構造化データ）に、書誌情報を入れる
 //      → 検索エンジンと AI に「この記事は実在する論文を引いている」と伝える唯一の手段
 
-const papersLedger = new Map(
-  (existsSync(join(SITE, 'papers.json'))
-    ? JSON.parse(read(join(SITE, 'papers.json'))).papers ?? []
-    : []
-  ).map((p) => [String(p.pmid), p])
-);
+const paperList = existsSync(join(SITE, 'papers.json'))
+  ? JSON.parse(read(join(SITE, 'papers.json'))).papers ?? []
+  : [];
+
+const papersLedger = new Map(paperList.map((p) => [String(p.pmid), p]));
+
+const EV_FUNDING = {
+  industry: 'メーカー資金',
+  independent: '独立資金',
+  public: '公的資金',
+  none: '資金提供なし',
+  unverified: '資金源が確認できない',
+};
 
 const FUNDING_LABEL = {
   industry: '企業',
@@ -973,6 +980,63 @@ ${list
 </aside>`;
 };
 
+// ---- 記事の冒頭に置く「根拠の内訳」 ------------------------------------
+//
+// ★★ なぜこれを作るか
+//
+//   記事は平均 8,000字。画像は3枚。**2,500字ごとに画像1枚。読み切れません。**
+//
+//   ★ ただし、文章は削れません。
+//     「ここまでは言えません」「資金源は誰か」「出典が見つからなかった」——
+//     **この3つが、うちが他と違う唯一の部分**です。削れば、ただの美容記事になります。
+//
+//   ★ そして、画像を「装飾」にはできません。
+//     論文のグラフを、うちが勝手に作ることはできません。
+//     figures.json は、出典（PMID）が無いと verify.mjs が公開を止めます。
+//
+//   **だから「文章を削る」のではなく、「すでにある事実を、図にする」。**
+//
+//   ここに出す数字は、**すべて papers.json を数えただけ**です。
+//   **新しい主張を1つも作りません。** 数えられないものは、出しません。
+
+const evidenceCard = (a) => {
+  const ps = paperList.filter((p) => (p.articles ?? []).includes(a.slug));
+  if (!ps.length) return '';
+
+  const n = ps.length;
+  const industry = ps.filter((p) => p.fundingType === 'industry').length;
+  const noAdverse = ps.filter((p) => /記載なし/.test(p.adverse ?? '')).length;
+  const noDose = ps.filter((p) => /記載なし/.test(p.concentration ?? '')).length;
+
+  // 資金源の内訳（棒）
+  const FUND_ORDER = ['industry', 'unverified', 'public', 'independent', 'none'];
+  const bars = FUND_ORDER.map((k) => ({ k, v: ps.filter((p) => p.fundingType === k).length }))
+    .filter((x) => x.v)
+    .map(
+      (x) =>
+        `      <li class="evc-bar-row">
+        <span class="evc-bar-l">${escapeHtml(EV_FUNDING[x.k] ?? x.k)}</span>
+        <span class="evc-bar-track"><span class="evc-bar-fill${x.k === 'industry' ? ' is-mark' : ''}" style="width:${Math.round((x.v / n) * 100)}%"></span></span>
+        <span class="evc-bar-v">${x.v}</span>
+      </li>`
+    )
+    .join('\n');
+
+  return `<aside class="evc">
+  <p class="evc-title">この記事が根拠にした論文</p>
+  <ul class="evc-stats">
+    <li><span class="evc-n">${n}</span><span class="evc-l">論文</span></li>
+    <li><span class="evc-n${noAdverse ? ' is-mark' : ''}">${noAdverse}</span><span class="evc-l">副作用の<br>記載なし</span></li>
+    <li><span class="evc-n${noDose ? ' is-mark' : ''}">${noDose}</span><span class="evc-l">濃度の<br>記載なし</span></li>
+    <li><span class="evc-n${industry ? ' is-mark' : ''}">${industry}</span><span class="evc-l">メーカー<br>資金</span></li>
+  </ul>
+  <ul class="evc-bars">
+${bars}
+  </ul>
+  <p class="evc-note"><strong>「副作用の記載なし」は「副作用がなかった」ではありません。</strong>その論文が、副作用について<strong>何も書いていない</strong>という意味です。<a href="../evidence/${escapeAttr(a.slug)}.html">1本ずつ表で見る →</a></p>
+</aside>`;
+};
+
 const receiptFor = (slug) => {
   const v = verified?.articles?.[slug];
   if (!v || !v.count) return '';
@@ -1204,6 +1268,7 @@ for (const a of meta) {
 
   const page = fill(tpl.article, {
     BODY: addInternalLinks(body, a.slug),
+    EVIDENCE_CARD: evidenceCard(a),
     TOC: toc,
     TITLE: escapeHtml(a.title),
     SUBTITLE: escapeHtml(a.subtitle),
@@ -1466,16 +1531,6 @@ console.log(`  built  category/ (${categories.length} 個)`);
 //   3. **順位・点数・おすすめを作らない。**
 //      商品欄は、記事から基準が導けたものだけ。無ければ「0個」と書きます。
 //      **判定は資産になり、資産は換金圧力を持つ**（CLAUDE.md）。持たなければ、売る対象が存在しません。
-
-const paperList = JSON.parse(read(join(SITE, 'papers.json'))).papers ?? [];
-
-const EV_FUNDING = {
-  industry: 'メーカー資金',
-  independent: '独立資金',
-  public: '公的資金',
-  none: '資金提供なし',
-  unverified: '資金源が確認できない',
-};
 
 const isNotStated = (v) => /記載なし/.test(v ?? '');
 const isPaywalled = (v) => /有料/.test(v ?? '');
