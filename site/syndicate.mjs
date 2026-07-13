@@ -298,7 +298,13 @@ ${s
 
   const v = verified.articles?.[a.slug] ?? {};
 
-  const body = `${a.subtitle}
+  // ★ 1行目にタイトルを置く（`# `）。
+  //   はてなへの投稿（auto/post-hatena.mjs）が、ここからタイトルを取ります。
+  //   note に貼るときも、1行目がタイトルになります。
+  //   （これを消したせいで、はてなのタイトルがスラッグ「turnover-28days」になった）
+  const body = `# ${a.title}
+
+${a.subtitle}
 
 ${breakParagraphs(a.summary)}
 

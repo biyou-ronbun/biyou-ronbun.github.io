@@ -109,11 +109,24 @@ if (done.has(slug) && !slugArg) {
   process.exit(0);
 }
 
-const md = readFileSync(join(SYND, `${slug}.md`), 'utf8');
+const md = readFileSync(join(SYND, `${slug}.md`), 'utf8').replace(/\r\n/g, '\n');
 
 // 1行目の「# タイトル」を取り出し、本文からは外す
-const title = md.match(/^#\s+(.+)$/m)?.[1] ?? slug;
+const title = md.match(/^#\s+(.+)$/m)?.[1];
 const body = md.replace(/^#\s+.+$/m, '').trim();
+
+// ★ タイトルが無いまま投稿しない。
+//   以前、紹介記事から「# タイトル」の行を消したことに気づかず、
+//   **タイトルが「turnover-28days」（スラッグ）のまま公開された。**
+//   スラッグをタイトルとして出すくらいなら、投稿しないほうがいい。
+if (!title) {
+  console.error('');
+  console.error(`✗ output/syndicate/${slug}.md に「# タイトル」の行がありません。`);
+  console.error('  スラッグをタイトルとして出すわけにはいかないので、投稿しません。');
+  console.error('  node site/syndicate.mjs を走らせ直してください。');
+  console.error('');
+  process.exit(1);
+}
 
 console.log('');
 console.log('==============================================');
