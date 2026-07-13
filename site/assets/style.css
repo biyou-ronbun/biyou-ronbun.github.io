@@ -794,23 +794,30 @@ a { color: var(--rose); }
   color: var(--ink-soft);
 }
 
+/* 商品欄。
+   ★ 目立たせるのは「基準」であって、「買え」ではない。
+     だから大きくするのは商品名と画像であって、ボタンの色ではない。
+     煽り（今だけ・残りわずか・◯%OFF）は verify.mjs が公開ごと止める。 */
 .products {
-  margin: 64px 0 0;
-  padding: 32px 30px 28px;
+  margin: 56px 0 0;
+  padding: 34px 32px 30px;
   border: 1px solid var(--rule);
+  border-top: 3px solid var(--ink);
   background: var(--bg-raised);
 }
 
 .products-title {
   font-family: var(--serif);
-  font-size: 17px;
+  font-size: 21px;
   font-weight: 400;
   letter-spacing: .08em;
   margin: 0 0 14px;
 }
 
 .products-lead {
-  margin: 0 0 24px;
+  margin: 0 0 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--rule-soft);
   font-size: 12.5px;
   line-height: 1.95;
   color: var(--ink-mute);
@@ -818,33 +825,80 @@ a { color: var(--rose); }
 
 .products-lead strong { color: var(--ink-soft); font-weight: 500; }
 
-.products-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 20px; }
+.products-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; }
 
 .prod {
-  padding-top: 18px;
+  display: grid;
+  grid-template-columns: 116px 1fr;
+  gap: 20px;
+  align-items: start;
+  padding-top: 26px;
   border-top: 1px solid var(--rule-soft);
 }
 
 .prod:first-child { padding-top: 0; border-top: 0; }
 
+.prod-thumb {
+  display: block;
+  border: 1px solid var(--rule-soft);
+  background: #fff;
+  line-height: 0;
+}
+
+.prod-thumb img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  display: block;
+}
+
 .prod-name {
   display: block;
-  font-size: 15px;
-  line-height: 1.7;
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.65;
   letter-spacing: .03em;
   text-underline-offset: 4px;
 }
 
 .prod-criterion {
   display: block;
-  margin-top: 6px;
-  font-size: 12.5px;
+  margin-top: 10px;
+  font-size: 13px;
   line-height: 1.95;
   color: var(--ink-soft);
 }
 
+.prod-go {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 11px 22px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 13.5px;
+  letter-spacing: .08em;
+  text-decoration: none;
+}
+
+.prod-go:hover { background: transparent; color: var(--ink); }
+
+/* 「広告」の2文字を、ボタンから外さない。押す瞬間まで見えていること。 */
+.prod-go-note {
+  font-size: 10.5px;
+  letter-spacing: .12em;
+  opacity: .72;
+}
+
 @media (max-width: 600px) {
-  .products { padding: 24px 20px 20px; margin-left: -20px; margin-right: -20px; }
+  .products { padding: 26px 20px 22px; margin-left: -20px; margin-right: -20px; }
+  .products-title { font-size: 19px; }
+  .prod { grid-template-columns: 84px 1fr; gap: 14px; }
+  .prod-name { font-size: 15.5px; }
+  .prod-go { width: 100%; justify-content: center; }
 }
 
 /* ---------- ニュースを確かめる ---------- */

@@ -444,8 +444,25 @@ for (const [slug, entry] of Object.entries(products)) {
       }
     }
 
+    // ★ 商品画像は、楽天の CDN から直接読むものだけ許す。
+    //   hbb.afl.rakuten.co.jp はアフィリエイトの「インプレッション計測ビーコン」。
+    //   **読者がページを開いただけで1件ずつ数えられる仕組みを、記事に埋めない。**
+    //   （うちの解析は Cookie を使わない。そう決めた以上、裏口を作らない）
+    if (item.image) {
+      if (/hbb\.afl\.rakuten\.co\.jp/.test(item.image)) {
+        failures.push(
+          `${slug}: 商品「${item.name}」の image が、アフィリエイトの計測ビーコンです。\n` +
+            `      **読者がページを開いただけで数えられる画像を、記事に埋めないでください。**\n` +
+            `      商品ページの画像（shop.r10s.jp / thumbnail.image.rakuten.co.jp）を使ってください。`
+        );
+      } else if (!/^https:\/\/(shop\.r10s\.jp|thumbnail\.image\.rakuten\.co\.jp)\//.test(item.image)) {
+        failures.push(`${slug}: 商品「${item.name}」の image が、楽天の画像CDNではありません: ${item.image}`);
+      }
+    }
+
     // 商品リンクが生きているか（後でまとめて確かめる）
     productUrls.push({ slug, name: item.name, url: item.url });
+    if (item.image) productUrls.push({ slug, name: `${item.name}（画像）`, url: item.image });
   }
 }
 

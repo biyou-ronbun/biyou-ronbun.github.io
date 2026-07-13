@@ -188,18 +188,29 @@ const productBlock = (slug) => {
   const items = itemsFor(slug);
   if (!items.length) return '';
 
+  // 画像は楽天の CDN から直接読む。
+  // アフィリエイトの「インプレッション計測ビーコン」（hbb.afl.rakuten.co.jp）は使わない。
+  // **読者がページを開いただけで1件ずつ数えられる仕組みを、記事に埋めない。**
   const rows = items
     .map(
       (i) => `    <li class="prod">
-      <a class="prod-name" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">${escapeHtml(i.name)}</a>
-      <span class="prod-criterion">${escapeHtml(i.criterion)}</span>
+      ${
+        i.image
+          ? `<a class="prod-thumb" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener" tabindex="-1" aria-hidden="true"><img src="${escapeAttr(i.image)}" alt="" loading="lazy" width="300" height="300"></a>`
+          : ''
+      }
+      <div class="prod-text">
+        <a class="prod-name" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">${escapeHtml(i.name)}</a>
+        <span class="prod-criterion">${escapeHtml(i.criterion)}</span>
+        <a class="prod-go" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">楽天で見る<span class="prod-go-note">広告</span></a>
+      </div>
     </li>`
     )
     .join('\n');
 
   return `<aside class="products">
   <p class="products-title">この記事の基準に合うもの</p>
-  <p class="products-lead">下は<strong>広告リンク</strong>です。ここから購入されると、このブログに収益が入ります。<strong>効果を保証するものではありません。</strong>記事で示した「選び方の基準」に合うかどうかだけを書いています。</p>
+  <p class="products-lead">下は<strong>広告リンク</strong>です。ここから購入されると、このブログに収益が入ります。<strong>効果を保証するものではありません。</strong>「効く順」でも「人気順」でもありません。<strong>この記事が示した「選び方の基準」に合うかどうか、それだけです。</strong>基準に合うものが無いときは、何も置いていません。</p>
   <ul class="products-list">
 ${rows}
   </ul>
