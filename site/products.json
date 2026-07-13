@@ -118,6 +118,14 @@
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bc5e25.d4bc4d77.55bc5e26.bf633cf3/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosrx-official%2Ftherx_retinolcream03%2F",
         "image": "https://shop.r10s.jp/cosrx-official/cabinet/08926095/10101955/imgrc0115565484.jpg?_ex=300x300",
         "volume": 20
+      },
+      {
+        "name": "The Ordinary R0.2 フェイスセラム（レチノール 0.2%）30ml",
+        "criterion": "レチノールの濃度が「0.2%」と商品名に明示されています。記事の基準は0.1〜0.3%。高濃度を選ぶ理由が、臨床試験のデータからは出てきませんでした",
+        "basis": "濃度を上げても見た目は変わらず、副作用だけがはっきり増えていました",
+        "url": "https://hb.afl.rakuten.co.jp/ichiba/55bdbaa1.6e6c52e5.55bdbaa2.422918aa/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftheordinary%2For-42%2F",
+        "image": "https://shop.r10s.jp/theordinary/cabinet/item_img/or-42.jpg?_ex=300x300",
+        "volume": 30
       }
     ]
   },

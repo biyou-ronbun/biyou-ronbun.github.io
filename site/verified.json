@@ -9,7 +9,7 @@
     "**論文の内容が正しいかどうかは、機械には判定できません。** 医師の監修もありません。",
     "そう書いてあることが、この仕組みの価値です。"
   ],
-  "verifiedAt": "2026-07-13T13:19:37.837Z",
+  "verifiedAt": "2026-07-13T13:20:58.365Z",
   "prices": {
     "sunscreen-spf::スキンアクア スーパーモイスチャーUVジェル 110g": {
       "name": "スキンアクア スーパーモイスチャーUVジェル 110g",
@@ -30,6 +30,13 @@
       "price": 2800,
       "volume": 20,
       "perMl": 140,
+      "at": "2026-07-13"
+    },
+    "retinol-concentration::The Ordinary R0.2 フェイスセラム（レチノール 0.2%）30ml": {
+      "name": "The Ordinary R0.2 フェイスセラム（レチノール 0.2%）30ml",
+      "price": 1540,
+      "volume": 30,
+      "perMl": 51.3,
       "at": "2026-07-13"
     },
     "vitamin-c-derivatives::Paula's Choice C15 スーパーブースター 20ml": {
