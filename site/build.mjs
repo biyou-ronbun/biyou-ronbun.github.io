@@ -1655,7 +1655,10 @@ console.log(`  built  tag/ (${tags.length} 個)`);
   const sources = [...new Set(items.map((n) => n.source).filter(Boolean))];
   const srcCount = (s) => items.filter((n) => n.source === s).length;
 
-  const filterHtml = sources.length
+  // ★ 出どころが1種類しかないときは、絞り込みを出さない。
+  //   「すべて / 企業の発表」の2択は、押しても何も変わらない。
+  //   **押しても何も起きないボタンは、信用を落とします。**
+  const filterHtml = sources.length >= 2
     ? `<nav class="news-filter" aria-label="出どころで絞る">
   <button class="news-chip is-on" data-src="">すべて<span class="news-chip-n">${items.length}</span></button>
   ${sources
