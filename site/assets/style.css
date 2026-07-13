@@ -1584,6 +1584,20 @@ a { color: var(--rose); }
   .series { padding: 18px 16px 14px; }
 }
 
+/* ---------- ほかの場所（X / note / はてな） ---------- */
+
+.footer-elsewhere {
+  margin-top: 10px;
+  align-items: baseline;
+}
+
+.elsewhere-label {
+  font-size: 11px;
+  letter-spacing: .1em;
+  color: var(--ink-mute);
+  margin-right: 4px;
+}
+
 /* ---------- 本文中の内部リンク ---------- */
 
 .inlink {

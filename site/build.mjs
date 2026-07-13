@@ -552,6 +552,22 @@ const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath,
     NAV_MEMBERSHIP: memOn
       ? `      <a href="${rootPath}membership.html">メンバーシップ</a>`
       : '',
+    // 同じ書き手が、他の場所にもいること。
+    // ★ ただし、あちらに全文は置いていません（同じ本文が2か所にあると、
+    //   Google はどちらか一方しか出しません。うちのドメインは新しく、向こうは巨大です）。
+    FOOTER_ELSEWHERE: [
+      cfg.xUrl && `<a href="${escapeAttr(cfg.xUrl)}" target="_blank" rel="noopener me">X</a>`,
+      cfg.noteUrl && `<a href="${escapeAttr(cfg.noteUrl)}" target="_blank" rel="noopener me">note</a>`,
+      cfg.hatenaUrl && `<a href="${escapeAttr(cfg.hatenaUrl)}" target="_blank" rel="noopener me">はてなブログ</a>`,
+    ].filter(Boolean).length
+      ? `    <p class="footer-links footer-elsewhere">\n      <span class="elsewhere-label">ほかの場所</span>\n${[
+          cfg.xUrl && `      <a href="${escapeAttr(cfg.xUrl)}" target="_blank" rel="noopener me">X</a>`,
+          cfg.noteUrl && `      <a href="${escapeAttr(cfg.noteUrl)}" target="_blank" rel="noopener me">note</a>`,
+          cfg.hatenaUrl && `      <a href="${escapeAttr(cfg.hatenaUrl)}" target="_blank" rel="noopener me">はてなブログ</a>`,
+        ]
+          .filter(Boolean)
+          .join('\n')}\n    </p>`
+      : '',
     FOOTER_MEMBERSHIP: memOn
       ? `      <a href="${rootPath}membership.html">メンバーシップ</a>\n      <a href="${rootPath}tokushoho.html">特定商取引法に基づく表記</a>`
       : '',
