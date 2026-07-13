@@ -600,7 +600,16 @@ const jsonLd = (a) => {
   return `<script type="application/ld+json">${JSON.stringify(data)}</script>`;
 };
 
-const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath, ogSlug, article, noindex, lang }) =>
+// ★ ad: true を渡したページの末尾に、広告枠が入る。
+//
+//   記事以外のページ（トップ・カテゴリ・タグ・証拠シート・ニュース・チェック）は、
+//   これまで広告が1枠も無かった。**証拠シート10枚も、丸ごと0枠だった。**
+//
+//   ★ 入れないページ:
+//     ・プライバシー / 特商法 / お問い合わせ … 法定・連絡のページ
+//     ・メンバーシップ                       … 金を求めるページで広告を出さない
+//     ・m/<token>/                           … **払っている人に広告を見せない**
+const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath, ogSlug, article, noindex, lang, ad }) =>
   fill(tpl.layout, {
     // ★ 英語のページに lang="ja" のままだと、
     //   Google は「日本語のページに、なぜか英語が書いてある」と判断します。
@@ -616,7 +625,7 @@ const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath,
       : '',
     OG_IMAGE: ogImage(ogSlug),
     JSONLD: jsonLd(article),
-    CONTENT: content,
+    CONTENT: ad ? `${content}\n\n${adSlot()}` : content,
     HEAD_TITLE: escapeAttr(headTitle),
     META_DESC: escapeAttr(metaDesc),
     CANONICAL: escapeAttr(canonical),
@@ -1199,6 +1208,7 @@ const cards = published
 write(
   join(DIST, 'index.html'),
   renderPage({
+      ad: true,
     content: tpl.home
       .replace('{{ARTICLE_LIST}}', cards)
       .replace('{{TAGS}}', tagNav)
@@ -1298,6 +1308,7 @@ ${cards}
   write(
     join(DIST, 'category', `${catSlug(cat)}.html`),
     renderPage({
+      ad: true,
       content,
       headTitle: `「${cat}」の記事 | ${cfg.title}`,
       metaDesc: `${cfg.title}の「${cat}」に関する記事の一覧です。`,
@@ -1433,6 +1444,7 @@ ${rows}
   write(
     join(DIST, 'evidence', `${a.slug}.html`),
     renderPage({
+      ad: true,
       content,
       headTitle: `証拠シート: ${a.title} | ${cfg.title}`,
       metaDesc: `${a.title} — 論文${n}本の、測定内容・試験で使われた濃度・報告された副作用の一覧。うち${noAdverse}本は副作用について何も書いていません。`,
@@ -1539,6 +1551,7 @@ ${g.items
   write(
     join(DIST, 'check.html'),
     renderPage({
+      ad: true,
       content: fill(read(join(SITE, 'templates', 'check.html')), {
         CHECK_ITEMS: itemsHtml,
         CLAIMS_JSON: JSON.stringify(payload).replace(/</g, '\\u003c'),
@@ -1594,6 +1607,7 @@ ${cards}
   write(
     join(DIST, 'tag', `${tagSlug(tag)}.html`),
     renderPage({
+      ad: true,
       content,
       headTitle: `「${tag}」に関わる記事 | ${cfg.title}`,
       metaDesc: `${cfg.title}の「${tag}」に関わる記事の一覧です。`,
@@ -1673,6 +1687,7 @@ console.log(`  built  tag/ (${tags.length} 個)`);
   write(
     join(DIST, 'news.html'),
     renderPage({
+      ad: true,
       content: read(join(SITE, 'templates', 'news.html')).replace('{{NEWS_ITEMS}}', html),
       headTitle: `ニュースを、論文で確かめる | ${cfg.title}`,
       metaDesc:
