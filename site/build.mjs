@@ -1270,6 +1270,67 @@ const cards = published
   )
   .join('');
 
+// ---- トップの商品欄 ------------------------------------------------
+//
+// ★★ 置く位置に、失うものがかかっています。
+//
+//   Google はアフィリエイトサイトを「thin affiliate（中身の薄いアフィリサイト）」として
+//   検索から落とします。**目印は「トップページの主役が商品リンクかどうか」です。**
+//
+//   うちは AdSense も入れています。**落とされると、検索流入と広告収益を同時に失います。**
+//   （CLAUDE.md が警告している「薄いページの量産でサイトが丸ごと消えた事例」と、同じ穴です）
+//
+//   ★ だから、**記事一覧の「下」に置きます。** 上には置きません。
+//     スクロールすれば必ず目に入る。しかし、サイトの主役は記事のまま。
+//
+// ★ 出すのは、各記事の「1（安い順）」の1点だけ。5点。
+//   トップに15点並べれば、それは商品カタログです。
+//
+// ★ そして、商品名の隣に**必ず基準を出します。**
+//   「なぜこれなのか」が、商品と切り離せない形にします。
+
+const homeProducts = (() => {
+  const rows = meta
+    .filter((a) => a.published !== false)
+    .map((a) => ({ a, items: itemsFor(a.slug) }))
+    .filter((r) => r.items.length);
+
+  if (!rows.length) return '';
+
+  const cells = rows
+    .map(({ a, items }) => {
+      const i = items[0]; // ★ 1点だけ（安い順の先頭）
+      const price = i._price ? `<span class="hp-price">1mLあたり <strong>${i._price.perMl} 円</strong></span>` : '';
+      return `  <li class="hp-item">
+    ${
+      i.image
+        ? `<a class="hp-thumb" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener" tabindex="-1" aria-hidden="true"><img src="${escapeAttr(i.image)}" alt="" loading="lazy" width="300" height="300"></a>`
+        : ''
+    }
+    <div class="hp-body">
+      <a class="hp-article" href="articles/${escapeAttr(a.slug)}.html">${escapeHtml(a.title)}</a>
+      <p class="hp-crit">${escapeHtml(i.criterion)}</p>
+      <a class="hp-name" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">${escapeHtml(i.name)}</a>
+      ${price}
+      ${items.length > 1 ? `<a class="hp-more" href="articles/${escapeAttr(a.slug)}.html">この基準に合う商品を、あと ${items.length - 1} 点</a>` : ''}
+    </div>
+  </li>`;
+    })
+    .join('\n');
+
+  return `<section class="home-products">
+  <p class="hp-label">広告</p>
+  <h2 class="section-heading">記事の結論から、選び方の基準をつくりました</h2>
+  <p class="hp-lead">下は<strong>広告リンク</strong>です。ここから購入されると、このブログに収益が入ります。</p>
+  <p class="hp-lead"><strong>「効く順」でも「人気順」でもありません。順位も点数もつけていません。</strong>記事が出した結論から<strong>「選び方の基準」</strong>をつくり、<strong>それに合う商品を、1mLあたりの価格が安い順に並べているだけ</strong>です。<strong>これは判定ではなく、算数です。</strong></p>
+  <p class="hp-lead"><strong>基準が導けなかった記事には、商品を置いていません。</strong>10本のうち5本が、それです。</p>
+  <ul class="hp-list">
+${cells}
+  </ul>
+  <p class="hp-all"><a href="products.html">基準に合う商品を、すべて見る</a></p>
+</section>`;
+})();
+
 write(
   join(DIST, 'index.html'),
   renderPage({
@@ -1277,6 +1338,7 @@ write(
     content: tpl.home
       .replace('{{ARTICLE_LIST}}', cards)
       .replace('{{TAGS}}', tagNav)
+      .replace('{{HOME_PRODUCTS}}', homeProducts)
       .replace('{{NEXT}}', nextTopics)
       .replace('{{BOOK}}', bookBlock())
       .replace('{{CTA}}', ctaFor('')),

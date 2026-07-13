@@ -170,6 +170,18 @@
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bdbe08.c131495f.55bdbe09.8d5970de/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Felier%2Fmv011%2F",
         "image": "https://shop.r10s.jp/elier/cabinet/11173028/mv011.jpg?_ex=300x300",
         "volume": 15
+      },
+      {
+        "name": "プラスキレイ プラスピュアVC10（ピュアビタミンC 10%配合）10mL",
+        "criterion": "ピュアなL-アスコルビン酸で、濃度が10%と明示されています。記事の基準は10〜20%です。利益相反のない総説が、8%未満では意義に乏しく、20%を超えても意義は増えないと述べているためです。「最新」「高浸透」とうたう誘導体では選んでいません",
+        "basis": [
+          "8%未満のビタミンC濃度では、生物学的な意義に乏しい",
+          "20%を超える濃度は生物学的意義を増やさず、むしろ刺激を起こしうる",
+          "新しくて高機能とされる誘導体ほど、ヒトでの根拠が薄い"
+        ],
+        "url": "https://hb.afl.rakuten.co.jp/ichiba/55bde93d.bffb6698.55bde93e.80da8b6f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcbja%2Fpure-vc10%2F",
+        "image": "https://shop.r10s.jp/cbja/cabinet/kirei/p-vc10.jpg?_ex=300x300",
+        "volume": 10
       }
     ]
   },
