@@ -228,6 +228,19 @@ const perMlLabel = (i) =>
     ? `<span class="prod-price"><strong>1mLあたり ${i._price.perMl} 円</strong><span class="prod-price-at">${escapeHtml(i._price.at)} に機械が取得。<strong>価格は変わります</strong></span></span>`
     : '';
 
+// ★★ 番号。**「1位」とは書かない。**
+//
+//   「1位」と書けば、読者は「一番いい」と読みます。**この番号は、単価が安い順です。**
+//   だから番号の下に、必ず「安い順」と書きます。**番号と意味を、切り離せない形にします。**
+//
+//   （「根拠の強さ」で順位を付けたら、1位はコラーゲンになりました。
+//     コラーゲンの記事の結論は「独立資金の試験は効果を支持していない」。
+//     **順位は、簡単に逆の意味で読まれます。**）
+const rankBadge = (n, total) =>
+  total >= 3
+    ? `<span class="prod-rank"><span class="prod-rank-n">${n}</span><span class="prod-rank-l">安い順</span></span>`
+    : '';
+
 const prBanner = (slug) =>
   itemsFor(slug).length
     ? `<p class="pr-banner">この記事は広告（アフィリエイトリンク）を含みます。</p>`
@@ -242,7 +255,8 @@ const productBlock = (slug) => {
   // **読者がページを開いただけで1件ずつ数えられる仕組みを、記事に埋めない。**
   const rows = items
     .map(
-      (i) => `    <li class="prod">
+      (i, n) => `    <li class="prod">
+      ${rankBadge(n + 1, items.length)}
       ${
         i.image
           ? `<a class="prod-thumb" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener" tabindex="-1" aria-hidden="true"><img src="${escapeAttr(i.image)}" alt="" loading="lazy" width="300" height="300"></a>`
