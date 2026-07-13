@@ -188,7 +188,18 @@ writeFileSync(LEDGER, JSON.stringify(posted, null, 2) + '\n', 'utf8');
 console.log(`○ ${PUBLISH ? '公開' : '下書きとして保存'}しました`);
 console.log(`  ${link}`);
 console.log('');
+
 if (!PUBLISH) {
-  console.log('  ★ まだ下書きです。はてなブログの管理画面で中身を読んでから、公開してください。');
-  console.log('    1本目を人間が確認したら、以降は --publish で自動公開に切り替えられます。');
+  // ★ 「下書きにした」とだけ言うと、探せません。
+  //   はてなの仕様で、**下書きはブログ本体にも、記事一覧のAPIにも出てきません。**
+  //   管理画面の「記事の管理」を開かないと、見つかりません。
+  //   （実際に「入ってないよ」と言われました。案内不足でした）
+  console.log('  ★ まだ下書きです。**ブログを見ても出てきません。** ここで読んでください:');
+  console.log('');
+  console.log(`     https://blog.hatena.ne.jp/${HATENA_ID}/${HATENA_BLOG_ID}/entries`);
+  console.log('');
+  console.log('     （管理画面 → 記事の管理 → 「下書き」）');
+  console.log('');
+  console.log('    読んで問題なければ、その画面から公開してください。');
+  console.log('    1本目を確認したら、以降は --publish で自動公開に切り替えられます。');
 }
