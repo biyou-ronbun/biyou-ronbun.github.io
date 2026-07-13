@@ -33,6 +33,11 @@ const products = JSON.parse(readFileSync(join(SITE, 'products.json'), 'utf8'));
 const baseline = existsSync(join(SITE, 'article-baseline.json'))
   ? JSON.parse(readFileSync(join(SITE, 'article-baseline.json'), 'utf8')).articles ?? {}
   : {};
+
+// ★ 数え方は article-metrics.mjs の1箇所だけ。**2箇所に書いたら、必ずずれる。**
+const { countWeapons, withFigures, WEAPON_KEYS, WEAPON_LABEL, WEAPON_WHY } = await import(
+  './article-metrics.mjs'
+);
 const papersData = JSON.parse(readFileSync(join(SITE, 'papers.json'), 'utf8'));
 
 // 論文台帳に載っている PMID
@@ -557,7 +562,28 @@ for (const [slug, entry] of Object.entries(products)) {
       );
     } else {
       const mdPath = join(ROOT, 'articles', `${slug}.md`);
-      const md = existsSync(mdPath) ? readFileSync(mdPath, 'utf8').replace(/\r\n/g, '\n') : '';
+      const rawMd = existsSync(mdPath) ? readFileSync(mdPath, 'utf8').replace(/\r\n/g, '\n') : '';
+
+      // ★★ 記事が埋め込んでいる図の中も探す。
+      //
+      //   文章を図に畳むと、基準の根拠になっている一文が、**図の中に移ります。**
+      //   （実際に起きました。「8%未満のビタミンC濃度では、生物学的な意義に乏しい」は
+      //     本文から消え、図 vitc-concentration のセルの中に移りました）
+      //
+      //   **読者には、記事の中で見えています。** 図は記事の一部です。
+      //   .md しか見ない関門は、**正しい書き換えを違反と判定します。**
+      //
+      //   ★ ただし「記事のどこかにある」ことは、変わらず必須です。
+      //     **記事から辿れない基準は、誰かが勝手に作ったものです。**
+      const figIdsForBasis = [...rawMd.matchAll(/^::figure:([\w-]+)::/gm)].map((m) => m[1]);
+      const figsForBasis = existsSync(join(SITE, 'figures.json'))
+        ? JSON.parse(readFileSync(join(SITE, 'figures.json'), 'utf8')).figures ?? {}
+        : {};
+      const md =
+        rawMd +
+        ' ' +
+        figIdsForBasis.map((id) => (figsForBasis[id] ? JSON.stringify(figsForBasis[id]) : '')).join(' ');
+
       for (const basis of bases) {
       if (!md.includes(basis)) {
         failures.push(
@@ -791,44 +817,90 @@ for (const a of meta) {
 
   const base = baseline[a.slug];
   if (base) {
-    const cnt = (re) => (text.match(re) ?? []).length;
-    const now = {
-      pmids: new Set([...text.matchAll(/PMID[:：]?\s*(\d{6,9})/gi)].map((m) => m[1])).size,
-      funding: cnt(/資金|利益相反|COI|スポンサー|所属/g),
-      notfound: cnt(/見つかりませんでした|見つかりません|確認できませんでした|確認できていません|1本もありません|0件/g),
-      figures: cnt(/^::figure:/gm),
-    };
+    // ★ 数え方は site/article-metrics.mjs の1箇所だけ。
+    //   **2箇所に書いたら、必ずずれます。** 実際にずれて、関門が甘くなりました。
+    const now = countWeapons(text);
 
-    const LABEL = {
-      pmids: '引用した論文の数',
-      funding: '資金源・利益相反・所属への言及',
-      notfound: '「見つかりませんでした」',
-      figures: '図の数',
-    };
-
-    const WHY = {
-      notfound:
-        '**「見つかりませんでした」は、何も言っていないように見えます。だから最初に消されます。**\n' +
-        '      **しかし、それが、うちが他のどの美容メディアとも違う、唯一の部分です。**',
-      funding:
-        '**「著者7人のうち6人がキユーピー社員」は、長い。だから削りたくなります。**\n' +
-        '      **その一文が、この記事の結論そのものです。**',
-      pmids: '**減らせば記事は短くなります。しかし、根拠が減ります。**',
-      figures: '**図を減らして文章に戻すのは、この作業と逆向きです。**',
-    };
-
-    for (const k of ['pmids', 'funding', 'notfound', 'figures']) {
+    // ★ 論文の数・図の数は、重複を畳んでも減りません。**1つでも減ったら、止めます。**
+    for (const k of ['pmids', 'figures']) {
       if (now[k] < base[k]) {
         failures.push(
-          `${a.slug}: ${LABEL[k]}が減っています（${base[k]} → ${now[k]}）。\n` +
+          `${a.slug}: ${WEAPON_LABEL[k]}が減っています（${base[k]} → ${now[k]}）。\n` +
             `\n` +
             `      **記事を短くするのは構いません。文字数のために事実を落とすことは、できません。**\n` +
             `\n` +
-            `      ${WHY[k]}\n` +
+            `      ${WEAPON_WHY[k]}\n` +
             `\n` +
-            `      基準線: site/article-baseline.json（2026-07-13、書き換え前の値）\n` +
-            `      **本当に不要だとオーナーが判断したときだけ、基準線のほうを下げてください。**`
+            `      基準線: site/article-baseline.json`
         );
+      }
+    }
+
+    // ★★★ ここが、この関門のいちばん難しいところ。
+    //
+    //   **「資金源への言及」と「見つかりませんでした」は、数だけでは判定できません。**
+    //
+    //   同じ事実を3回繰り返していた部分を1回に畳むと、**数は減ります。**
+    //   **しかし、事実は1つも失われていません。** それは、まさに頼まれた作業です。
+    //
+    //   ★ 実際に起きました。ビタミンCの記事で 23 → 20。
+    //     消えたのは重複だけで、**6つの「見つからなかった」の事実は全部残っていました**
+    //     （記事か、図の中に）。
+    //
+    //   ★ **ここで関門を緩めるのは、いちばん危険な動きです。**
+    //     「自分の作業を通すために、歯止めを外す」——**最悪の形です。**
+    //
+    //   ★ だから、数の代わりに**錨（mustSurvive）**を持ちます。
+    //
+    //     **「この事実は、書き換え後も必ず残っていること」を、記事ごとに列挙する。**
+    //     数ではなく、**事実そのもの**を守ります。
+    //     （商品の basis と同じ考え方。**記事から辿れないものは、無い**）
+    //
+    //   ★ mustSurvive が無い記事では、**数が減ったら止めます。**
+    //     **錨を書くまで、その記事は短くできません。それでいい。**
+
+    const HALF_JUDGED = ['funding', 'notfound'];
+    const anchors = base.mustSurvive ?? null;
+
+    if (anchors) {
+      const haystack = withFigures(text).replace(/\s/g, '');
+      const lost = anchors.filter((s) => !haystack.includes(s.replace(/\s/g, '')));
+      if (lost.length) {
+        failures.push(
+          `${a.slug}: 書き換えで、**残すと決めた事実が消えています**（${lost.length} 件）。\n` +
+            lost.map((s) => `        ・「${s}」`).join('\n') +
+            `\n\n` +
+            `      **記事を短くするのは構いません。事実を落とすことは、できません。**\n` +
+            `      錨は site/article-baseline.json の mustSurvive にあります。`
+        );
+      }
+      // 錨があっても、半分以下まで削られたら、それは畳んだのではなく捨てています
+      for (const k of HALF_JUDGED) {
+        if (now[k] < base[k] * 0.5) {
+          failures.push(
+            `${a.slug}: ${WEAPON_LABEL[k]}が半分以下になりました（${base[k]} → ${now[k]}）。\n` +
+              `      **重複を畳んだのではなく、捨てています。**\n` +
+              `\n      ${WEAPON_WHY[k]}`
+          );
+        }
+      }
+    } else {
+      // 錨が無い記事は、数で守る（＝短くする前に、錨を書くこと）
+      for (const k of HALF_JUDGED) {
+        if (now[k] < base[k]) {
+          failures.push(
+            `${a.slug}: ${WEAPON_LABEL[k]}が減っています（${base[k]} → ${now[k]}）。\n` +
+              `\n` +
+              `      **記事を短くするのは構いません。文字数のために事実を落とすことは、できません。**\n` +
+              `\n` +
+              `      ${WEAPON_WHY[k]}\n` +
+              `\n` +
+              `      ★ 重複を畳んだだけで、事実は残っている——という場合は、\n` +
+              `        site/article-baseline.json の この記事の mustSurvive に、\n` +
+              `        **「必ず残す事実」を列挙してください。** 数ではなく、事実で守ります。\n` +
+              `        **錨を書くまで、この記事は短くできません。**`
+          );
+        }
       }
     }
   }
