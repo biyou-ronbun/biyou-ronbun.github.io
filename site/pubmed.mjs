@@ -166,6 +166,52 @@ if (cmd === 'search') {
   const notFound = json.esearchresult?.errorlist?.phrasesnotfound ?? [];
   const ignored = json.esearchresult?.warninglist?.phrasesignored ?? [];
 
+  // ★★★ 2つ目の地雷。1つ目より、はるかに危ない。
+  //
+  //   PubMed は **記号を黙って捨てます。errorlist にも warninglist にも何も出ません。**
+  //
+  //     投げた式 : retinol[tiab] AND "0.3%"[tiab]
+  //     解釈     : "retinol" AND "0 3"        ← % が消え、ピリオドが空白に
+  //     件数     : 10
+  //
+  //     投げた式 : retinol[tiab] AND "1%"[tiab]
+  //     解釈     : "retinol" AND "1"          ← "1" は数万件にマッチする
+  //     件数     : 7247
+  //
+  //   **「0.3%の研究は0件」と書いたら、それは捏造です。** 検索式が壊れていただけです。
+  //   **うちが糾弾している行為そのものになります。**
+  //
+  //   （PA++++ も同じ。+ が全部落ちて "pa" になる）
+  //
+  //   だから、**PubMed が実際にどう解釈したか（querytranslation）を、こちらで照合します。**
+  //   投げた検索式に記号（% + など）が含まれ、それが解釈から消えていたら、記録せずに落とします。
+
+  const translation = json.esearchresult?.querytranslation ?? '';
+  const symbols = [...new Set((query.match(/[%+#&]/g) ?? []))];
+  const dropped = symbols.filter((s) => query.includes(s) && !translation.includes(s));
+
+  if (dropped.length) {
+    console.error('');
+    console.error('  ✗ PubMed が、検索式の記号を黙って捨てました。記録しません。');
+    console.error('');
+    console.error(`    捨てられた記号: ${dropped.join(' ')}`);
+    console.error(`    あなたが投げた式  : ${query}`);
+    console.error(`    PubMed の解釈    : ${translation}`);
+    console.error('');
+    console.error('  ★ PubMed は記号を落とします。**エラーも警告も出ません。**');
+    console.error('    "0.3%" → "0 3" になり、"1%" → "1"（数万件にマッチ）になります。');
+    console.error('');
+    console.error('    **この結果を「0件でした」と書けば、それは捏造です。**');
+    console.error('    検索式が壊れていただけです。');
+    console.error('');
+    console.error('  濃度や指数を数えたいなら、記号に頼らない書き方をしてください。');
+    console.error('    ✗ "0.3%"[tiab]');
+    console.error('    ○ "0.3 percent"[tiab] OR "0.3%"[tiab]  ← それでも %  は落ちる。効くのは前者だけ');
+    console.error('    ○ そもそも、濃度で数えられない可能性を疑うこと');
+    console.error('');
+    process.exit(1);
+  }
+
   if (notFound.length || ignored.length) {
     console.error('');
     console.error('  ✗ PubMed が、検索式の一部を理解できませんでした。記録しません。');

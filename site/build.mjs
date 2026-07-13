@@ -276,9 +276,21 @@ ${items.map((it) => `    <li><a href="#${it.id}">${escapeHtml(it.label)}</a></li
 //
 // ★ 効く・効かないは1文字も書きません。事実だけを並べます。
 
-// 論文台帳（site/papers.json）は、サイトには出しません（オーナーの判断）。
-// ただしデータは残しています。site/verify.mjs が、記事の引用論文が
-// 台帳に載っているかを検査するのに使っています（記録の抜けを防ぐため）。
+// 論文台帳（site/papers.json）は、**表としてはサイトに出しません**（オーナーの判断）。
+// 「蓄積を表にして並べる」形は却下済み。それは糾弾リストの目次になります。
+//
+// ただしデータは残しています。使い道は2つ:
+//   1. site/verify.mjs が、記事の引用論文が台帳に載っているかを検査する（記録の抜けを防ぐ）
+//   2. **JSON-LD の citation**（構造化データ）に、書誌情報を入れる
+//      → 検索エンジンと AI に「この記事は実在する論文を引いている」と伝える唯一の手段。
+//        **表として読者に見せるのではなく、機械に見せる。** ここが決定的な違いです。
+
+const papersLedger = new Map(
+  (existsSync(join(SITE, 'papers.json'))
+    ? JSON.parse(read(join(SITE, 'papers.json'))).papers ?? []
+    : []
+  ).map((p) => [String(p.pmid), p])
+);
 
 const FUNDING_LABEL = {
   industry: '企業',
@@ -507,8 +519,42 @@ const ogImage = (slug) => {
 
 // 構造化データ。Google に「誰がいつ書いた記事で、何を根拠にしているか」を機械可読で渡す。
 // このブログの武器は出典なので、それを検索エンジンにも伝わる形にしておく。
+// ---- 構造化データ（機械に、うちが何を引いたかを見せる） ------------------
+//
+// ★ うちは論文を89本引いているのに、**機械にはそれが1本も見えていませんでした。**
+//   JSON-LD に citation（引用文献）が入っていなかったからです。
+//
+//   検索エンジンにも、AI にも、**「この記事は実在する論文を引いている」と伝える手段が
+//   これしかありません。** 本文に PMID を書いても、機械はそれを引用だと解釈しません。
+//
+// ★ ここに書くのは、**verified.json（＝機械が PubMed に照会して通ったもの）だけ**です。
+//   articles.json に手書きの欄を作らないこと。**書けば、それは飾りになります。**
+//
+// ★ dateModified を、検証した日にしないこと。
+//   うちは毎日 PubMed に照会し直しますが、**記事の中身は変わっていません。**
+//   検証日を「更新日」として出すのは、鮮度の偽装です。
+//   （Qiita のバナーが誤字修正1文字で消える、という既知の欠陥と同じ穴）
+
 const jsonLd = (a) => {
   if (!a) return '';
+
+  // 機械が照会して通った論文だけを、引用として出す
+  const pmids = verified?.articles?.[a.slug]?.pmids ?? [];
+  const citations = pmids
+    .map((p) => {
+      const paper = papersLedger.get(String(p));
+      if (!paper) return null;
+      return {
+        '@type': 'ScholarlyArticle',
+        '@id': `https://pubmed.ncbi.nlm.nih.gov/${p}/`,
+        name: paper.title,
+        identifier: `PMID:${p}`,
+        ...(paper.journal ? { isPartOf: { '@type': 'Periodical', name: paper.journal } } : {}),
+        ...(paper.year ? { datePublished: String(paper.year) } : {}),
+      };
+    })
+    .filter(Boolean);
+
   const data = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -522,6 +568,8 @@ const jsonLd = (a) => {
     author: { '@type': 'Organization', name: cfg.title, url: `${baseUrl}/` },
     publisher: { '@type': 'Organization', name: cfg.title, url: `${baseUrl}/` },
     isAccessibleForFree: true,
+    ...(a.tags?.length ? { about: a.tags.map((t) => ({ '@type': 'Thing', name: t })) } : {}),
+    ...(citations.length ? { citation: citations } : {}),
   };
   return `<script type="application/ld+json">${JSON.stringify(data)}</script>`;
 };
