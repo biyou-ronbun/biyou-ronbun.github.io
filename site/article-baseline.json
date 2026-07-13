@@ -1,0 +1,98 @@
+{
+  "_readme": [
+    "★ 記事を短くするときの、下限の基準線。site/verify.mjs が使う。",
+    "",
+    "「長文は読まれない」は正しい。だから記事を短くする。",
+    "**しかし、文字数のために事実を落とすことは、できない。**",
+    "",
+    "記録してあるのは、書き換え前（2026-07-13）の各記事の:",
+    "  pmids     … 引用した論文の数",
+    "  funding   … 資金源・利益相反・所属への言及の数",
+    "  notfound  … 「見つかりませんでした」の数  ← ★ うちが他と違う唯一の部分",
+    "  figures   … 図の数",
+    "",
+    "**この数を下回ると、verify.mjs が公開を止める。**",
+    "**文字数（chars）は減ってよい。上の4つは減らせない。**",
+    "",
+    "★ 何が最初に消えるかは、分かっている:",
+    "  ・資金源の記述 …「著者7人のうち6人がキユーピー社員」は長い。削りたくなる",
+    "  ・「見つかりませんでした」… 何も言っていないように見える。**うちの唯一の武器なのに**",
+    "  ・引用した論文 … 減らせば、記事は短くなる",
+    "",
+    "★ 記事を新しく書いたときは、この台帳に足すこと。",
+    "★ 本当に不要だとオーナーが判断したときだけ、基準線のほうを下げること。"
+  ],
+  "recordedAt": "2026-07-13",
+  "articles": {
+    "bathing-dryness": {
+      "chars": 9217,
+      "pmids": 7,
+      "funding": 2,
+      "notfound": 10,
+      "figures": 3
+    },
+    "hyaluronic-acid": {
+      "chars": 10724,
+      "pmids": 9,
+      "funding": 34,
+      "notfound": 14,
+      "figures": 3
+    },
+    "oral-collagen": {
+      "chars": 6268,
+      "pmids": 8,
+      "funding": 23,
+      "notfound": 3,
+      "figures": 3
+    },
+    "oral-sunscreen": {
+      "chars": 9437,
+      "pmids": 10,
+      "funding": 18,
+      "notfound": 12,
+      "figures": 2
+    },
+    "pdrn-salmon-dna": {
+      "chars": 9746,
+      "pmids": 8,
+      "funding": 35,
+      "notfound": 9,
+      "figures": 3
+    },
+    "retinol-concentration": {
+      "chars": 8824,
+      "pmids": 8,
+      "funding": 9,
+      "notfound": 13,
+      "figures": 3
+    },
+    "skin-fasting": {
+      "chars": 9273,
+      "pmids": 6,
+      "funding": 5,
+      "notfound": 5,
+      "figures": 3
+    },
+    "sunscreen-spf": {
+      "chars": 11203,
+      "pmids": 12,
+      "funding": 4,
+      "notfound": 22,
+      "figures": 3
+    },
+    "turnover-28days": {
+      "chars": 7142,
+      "pmids": 6,
+      "funding": 2,
+      "notfound": 9,
+      "figures": 2
+    },
+    "vitamin-c-derivatives": {
+      "chars": 11821,
+      "pmids": 12,
+      "funding": 9,
+      "notfound": 13,
+      "figures": 3
+    }
+  }
+}

@@ -27,6 +27,12 @@ const ROOT = dirname(SITE);
 
 const meta = JSON.parse(readFileSync(join(SITE, 'articles.json'), 'utf8'));
 const products = JSON.parse(readFileSync(join(SITE, 'products.json'), 'utf8'));
+
+// ★ 記事を短くするときの、下限の基準線。
+//   **文字数は減ってよい。資金源・「見つかりませんでした」・論文・図は、減らせない。**
+const baseline = existsSync(join(SITE, 'article-baseline.json'))
+  ? JSON.parse(readFileSync(join(SITE, 'article-baseline.json'), 'utf8')).articles ?? {}
+  : {};
 const papersData = JSON.parse(readFileSync(join(SITE, 'papers.json'), 'utf8'));
 
 // 論文台帳に載っている PMID
@@ -764,7 +770,70 @@ for (const a of meta) {
     );
   }
 
-  // 3. 根拠の厚み。PMID が3件未満の記事は、調べ切れていない
+  // ★★★ 3. 記事を短くするときの、下限の基準線
+  //
+  //   **「長文は読まれない」は正しい。だから記事を短くする。**
+  //   **しかし、文字数のために事実を落とすことは、できない。**
+  //
+  //   ★ 上の SIGNATURE の検査は「1つでもあれば通る」。
+  //     **書き換えで大半が消えても、止まりません。**
+  //     9,000字を6,000字にする作業を始めるところで、この穴に気づきました。
+  //
+  //   ★ 何が最初に消えるかは、分かっています。
+  //
+  //     ・**資金源の記述**          … 「著者7人のうち6人がキユーピー社員」は、長い。削りたくなる
+  //     ・**「見つかりませんでした」** … 何も言っていないように見える。
+  //                                    **それが、うちが他と違う唯一の部分なのに**
+  //     ・**引用した論文**          … 減らせば、記事は短くなる
+  //
+  //   **だから、書き換え前の数を基準線として固定し、下回ったら公開を止めます。**
+  //   **文字数は減ってよい。上の3つは減らせない。**
+
+  const base = baseline[a.slug];
+  if (base) {
+    const cnt = (re) => (text.match(re) ?? []).length;
+    const now = {
+      pmids: new Set([...text.matchAll(/PMID[:：]?\s*(\d{6,9})/gi)].map((m) => m[1])).size,
+      funding: cnt(/資金|利益相反|COI|スポンサー|所属/g),
+      notfound: cnt(/見つかりませんでした|見つかりません|確認できませんでした|確認できていません|1本もありません|0件/g),
+      figures: cnt(/^::figure:/gm),
+    };
+
+    const LABEL = {
+      pmids: '引用した論文の数',
+      funding: '資金源・利益相反・所属への言及',
+      notfound: '「見つかりませんでした」',
+      figures: '図の数',
+    };
+
+    const WHY = {
+      notfound:
+        '**「見つかりませんでした」は、何も言っていないように見えます。だから最初に消されます。**\n' +
+        '      **しかし、それが、うちが他のどの美容メディアとも違う、唯一の部分です。**',
+      funding:
+        '**「著者7人のうち6人がキユーピー社員」は、長い。だから削りたくなります。**\n' +
+        '      **その一文が、この記事の結論そのものです。**',
+      pmids: '**減らせば記事は短くなります。しかし、根拠が減ります。**',
+      figures: '**図を減らして文章に戻すのは、この作業と逆向きです。**',
+    };
+
+    for (const k of ['pmids', 'funding', 'notfound', 'figures']) {
+      if (now[k] < base[k]) {
+        failures.push(
+          `${a.slug}: ${LABEL[k]}が減っています（${base[k]} → ${now[k]}）。\n` +
+            `\n` +
+            `      **記事を短くするのは構いません。文字数のために事実を落とすことは、できません。**\n` +
+            `\n` +
+            `      ${WHY[k]}\n` +
+            `\n` +
+            `      基準線: site/article-baseline.json（2026-07-13、書き換え前の値）\n` +
+            `      **本当に不要だとオーナーが判断したときだけ、基準線のほうを下げてください。**`
+        );
+      }
+    }
+  }
+
+  // 4. 根拠の厚み。PMID が3件未満の記事は、調べ切れていない
   const unique = new Set(pmids.map((p) => p.pmid));
   if (unique.size > 0 && unique.size < 3) {
     failures.push(

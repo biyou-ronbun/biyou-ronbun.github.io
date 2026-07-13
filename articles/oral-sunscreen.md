@@ -106,6 +106,10 @@
 
 2024年の総説も同じでした。「systemic photoprotection should be used as an **adjunctive measure to topical photoprotection**（全身性の光防御は、塗る光防御への**補助的手段**として使われるべきである）」。
 
+### ここまでに出てきた数字を、並べます
+
+::figure:oral-med-rise::
+
 ## ただし、ここまでは言えません
 
 **1. 「効かない」とは書けません。**
@@ -149,6 +153,8 @@ oral supplement AND topical sunscreen AND (compared OR comparison OR versus)
 **6. 参加者は、ほぼ全員が色白の欧米の人です。**
 
 ここまで挙げた試験の参加者は、肌タイプI〜III。イタリア、デンマーク、スロベニア。アジア人を含む試験は1本だけ見つかりました（アジア人と白人の計110人）。**日本人の肌でどうなるかは、このデータからは分かりません。** そして「日本人には効かない」根拠にもなりません。
+
+::figure:oral-claims::
 
 ## 日常への生かし方
 
