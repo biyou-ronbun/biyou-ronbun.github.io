@@ -60,7 +60,6 @@
     "  pdrn-salmon-dna … ヒト試験1本。第III相試験は撤回済み",
     "  oral-sunscreen  … 「塗るものの代わりになる」と書いた論文が、売る側の研究にも1本もない"
   ],
-
   "_sunscreen-spf の基準について": [
     "★ 最初、私は基準を「SPF30前後・PA+++以上」と書いた。**記事にそんなことは書いていない。**",
     "  勝手に足した数字だった。**これこそ、basis の関門が防ぐはずだったもの。**",
@@ -71,7 +70,6 @@
     "",
     "  **だから、SPF値で絞ってはいけない。絞るのは「塗り切れるか」だけ。**"
   ],
-
   "sunscreen-spf": {
     "items": [
       {
@@ -82,18 +80,16 @@
       }
     ]
   },
-
   "retinol-concentration": {
     "items": [
       {
-        "name": "",
-        "criterion": "0.3%前後の低い濃度のもの。高濃度を選ばないこと",
+        "name": "COSRX RX ザ・レチノール 0.3 クリーム 20ml",
+        "criterion": "レチノールの濃度が「0.3%」と商品名に明示されています。記事の基準は0.1〜0.3%。高濃度を選ぶ理由が、臨床試験のデータからは出てきませんでした",
         "basis": "濃度を上げても見た目は変わらず、副作用だけがはっきり増えていました",
-        "url": ""
+        "url": "https://hb.afl.rakuten.co.jp/ichiba/55bc5e25.d4bc4d77.55bc5e26.bf633cf3/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosrx-official%2Ftherx_retinolcream03%2F"
       }
     ]
   },
-
   "vitamin-c-derivatives": {
     "items": [
       {
@@ -104,32 +100,39 @@
       }
     ]
   },
-
   "hyaluronic-acid": {
     "items": [
       {
-        "name": "",
+        "name": "肌ラボ 極潤ヒアルロン液 化粧水 170mL",
         "criterion": "塗るタイプのもの。飲むタイプではありません",
         "basis": "塗るほうは独立資金でも確認され、飲むほうは独立資金の試験が1本もありませんでした",
-        "url": ""
+        "url": "https://hb.afl.rakuten.co.jp/ichiba/55bc5eca.ec0121d7.55bc5ecb.3cd4a3bc/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmebox%2Fj4987241155712%2F"
       }
     ]
   },
-
   "bathing-dryness": {
     "items": [
       {
-        "name": "",
-        "criterion": "入浴後に塗るもの。「3分以内」は気にしなくて構いません。分かれ目は速さではなく「塗るか塗らないか」だったので、毎日続けられる質感と価格のものを",
+        "name": "ヴァセリン アドバンスドリペア ボディローション 400ml 2個セット",
+        "criterion": "入浴後に塗るものです。「3分以内」は気にしなくて構いません。試験で分かれ目になっていたのは速さではなく「塗るか塗らないか」でした。だから選んだ基準は、毎日続けられること。400mlが2本という容量と、1本あたりの価格です",
         "basis": "「3分以内に保湿」の\"3分\"に、根拠は見つかりませんでした",
-        "url": ""
+        "url": "https://hb.afl.rakuten.co.jp/ichiba/55bc5fd4.8f34ee51.55bc5fd5.56d64767/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbeautyeveryday%2F4902111778396%2F"
       }
     ]
   },
-
-  "turnover-28days": { "items": [] },
-  "oral-collagen": { "items": [] },
-  "skin-fasting": { "items": [] },
-  "pdrn-salmon-dna": { "items": [] },
-  "oral-sunscreen": { "items": [] }
+  "turnover-28days": {
+    "items": []
+  },
+  "oral-collagen": {
+    "items": []
+  },
+  "skin-fasting": {
+    "items": []
+  },
+  "pdrn-salmon-dna": {
+    "items": []
+  },
+  "oral-sunscreen": {
+    "items": []
+  }
 }
