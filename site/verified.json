@@ -9,7 +9,7 @@
     "**論文の内容が正しいかどうかは、機械には判定できません。** 医師の監修もありません。",
     "そう書いてあることが、この仕組みの価値です。"
   ],
-  "verifiedAt": "2026-07-13T13:36:54.803Z",
+  "verifiedAt": "2026-07-13T13:38:34.616Z",
   "prices": {
     "sunscreen-spf::スキンアクア スーパーモイスチャーUVジェル 110g": {
       "name": "スキンアクア スーパーモイスチャーUVジェル 110g",
@@ -44,6 +44,13 @@
       "price": 1540,
       "volume": 30,
       "perMl": 51.3,
+      "at": "2026-07-13"
+    },
+    "retinol-concentration::KISO CARE 純粋レチノール 0.1%配合 美容液 30ml": {
+      "name": "KISO CARE 純粋レチノール 0.1%配合 美容液 30ml",
+      "price": 1630,
+      "volume": 30,
+      "perMl": 54.3,
       "at": "2026-07-13"
     },
     "vitamin-c-derivatives::Paula's Choice C15 スーパーブースター 20ml": {

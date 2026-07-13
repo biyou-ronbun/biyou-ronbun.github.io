@@ -134,6 +134,14 @@
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bdbaa1.6e6c52e5.55bdbaa2.422918aa/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftheordinary%2For-42%2F",
         "image": "https://shop.r10s.jp/theordinary/cabinet/item_img/or-42.jpg?_ex=300x300",
         "volume": 30
+      },
+      {
+        "name": "KISO CARE 純粋レチノール 0.1%配合 美容液 30ml",
+        "criterion": "レチノールの濃度が「0.1%」と商品名に明示されています。記事の基準は0.1〜0.3%。高濃度を選ぶ理由が、臨床試験のデータからは出てきませんでした",
+        "basis": "濃度を上げても見た目は変わらず、副作用だけがはっきり増えていました",
+        "url": "https://hb.afl.rakuten.co.jp/ichiba/55bde0de.169e49c0.55bde0df.94fdc96f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkiso%2Fkiso-k35%2F",
+        "image": "https://shop.r10s.jp/kiso/cabinet/raku/k35/00_k35.jpg?_ex=300x300",
+        "volume": 30
       }
     ]
   },
