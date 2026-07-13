@@ -66,6 +66,15 @@ $env:Path = [System.Environment]::GetEnvironmentVariable('Path', 'Machine') + ';
 
 Set-Location $Root
 
+# ★ Node は UTF-8 で出力します。PowerShell は既定で Shift-JIS(CP932) として読みます。
+#   これを直さないと、**ファイルに書く前の時点で、日本語がすでに壊れています。**
+#   （Add-Content に -Encoding UTF8 を付けても手遅れです。壊れた文字列を保存するだけ）
+#
+#   ★ ただの見た目の問題ではありません。
+#     **関門が「金の出口が開いた」と報告しても、その理由が読めなくなります。**
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+
 Log '=========================================='
 Log '配信の購読者を調べます（毎週）'
 Log '=========================================='

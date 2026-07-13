@@ -24,6 +24,15 @@ $env:Path = [System.Environment]::GetEnvironmentVariable('Path', 'Machine') + ';
 
 Set-Location $Root
 
+# ★ Node は UTF-8 で出力します。PowerShell は既定で Shift-JIS(CP932) として読みます。
+#   これを直さないと、**ファイルに書く前の時点で、日本語がすでに壊れています。**
+#   （-Encoding UTF8 を付けても手遅れです。壊れた文字列を UTF-8 で保存するだけ）
+#
+#   ★ これはただの見た目の問題ではありません。
+#     **投稿が関門（verify-x.mjs）に拒否されたとき、その理由が読めなくなります。**
+#     実際に「蜃ｺ縺吩ｺ亥ｮ壹・謚慕ｨｿ縺ｯ縺ゅｊ縺ｾ縺帙ｓ」という状態のまま、数日間動いていました。
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
 $stamp = Get-Date -Format 'HH:mm:ss'
 $out = & node (Join-Path $Root 'auto\post-x.mjs') 2>&1 | Out-String
 
