@@ -10,14 +10,12 @@
   "footerNote": "このブログは学術論文をもとに書いていますが、医学的な診断・治療の代わりにはなりません。肌の不調が続くときは皮膚科を受診してください。記事中の研究結果は、その試験の参加者に起きたことであり、あなたの肌に同じことが起きると約束するものではありません。",
   "xUrl": "https://x.com/biyouron",
   "noteUrl": "https://note.com/biyouron_1056",
-
   "_hatenaUrl": "はてなブログ。全文は載せない（同じ本文が2か所にあると Google はどちらか一方しか出さない）。site/syndicate.mjs が作る紹介記事を出す。",
   "hatenaUrl": "https://biyouronbun.hatenablog.com/",
   "_askUrl": "読者からの質問を受けるフォームのURL（Googleフォーム等）。空のあいだは、質問箱の枠がサイトに出ません。",
   "askUrl": "https://forms.gle/V4tNomjBNbHEHbFm9",
   "_analyticsToken": "Cloudflare Web Analytics のトークン。Cookieを使わないので同意バナーが要りません。空なら計測タグを出しません。",
   "analyticsToken": "d7f8076cb35544d0aaf1a7b284287b89",
-
   "_googleSiteVerification": [
     "Google Search Console の所有権確認（HTMLタグ方式）のコード。",
     "content=\"...\" の中身だけを入れます。空なら何も出しません。",
@@ -26,7 +24,6 @@
     "  DNS のほうが確実です（サイトのビルドに依存しないため）。"
   ],
   "googleSiteVerification": "",
-
   "_indexNowKey": [
     "IndexNow のキー。Bing・Yandex に「更新しました」と即時で伝えるための鍵。",
     "**公開されて構いません**（仕様上、キーファイルをサイトに置いて所有を証明する仕組みです）。",
@@ -97,7 +94,7 @@
   ],
   "ads": {
     "adsenseClientId": "ca-pub-7734546695481260",
-    "showAdUnits": false,
+    "showAdUnits": true,
     "blockedCategories": [
       "薬品・サプリメント（Drugs & supplements）",
       "美容整形・美容医療（Cosmetic procedures & body modification）",

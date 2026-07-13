@@ -33,17 +33,41 @@ const SITE = join(ROOT, 'site');
 
 const read = (p) => (existsSync(p) ? JSON.parse(readFileSync(p, 'utf8')) : null);
 
-const open = [];
+// ---- オーナーが承認した出口 -------------------------------------------
+//
+// ★ 「オーナーが開けた」と「機械が勝手に開けた」を区別します。
+//
+//   これが無いと、オーナーが正当に広告をONにした瞬間、この関門が
+//   「金の出口が開いている」と判定して、**収益の輪が二度と動かなくなります。**
+//   （実際にその欠陥がありました）
+//
+// ★ site/money-approved.json は、auto/money.ps1 が作業のたびに git から元に戻します。
+//   **エージェントが自分で自分を承認できないようにするためです。**
+
+const approved = new Set(read(join(SITE, 'money-approved.json'))?.approved ?? []);
+
+const open = [];   // 承認されていないのに開いている（＝止める）
+const okOpen = []; // 承認されて開いている（＝正常）
 const shut = [];
+
+const check = (key, isOpen, label) => {
+  if (!isOpen) {
+    shut.push(label);
+  } else if (approved.has(key)) {
+    okOpen.push(label);
+  } else {
+    open.push(label);
+  }
+};
 
 // ---- ① 広告枠 --------------------------------------------------------
 const cfg = read(join(SITE, 'config.json')) ?? {};
 
-if (cfg.ads?.showAdUnits === true) {
-  open.push('広告枠（config.json の ads.showAdUnits が true）');
-} else {
-  shut.push('広告枠（showAdUnits: false）');
-}
+check(
+  'ads',
+  cfg.ads?.showAdUnits === true,
+  cfg.ads?.showAdUnits === true ? '広告枠（showAdUnits: true）' : '広告枠（showAdUnits: false）'
+);
 
 // ---- ② アフィリエイトのURL -------------------------------------------
 const products = read(join(SITE, 'products.json')) ?? {};
@@ -51,30 +75,36 @@ const affiliate = Object.entries(products)
   .filter(([k]) => !k.startsWith('_'))
   .flatMap(([slug, v]) => (v.items ?? []).filter((i) => i.url).map((i) => `${slug}: ${i.url}`));
 
-if (affiliate.length) {
-  open.push(`アフィリエイトのURL（${affiliate.length} 件）\n      ${affiliate.join('\n      ')}`);
-} else {
-  shut.push('アフィリエイトのURL（1件も入っていない）');
-}
+check(
+  'affiliate',
+  affiliate.length > 0,
+  affiliate.length
+    ? `アフィリエイトのURL（${affiliate.length} 件）\n      ${affiliate.join('\n      ')}`
+    : 'アフィリエイトのURL（1件も入っていない）'
+);
 
 // ---- ③ 本（Kindle）のURL ---------------------------------------------
 const books = read(join(SITE, 'books.json')) ?? {};
 const amazon = (books.volumes ?? []).filter((v) => v.amazonUrl).map((v) => `${v.id}: ${v.amazonUrl}`);
 
-if (amazon.length) {
-  open.push(`本の Amazon URL（${amazon.length} 件）\n      ${amazon.join('\n      ')}`);
-} else {
-  shut.push('本の Amazon URL（1件も入っていない）');
-}
+check(
+  'book',
+  amazon.length > 0,
+  amazon.length
+    ? `本の Amazon URL（${amazon.length} 件）\n      ${amazon.join('\n      ')}`
+    : '本の Amazon URL（1件も入っていない）'
+);
 
 // ---- ④ メンバーシップの支払いリンク ------------------------------------
 const plans = (cfg.membership?.plans ?? []).filter((p) => p.url);
 
-if (plans.length) {
-  open.push(`メンバーシップの支払いリンク（${plans.length} 件）\n      ${plans.map((p) => `${p.name}: ${p.url}`).join('\n      ')}`);
-} else {
-  shut.push('メンバーシップの支払いリンク（1件も入っていない）');
-}
+check(
+  'membership',
+  plans.length > 0,
+  plans.length
+    ? `メンバーシップの支払いリンク（${plans.length} 件）\n      ${plans.map((p) => `${p.name}: ${p.url}`).join('\n      ')}`
+    : 'メンバーシップの支払いリンク（1件も入っていない）'
+);
 
 // ---- ⑤ 判定を作っていないか ------------------------------------------
 //
@@ -97,8 +127,14 @@ for (const p of read(join(SITE, 'papers.json'))?.papers ?? []) {
   }
 }
 
+// ★ 判定は、承認しても通しません。承認できる項目に入れていません。
+//   判定は資産になり、資産は換金圧力を持ちます。**持たないことで止めます。**
 if (judged.length) {
-  open.push(`判定（スコア・ランキング・お墨付き）が作られています\n      ${judged.slice(0, 5).join('\n      ')}`);
+  open.push(
+    `判定（スコア・ランキング・お墨付き）が作られています【これは承認できません】\n      ${judged
+      .slice(0, 5)
+      .join('\n      ')}`
+  );
 }
 
 // ---- 結果 ------------------------------------------------------------
@@ -107,14 +143,15 @@ console.log('');
 console.log('金の出口の状態');
 console.log('='.repeat(46));
 
-for (const s of shut) console.log(`  閉  ${s}`);
-for (const o of open) console.log(`  ★開 ${o}`);
+for (const s of shut) console.log(`  閉    ${s}`);
+for (const o of okOpen) console.log(`  開(承認済) ${o}`);
+for (const o of open) console.log(`  ★開   ${o}`);
 
 console.log('');
 
 if (open.length) {
   console.error('='.repeat(46));
-  console.error(`  金の出口が ${open.length} 件、開いています。`);
+  console.error(`  承認されていない金の出口が ${open.length} 件、開いています。`);
   console.error('='.repeat(46));
   console.error('');
   console.error('  **これらは、オーナーだけが開けられます。**（CLAUDE.md ルール6）');
@@ -126,8 +163,17 @@ if (open.length) {
   console.error('');
   console.error('  意志では止まりません。だから、機械で止めます。');
   console.error('');
+  console.error(`  （承認済みの出口: ${[...approved].join(', ') || 'なし'}）`);
+  console.error('   承認は site/money-approved.json にあります。');
+  console.error('   **エージェントがそこを書き換えても、money.ps1 が git から元に戻します。**');
+  console.error('');
   process.exit(1);
 }
 
-console.log('  すべて閉じています。エージェントは器を作るところまで。');
+if (okOpen.length) {
+  console.log(`  承認された出口だけが開いています（${[...approved].join(', ')}）。`);
+} else {
+  console.log('  すべて閉じています。');
+}
+console.log('  エージェントは器を作るところまで。');
 console.log('');
