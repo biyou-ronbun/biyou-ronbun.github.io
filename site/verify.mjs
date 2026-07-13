@@ -366,7 +366,12 @@ for (const [slug, entry] of Object.entries(products)) {
     //   毎週の収益タスクが「商品を増やせば儲かる」と考えたとき、
     //   **記事に無い基準を作れないので、勝手に商品を増やせません。**
 
-    if (!item.basis) {
+    // ★ basis は、文字列でも配列でもよい。
+    //   基準が2つのことを言っているなら（例:「10〜20%」かつ「誘導体ではない」）、
+    //   **根拠の引用も2本必要です。** 1本で2つの主張を担保させないこと。
+    const bases = item.basis == null ? [] : [].concat(item.basis).filter((b) => b);
+
+    if (!bases.length) {
       failures.push(
         `${slug}: 商品「${item.name}」に basis がありません。\n` +
           `      **basis = その基準の根拠を、記事から一字一句コピーした文。**\n` +
@@ -375,10 +380,11 @@ for (const [slug, entry] of Object.entries(products)) {
     } else {
       const mdPath = join(ROOT, 'articles', `${slug}.md`);
       const md = existsSync(mdPath) ? readFileSync(mdPath, 'utf8').replace(/\r\n/g, '\n') : '';
-      if (!md.includes(item.basis)) {
+      for (const basis of bases) {
+      if (!md.includes(basis)) {
         failures.push(
           `${slug}: 商品「${item.name}」の basis が、記事の中に見つかりません。\n` +
-            `      basis: 「${item.basis}」\n` +
+            `      basis: 「${basis}」\n` +
             `\n` +
             `      **基準の根拠は、記事から一字一句コピーできなければいけません。**\n` +
             `      コピーできないということは、**その基準は誰かが勝手に作ったもの**です。\n` +
@@ -388,6 +394,7 @@ for (const [slug, entry] of Object.entries(products)) {
             `        根拠のない推薦アルゴリズムを発明することは、うちが毎日\n` +
             `        他社に対して指摘していることを、自分でやることです）`
         );
+      }
       }
     }
 
