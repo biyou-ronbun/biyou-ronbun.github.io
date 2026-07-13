@@ -95,12 +95,48 @@ const bodyNums = new Set([
 ]);
 let fabricated = 0;
 
+// ★★ 図の「表示される文字列」だけを見る。JSON全体を見てはいけない。
+//
+//   最初、JSON.stringify(figure) 全体から数字を拾った。**誤検知だらけだった。**
+//     ・"07" "13"  ← 日付「2026-07-13」と PMID の断片
+//     ・"230"      ← グラフの軸の最大値（max）。**主張ではない**
+//
+//   **関門が、正しい図を捏造と判定した。** 今日、何度目か。
+//
+//   ★ 見るべきは、読者の目に入る文字列だけ:
+//     title / label / text / note / unit / name / source / refLine.label
+const textOf = (spec) => {
+  const out = [];
+  const walk = (v, key) => {
+    if (v == null) return;
+    if (typeof v === 'string') {
+      // 出典・日付を含む欄は、数値の検査から外す
+      if (['source', 'sourceOther'].includes(key)) return;
+      out.push(v);
+      return;
+    }
+    if (Array.isArray(v)) {
+      for (const x of v) walk(x, key);
+      return;
+    }
+    if (typeof v === 'object') {
+      for (const [k, x] of Object.entries(v)) {
+        // 構造の数値（max / value / strength / on）は主張ではない
+        if (['max', 'strength', 'sourcePmids', 'type'].includes(k)) continue;
+        walk(x, k);
+      }
+    }
+  };
+  walk(spec, null);
+  return out.join(' ');
+};
+
 for (const id of usedIds) {
   const f = figs[id];
   if (!f) continue;
-  const pm = new Set((f.sourcePmids ?? []).map(String));
-  for (const n of new Set([...JSON.stringify(f).matchAll(/\d+(?:\.\d+)?/g)].map((m) => m[0]))) {
-    if (pm.has(n) || Number(n) <= 3 || bodyNums.has(n)) continue;
+  const shown = textOf(f).replace(/\d{4}-\d{2}-\d{2}/g, ' '); // 日付を外す
+  for (const n of new Set([...shown.matchAll(/\d+(?:\.\d+)?/g)].map((m) => m[0]))) {
+    if (Number(n) <= 3 || bodyNums.has(n)) continue;
     console.log(`  ★ 図「${id}」の数値「${n}」が、記事本文（前・後とも）にありません`);
     problems.push(`図「${id}」の数値「${n}」は捏造の疑い`);
     fabricated++;
