@@ -142,6 +142,18 @@
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bc86fa.ff1bdfd5.55bc86fb.ba62e819/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpaulaschoicejapan%2F7770%2F",
         "image": "https://shop.r10s.jp/paulaschoicejapan/cabinet/serum/10620282/imgrc0117136129.jpg?_ex=300x300",
         "volume": 20
+      },
+      {
+        "name": "モルバニー グロウピュアビタミンC 15% アンプル 15ml",
+        "criterion": "ピュアなL-アスコルビン酸で、濃度が15%と明示されています。記事の基準は10〜20%です。利益相反のない総説が、8%未満では意義に乏しく、20%を超えても意義は増えないと述べているためです。全成分表示を確認したところ、先頭がアスコルビン酸で、誘導体は入っていませんでした",
+        "basis": [
+          "8%未満のビタミンC濃度では、生物学的な意義に乏しい",
+          "20%を超える濃度は生物学的意義を増やさず、むしろ刺激を起こしうる",
+          "新しくて高機能とされる誘導体ほど、ヒトでの根拠が薄い"
+        ],
+        "url": "https://hb.afl.rakuten.co.jp/ichiba/55bdbe08.c131495f.55bdbe09.8d5970de/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Felier%2Fmv011%2F",
+        "image": "https://shop.r10s.jp/elier/cabinet/11173028/mv011.jpg?_ex=300x300",
+        "volume": 15
       }
     ]
   },
