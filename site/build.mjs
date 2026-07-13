@@ -907,13 +907,19 @@ const receiptFor = (slug) => {
       : ''
   }</li>`;
 
+  // ★ 証拠シートへの導線。
+  //   レシートは「実在するか」までしか言えない。
+  //   **「何が測られ、どの濃度で、どんな副作用が報告されたか」は、シートのほう。**
+  const sheet = `
+  <p class="receipt-sheet"><a href="../evidence/${escapeAttr(slug)}.html">この ${v.count} 本を、1本ずつ表で見る →</a><span class="receipt-sheet-sub">何が測られたか / 試験で使われた濃度 / <strong>報告された副作用</strong></span></p>`;
+
   return `<aside class="receipt">
   <p class="receipt-title">この記事の参考文献を、機械が確かめました</p>
   <ul class="receipt-list">
     <li><strong>${v.count} 本</strong>の論文すべてを、<strong>${d}</strong> に PubMed へ自動照会しました。</li>
     ${checked}
     ${mix}
-  </ul>
+  </ul>${sheet}
   <p class="receipt-limit"><strong>確かめたのは、論文が実在することだけです。</strong> 論文の内容が正しいかどうかは、機械には判定できません。<strong>医師の監修はありません。</strong> この記事は AI が書き、上記の照会に通ったものだけが公開されています。照会に1本でも通らなければ、この記事は世に出ていません。<br><strong>そして、上の内訳は「総説を探した」ことの証明ではありません。</strong> 機械に数えられるのは「引いた論文のうち何本が総説だったか」だけで、<strong>探したかどうかまでは確認できません。</strong></p>
 </aside>`;
 };
@@ -1288,6 +1294,141 @@ ${cards}
   );
 }
 console.log(`  built  category/ (${categories.length} 個)`);
+
+// ---- 証拠シート（成分ごと） --------------------------------------------
+//
+//   論文N本 → 何が測られたか → 試験で使われた濃度 → 報告された副作用 → 基準に合う商品
+//
+// ★★ このページの、越えたら別物になる線
+//
+//   1. **「記載なし」を「なし」と書かない。**
+//      86本中62本が、副作用について一言も書いていません。
+//      **ページを作る機械は、この62を「安全」と書きたがります。**
+//      **「副作用が0件だった」と「副作用について何も書いていない」は、別の事実です。**
+//      verify.mjs が、台帳の側でこれを止めます。
+//
+//   2. **数を手で書かない。** 「論文15本」と書けてしまったら、それは捏造の入口です。
+//      **本数は全部 papers.json から数えます。** 8本なら8本と出ます。
+//
+//   3. **順位・点数・おすすめを作らない。**
+//      商品欄は、記事から基準が導けたものだけ。無ければ「0個」と書きます。
+//      **判定は資産になり、資産は換金圧力を持つ**（CLAUDE.md）。持たなければ、売る対象が存在しません。
+
+const paperList = JSON.parse(read(join(SITE, 'papers.json'))).papers ?? [];
+
+const EV_FUNDING = {
+  industry: 'メーカー資金',
+  independent: '独立資金',
+  public: '公的資金',
+  none: '資金提供なし',
+  unverified: '資金源が確認できない',
+};
+
+const isNotStated = (v) => /記載なし/.test(v ?? '');
+const isPaywalled = (v) => /有料/.test(v ?? '');
+
+const evidenceSheets = meta
+  .filter((a) => a.published !== false)
+  .map((a) => ({ a, papers: paperList.filter((p) => (p.articles ?? []).includes(a.slug)) }))
+  .filter((e) => e.papers.length > 0);
+
+for (const { a, papers } of evidenceSheets) {
+  const n = papers.length;
+  const fund = {};
+  for (const p of papers) fund[p.fundingType] = (fund[p.fundingType] ?? 0) + 1;
+
+  const noAdverse = papers.filter((p) => isNotStated(p.adverse)).length;
+  const paywalled = papers.filter((p) => isPaywalled(p.adverse) || isPaywalled(p.concentration)).length;
+  const reported = papers.filter((p) => p.adverse && !isNotStated(p.adverse) && !isPaywalled(p.adverse)).length;
+  const noDose = papers.filter((p) => isNotStated(p.concentration)).length;
+
+  const fundRow = Object.entries(fund)
+    .sort((x, y) => y[1] - x[1])
+    .map(([k, v]) => `<li><span class="ev-k">${escapeHtml(EV_FUNDING[k] ?? k)}</span><span class="ev-v">${v} 本</span></li>`)
+    .join('');
+
+  const rows = papers
+    .map((p) => {
+      const cls = (v) => (isNotStated(v) ? ' is-notstated' : isPaywalled(v) ? ' is-paywall' : '');
+      const retracted = p.retracted ? `<span class="ev-retracted">撤回</span>` : '';
+      return `      <tr>
+        <td class="ev-paper">
+          <a href="https://pubmed.ncbi.nlm.nih.gov/${escapeAttr(p.pmid)}/" target="_blank" rel="noopener">${escapeHtml(p.title ?? '')}</a>
+          <span class="ev-sub">${escapeHtml(p.journal ?? '')} ${escapeHtml(String(p.year ?? ''))} ・ PMID ${escapeHtml(String(p.pmid))} ・ ${escapeHtml(EV_FUNDING[p.fundingType] ?? p.fundingType ?? '')} ${retracted}</span>
+        </td>
+        <td>${escapeHtml(p.measured ?? '—')}</td>
+        <td class="${cls(p.concentration).trim()}">${escapeHtml(p.concentration ?? '—')}</td>
+        <td class="${cls(p.adverse).trim()}">${escapeHtml(p.adverse ?? '—')}</td>
+        <td class="ev-dur">${escapeHtml(p.duration ?? '—')}</td>
+      </tr>`;
+    })
+    .join('\n');
+
+  const items = itemsFor(a.slug);
+  const productPart = items.length
+    ? `<ul class="ev-prod">${items
+        .map(
+          (i) =>
+            `<li><a href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">${escapeHtml(i.name)}</a><span class="ev-sub">${escapeHtml(i.criterion)}</span></li>`
+        )
+        .join('')}</ul>
+<p class="ev-note">上は<strong>広告リンク</strong>です。この記事が示した「選び方の基準」に合うかどうかだけを書いています。</p>`
+    : `<p class="ev-zero"><strong>0 個。</strong>この記事の結論からは、<strong>商品を選ぶ基準そのものが導けませんでした。</strong>だから、何も置いていません。</p>`;
+
+  const content = `<section class="hero is-narrow">
+  <p class="hero-lead">証拠シート</p>
+  <h1 class="ev-title">${escapeHtml(a.title)}</h1>
+  <p class="hero-body">この記事が根拠にした論文を、<strong>1本ずつ表にしたもの</strong>です。<strong>何が測られ、どの濃度で試され、どんな副作用が報告されたか。</strong>数字はすべて、実際に PubMed で開いたアブストラクトに書いてあったものだけです。</p>
+</section>
+
+<section class="ev-summary">
+  <ul class="ev-stats">
+    <li><span class="ev-n">${n}</span><span class="ev-l">論文</span></li>
+    <li><span class="ev-n">${noAdverse}</span><span class="ev-l">副作用の<br>記載なし</span></li>
+    <li><span class="ev-n">${noDose}</span><span class="ev-l">濃度の<br>記載なし</span></li>
+    <li><span class="ev-n">${items.length}</span><span class="ev-l">基準に<br>合う商品</span></li>
+  </ul>
+  <ul class="ev-fund">${fundRow}</ul>
+</section>
+
+<section class="ev-warn">
+  <p><strong>★ 「副作用の記載なし」は、「副作用がなかった」ではありません。</strong></p>
+  <p>この ${n} 本のうち <strong>${noAdverse} 本</strong>は、副作用について<strong>一言も書いていません</strong>。書いていないだけです。<strong>起きなかったとは、どこにも書かれていません。</strong>副作用が実際に報告されていたのは <strong>${reported} 本</strong>${paywalled ? `、全文が有料で確認すらできなかったものが <strong>${paywalled} 本</strong>` : ''}です。</p>
+  <p class="ev-note">この2つを混ぜないために、うちは機械（<code>site/verify.mjs</code>）で検査しています。台帳に「なし」とだけ書くと、<strong>サイトが公開されません。</strong></p>
+</section>
+
+<div class="ev-tablewrap">
+<table class="ev-table">
+  <thead>
+    <tr><th>論文</th><th>何を測ったか</th><th>試験で使われた濃度</th><th>報告された副作用</th><th>期間</th></tr>
+  </thead>
+  <tbody>
+${rows}
+  </tbody>
+</table>
+</div>
+
+<section class="ev-products">
+  <h2>この記事の基準に合う商品</h2>
+  ${productPart}
+</section>
+
+<p class="back-to-index"><a class="back-link" href="../articles/${escapeAttr(a.slug)}.html">記事を読む</a></p>`;
+
+  write(
+    join(DIST, 'evidence', `${a.slug}.html`),
+    renderPage({
+      content,
+      headTitle: `証拠シート: ${a.title} | ${cfg.title}`,
+      metaDesc: `${a.title} — 論文${n}本の、測定内容・試験で使われた濃度・報告された副作用の一覧。うち${noAdverse}本は副作用について何も書いていません。`,
+      canonical: `${baseUrl}/evidence/${a.slug}.html`,
+      ogType: 'article',
+      rootPath: '../',
+      ogSlug: a.slug,
+    })
+  );
+}
+console.log(`  built  evidence/ (${evidenceSheets.length} 個)`);
 
 // ---- サイト内検索用のデータ ---------------------------------------------
 //

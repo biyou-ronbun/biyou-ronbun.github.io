@@ -1,0 +1,206 @@
+{
+  "_note": "site/papers.json の論文から、試験で使われた濃度と報告された副作用を抜き出したもの。PubMed のアブストラクトに実際に書いてあったことだけ。書いていないものは「記載なし」と書いた。推測で埋めていない。",
+  "_warning": "『記載なし』は『副作用が0件だった』という意味ではない。『その論文が副作用について何も書いていない』という意味である。この2つを混同しないこと。",
+  "_method": "各PMIDの PubMed ページ（pubmed.ncbi.nlm.nih.gov/<PMID>/）を開いてアブストラクト本文を確認した。要旨が非掲載の2本は Europe PMC でも要旨の不在を確認した。",
+  "_date": "2026-07-13",
+
+  "34980969": {
+    "_article": "retinol-concentration",
+    "_title": "Evidence for the Efficacy of Over-the-counter Vitamin A Cosmetic Products in the Improvement of Facial Skin Aging: A Systematic Review",
+    "measured": "システマティックレビューのため、統合した各試験が何を測ったかは要旨に記載なし。要旨が述べているのは『9件のランダム化・二重盲検・基剤対照試験のうち4件はレチノールと基剤の間に統計学的有意差を報告しなかった。残る5件は細かい表情ジワにのみ軽度の改善という弱い根拠を示すが、重大な方法論的欠陥がある』という評価のみ",
+    "concentration": "記載なし",
+    "adverse": "記載なし",
+    "duration": "記載なし",
+    "confirmed": "abstract"
+  },
+
+  "35778881": {
+    "_article": "retinol-concentration",
+    "_title": "Multifaceted amelioration of cutaneous photoageing by (0.3%) retinol",
+    "measured": "組織（生検）。前腕に閉鎖塗布し12日後に3mmの皮膚生検を採取。表皮の厚み、フィラグリンとKPRPの発現、ケラチノサイトの増殖、E-カドヘリン、フィブリリン豊富微細線維の沈着を評価。機器測定でも医師の見た目評価でもない。加えて在宅使用試験では被験者本人が忍容性を記録",
+    "concentration": "0.1% / 0.3% / 1%（＋基剤対照）。在宅使用試験は 0.3% と 1% のみ",
+    "adverse": "在宅使用試験で『0.3%レチノールは1%レチノールより忍容性が良好で、報告された有害事象はより少なく軽度だった（χ2(1)=23.97; p<0.001）』。有害事象の種類・人数は要旨に記載なし。パッチ試験については『局所の炎症の所見は検出されなかった』と記載",
+    "duration": "パッチ試験12日間 / 在宅使用試験6週間",
+    "confirmed": "abstract"
+  },
+
+  "20078381": {
+    "_article": "retinol-concentration",
+    "_title": "Improvement of photoaged facial skin in middle-aged Japanese females by topical retinol",
+    "measured": "見た目の評価（photoaging improvement の率。細かいシワと深いシワ）。評価者が医師か本人かは要旨に明記なし",
+    "concentration": "0.075% と 0.04%",
+    "adverse": "『57人のうち3人が刺激（irritation）のため試験を脱落した』と明記。0.04%クリームの試験については『刺激はごくわずか（minimal irritation）』と記載",
+    "duration": "0.075%クリームは26週間 / 0.04%クリームは13週間",
+    "confirmed": "abstract"
+  },
+
+  "25607905": {
+    "_article": "retinol-concentration",
+    "_title": "A Randomized, Double-blind, Split-face Study Comparing Three Retinol-based Products vs. Three Tretinoin-based Products",
+    "measured": "見た目の評価（有効性と忍容性の臨床評価＋標準化デジタル写真。全体の光老化、細かいシワ、粗いシワ、肌の明るさ、まだらな色素沈着、触感の粗さ）",
+    "concentration": "レチノール 0.25% / 0.5% / 1.0%（対照はトレチノイン 0.025% / 0.05% / 0.1%）",
+    "adverse": "★方法欄に『忍容性（tolerability）の臨床評価を行った』と書いてあるが、その結果は要旨に一切書かれていない。有害事象の種類・件数・人数の記載なし。『副作用がなかった』とは書いていない",
+    "duration": "12週間",
+    "confirmed": "abstract"
+  },
+
+  "39128883": {
+    "_article": "retinol-concentration",
+    "_title": "Cosmetic retinoid use in photoaged skin: A review of the compounds, their use and mechanisms of action",
+    "measured": "該当なし（ナラティブレビュー。一次データなし）",
+    "concentration": "記載なし",
+    "adverse": "★『レチノール、レチニルエステル、レチナールデヒドは有効で安全、忍容性が良い（efficacious, safe and well-tolerated）』と著者は述べている。ただしこれは総説の総括であって、この論文が観察・集計した有害事象の報告ではない。件数・人数なし",
+    "duration": "該当なし",
+    "confirmed": "abstract"
+  },
+
+  "39184919": {
+    "_article": "retinol-concentration",
+    "_title": "A Comprehensive Review of the Strategies to Reduce Retinoid-Induced Skin Irritation in Topical Formulation",
+    "measured": "該当なし（21本の文献のナラティブレビュー）",
+    "concentration": "記載なし",
+    "adverse": "『レチノイドを皮膚に使うことにさまざまな副作用があることは否定できず、その1つが刺激（irritation）である』と記載。この論文自体が「刺激をどう減らすか」の製剤技術レビュー。件数・人数の記載なし",
+    "duration": "該当なし",
+    "confirmed": "abstract"
+  },
+
+  "32428912": {
+    "_article": "retinol-concentration",
+    "_title": "A Clinical Anti-Ageing Comparative Study of 0.3 and 0.5% Retinol Serums",
+    "measured": "機械の測定値と見た目の評価の両方。multi probe adapter と Fotomedicus 撮像システム、PRIMOS（皮膚表面の粗さ）による測定に加え、3名の独立した専門家によるVAS（視覚アナログスケール）評価",
+    "concentration": "0.3% と 0.5%（先行して基剤のみ〈液晶製剤〉の試験を実施）",
+    "adverse": "『有害事象は主に軽度または中等度の皮膚の刺激（skin irritation）だった。より頻繁で、より強い症状が左側（0.5%）で観察された』と記載。人数・件数の記載なし",
+    "duration": "12週間（先行する基剤のみの試験は8週間）",
+    "confirmed": "abstract"
+  },
+
+  "31222977": {
+    "_article": "retinol-concentration",
+    "_title": "Randomized parallel control trial checking the efficacy and impact of two concentrations of retinol... Pilot study",
+    "measured": "見た目の評価（盲検下での専門家による画像評価）。忍容性は試験期間を通じて評価",
+    "concentration": "0.15% と 0.3%",
+    "adverse": "『8週間の試験期間中の副作用（灼熱感、乾燥、そう痒、紅斑）は軽微（minimal）であった』と記載。人数・件数の記載なし",
+    "duration": "8週間（2か月）",
+    "confirmed": "abstract"
+  },
+
+  "37128827": {
+    "_article": "vitamin-c-derivatives",
+    "_title": "Efficacy of topical vitamin C in melasma and photoaging: A systematic review",
+    "measured": "システマティックレビュー。統合した試験が測ったものとして、皮膚の topography（きめ・シワ）、生検データ、客観的な色素沈着の評価、水分量が挙げられている",
+    "concentration": "記載なし（要旨にビタミンCの濃度は一切書かれていない）",
+    "adverse": "記載なし",
+    "duration": "記載なし（『目に見える変化には長期の使用が必要かもしれない』との記述はあるが、期間の数値はない）",
+    "confirmed": "abstract"
+  },
+
+  "10522500": {
+    "_article": "vitamin-c-derivatives",
+    "_title": "Use of topical ascorbic acid and its effects on photodamaged skin topography",
+    "measured": "機械の測定値と見た目の評価の両方。光学プロフィロメトリー（皮膚レプリカのコンピュータ画像解析。Ra・Rz・shadows）＋医師による0〜9点の臨床評価＋写真評価＋本人の自己評価質問票",
+    "concentration": "記載なし（製品名『Cellex-C high-potency serum』とのみ。アスコルビン酸の%は書かれていない）。塗布量は1日3滴（0.5mL）",
+    "adverse": "★方法欄に『本人の自己評価質問票で有害作用（灼熱感、刺すような感覚、発赤、落屑、乾燥、色調変化、かゆみ、発疹）を報告させた』と書いてあるが、その結果は要旨に一切書かれていない。『副作用がなかった』とは書いていない",
+    "duration": "3か月",
+    "confirmed": "abstract"
+  },
+
+  "11207686": {
+    "_article": "vitamin-c-derivatives",
+    "_title": "Topical L-ascorbic acid: percutaneous absorption studies",
+    "measured": "組織中濃度の測定（ブタ皮膚のL-アスコルビン酸レベルを測り、経皮送達量を求めた）。ヒトの見た目でも、シワ・シミの機器測定でもない",
+    "concentration": "『最適な経皮吸収のための最大濃度は20%だった』と記載。加えて『L-アスコルビン酸は皮膚に入るためにpH3.5未満で製剤化されなければならない』。誘導体（マグネシウムアスコルビルリン酸、アスコルビル-6-パルミテート、デヒドロアスコルビン酸）も試したが、その濃度の記載はない",
+    "adverse": "記載なし（ブタ皮膚の試験。ヒト被験者はいない）",
+    "duration": "記載なし（『3日間の連日塗布で組織レベルが飽和した』『組織からの消失半減期は約4日』との記述のみ）",
+    "confirmed": "abstract"
+  },
+
+  "8543691": {
+    "_article": "vitamin-c-derivatives",
+    "_title": "Inhibitory effect of magnesium L-ascorbyl-2-phosphate (VC-PMG) on melanogenesis in vitro and in vivo",
+    "measured": "3つが混在。①摘出ヒト皮膚での経皮吸収（塗布48時間後に1.6%が残存）②in vitro のメラニン産生（チロシナーゼ、ヒトメラノーマ細胞）③患者での『明るくなる効果（lightening effect）』＝見た目の評価。ただし誰がどう評価したかは要旨に記載なし",
+    "concentration": "10% VC-PMG クリーム",
+    "adverse": "記載なし",
+    "duration": "記載なし（塗布期間の記載が一切ない。経皮吸収の48時間というデータのみ）",
+    "confirmed": "abstract"
+  },
+
+  "20367669": {
+    "_article": "vitamin-c-derivatives",
+    "_title": "Sodium L-ascorbyl-2-phosphate 5% lotion for the treatment of acne vulgaris",
+    "measured": "見た目の評価と病変数。医師による全般評価スコア（IGA）、本人による全般評価スコア、皮疹の数（lesion counts）、皮膚忍容性、有害事象",
+    "concentration": "アスコルビルリン酸ナトリウム（APS）5% ローション",
+    "adverse": "『APS 5%ローションの有害事象の頻度と皮膚忍容性のプロファイルは、基剤（vehicle）と同程度だった』と記載。有害事象の内容・件数・人数の記載はない",
+    "duration": "12週間",
+    "confirmed": "abstract"
+  },
+
+  "34679221": {
+    "_article": "vitamin-c-derivatives",
+    "_title": "Ascorbic acid 2-glucoside: An ascorbic acid pro-drug with longer-term antioxidant efficacy in skin",
+    "measured": "組織への送達量と酸化ストレスの指標。生きた摘出ヒト皮膚での送達量、およびヒト再構成表皮（RHE）モデルでのMDA・SOD・カタラーゼ。ヒト被験者はいない",
+    "concentration": "アスコルビン酸（AA）15%、アスコルビン酸2-グルコシド（AA2G）1.8%",
+    "adverse": "記載なし（ヒト被験者も動物も用いていない）",
+    "duration": "記載なし（『AA当量の最大フラックスは12時間、吸収は24時間まで継続』との記述のみ）",
+    "confirmed": "abstract"
+  },
+
+  "11896774": {
+    "_article": "vitamin-c-derivatives",
+    "_title": "Double-blind, half-face study comparing topical vitamin C and vehicle for rejuvenation of photodamage",
+    "measured": "見た目の評価と組織（生検）の両方。シワ・色素沈着・炎症・水分の臨床評価（開始前と4・8・12週）＋12週時点で4人に2mmパンチ生検（H&E染色、I型コラーゲンmRNAのin situハイブリダイゼーション）＋本人の質問票",
+    "concentration": "アスコルビン酸10%（水溶性）＋テトラヘキシルデシルアスコルビン酸7%（脂溶性）を無水ポリシリコンゲル基剤に配合",
+    "adverse": "『炎症の所見が認められた患者はいなかった（No patients were found to have any evidence of inflammation.）』と記載。ただし炎症は有効性の評価項目としても挙がっており、有害事象そのものの集計は要旨にない。この一文以外に副作用の記載はない",
+    "duration": "12週間",
+    "confirmed": "abstract"
+  },
+
+  "18603326": {
+    "_article": "vitamin-c-derivatives",
+    "_title": "A topical antioxidant solution containing vitamins C and E stabilized by ferulic acid provides protection... against ultraviolet irradiation",
+    "measured": "紫外線ダメージの指標（シワ・シミの改善ではない）。紅斑、サンバーン細胞、免疫組織化学によるチミンダイマーとp53、リアルタイムPCRによるサイトカイン（IL-1α、IL-6、IL-8、IL-10、TNF-α）",
+    "concentration": "L-アスコルビン酸15%、α-トコフェロール1%、フェルラ酸0.5%（CEFer）",
+    "adverse": "記載なし",
+    "duration": "4日間（塗布し、その後に紫外線照射）",
+    "confirmed": "abstract"
+  },
+
+  "16185284": {
+    "_article": "vitamin-c-derivatives",
+    "_title": "Ferulic acid stabilizes a solution of vitamins C and E and doubles its photoprotection of skin",
+    "measured": "紫外線ダメージの指標。紅斑とサンバーン細胞の形成、カスパーゼ3・7の誘導、チミンダイマーの形成。光防御の評価はブタ皮膚",
+    "concentration": "L-アスコルビン酸15%、α-トコフェロール1%（フェルラ酸の濃度は要旨に記載なし）",
+    "adverse": "記載なし",
+    "duration": "記載なし",
+    "confirmed": "abstract"
+  },
+
+  "17291309": {
+    "_article": "vitamin-c-derivatives",
+    "_title": "Perifollicular pigmentation is the first target for topical vitamin C derivative ascorbyl 2-phosphate 6-palmitate (APPS)",
+    "measured": "★確認できていない。PubMed に要旨が掲載されていない（No abstract available）。3ページの短報で、全文は有料",
+    "concentration": "★確認できていない。要旨が存在しないため、APPS の濃度は分からない。「記載なし」ではなく「確認できていない」",
+    "adverse": "★全文が有料かつ要旨が非掲載のため、副作用の記載の有無を確認できていない。これは「記載なし」ではない",
+    "duration": "★確認できていない（要旨が存在しない）",
+    "confirmed": "bibliographic"
+  },
+
+  "29104718": {
+    "_article": "vitamin-c-derivatives",
+    "_title": "Topical Vitamin C and the Skin: Mechanisms of Action and Clinical Applications",
+    "measured": "該当なし（ナラティブレビュー。一次データなし）",
+    "concentration": "★「試験で使われた濃度」は該当なし。本文で著者は『生物学的に意味を持つには8%超が必要』『評判の良い製品は10〜20%』『20%を超えても生物学的意義は増えず、むしろ刺激を起こしうる』と述べている。これは著者の推奨であって、この論文が行った試験の濃度ではない。よく引用される「10〜20%が最適」の出典はここだが、レビューの記述である",
+    "adverse": "本文に『20%を超える濃度は、いくらかの刺激（some irritation）を起こしうる』との記述。件数・人数・出典となる試験の記載はない。著者は外用ビタミンCの安全性プロファイルは良好としている",
+    "duration": "該当なし",
+    "confirmed": "fulltext"
+  },
+
+  "31066077": {
+    "_article": "vitamin-c-derivatives",
+    "_title": "A new case of allergic contact dermatitis caused by 3-o-ethyl ascorbic acid in facial antiageing cosmetics",
+    "measured": "★確認できていない。PubMed にも Europe PMC にも要旨が存在しない（abstractText フィールドが無いことを確認）。Contact Dermatitis 誌の2ページの短報で、全文は有料",
+    "concentration": "★確認できていない。要旨が存在しないため、3-O-エチルアスコルビン酸の配合濃度は分からない",
+    "adverse": "★タイトルが『顔用アンチエイジング化粧品中の3-O-エチルアスコルビン酸によるアレルギー性接触皮膚炎の新たな1例』であり、有害事象そのものを報告した症例報告である。ただし全文が有料かつ要旨が非掲載のため、症例の詳細（重症度・経過・パッチテストの結果）は確認できていない。1例の症例報告であり、頻度は分からない",
+    "duration": "★確認できていない（要旨が存在しない）",
+    "confirmed": "bibliographic"
+  }
+}

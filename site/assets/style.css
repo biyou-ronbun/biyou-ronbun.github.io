@@ -2479,3 +2479,170 @@ a { color: var(--rose); }
   .post-body h3 { font-size: 16.5px; }
   .post-note { padding: 20px 18px; }
 }
+
+/* ---------- 証拠シート ----------
+   ★ 目立たせるのは「記載なし」の数。ここが、このページの発見そのもの。
+     判定・点数・順位は1つも置かない（verify.mjs が台帳の側で止める）。 */
+
+.ev-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: .02em;
+  margin: 10px 0 18px;
+}
+
+.ev-summary {
+  margin: 40px 0 0;
+  padding: 30px 28px 24px;
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--ink);
+  background: var(--bg-raised);
+}
+
+.ev-stats {
+  list-style: none;
+  margin: 0 0 22px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.ev-stats li { text-align: center; }
+
+.ev-n {
+  display: block;
+  font-family: var(--serif);
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: .02em;
+}
+
+.ev-l {
+  display: block;
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: .06em;
+  color: var(--ink-mute);
+}
+
+.ev-fund {
+  list-style: none;
+  margin: 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.ev-fund .ev-k { letter-spacing: .04em; }
+.ev-fund .ev-v { margin-left: 8px; color: var(--ink); }
+
+/* ★ このページで、いちばん読ませたい箱 */
+.ev-warn {
+  margin: 26px 0 0;
+  padding: 26px 26px 20px;
+  border-left: 3px solid var(--ink);
+  background: var(--bg-wash);
+}
+
+.ev-warn p { margin: 0 0 12px; font-size: 14px; line-height: 1.95; }
+.ev-warn p:last-child { margin-bottom: 0; }
+.ev-note { font-size: 12px; color: var(--ink-mute); line-height: 1.9; }
+
+.ev-tablewrap { margin: 34px 0 0; overflow-x: auto; }
+
+.ev-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  line-height: 1.8;
+}
+
+.ev-table th {
+  text-align: left;
+  font-weight: 400;
+  letter-spacing: .06em;
+  font-size: 11.5px;
+  color: var(--ink-mute);
+  padding: 0 14px 10px 0;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+
+.ev-table td {
+  padding: 16px 14px 16px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: top;
+}
+
+.ev-paper { min-width: 230px; }
+.ev-paper a { text-underline-offset: 3px; }
+
+.ev-sub {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--ink-mute);
+}
+
+.ev-retracted {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border: 1px solid var(--ink);
+  font-size: 10px;
+  letter-spacing: .08em;
+}
+
+.ev-dur { white-space: nowrap; color: var(--ink-soft); }
+
+/* ★ 「記載なし」は、薄く逃がさない。むしろ印を付ける。
+     ここが空白であることが、このページの発見だから。 */
+.is-notstated { color: var(--ink); background: var(--bg-wash); }
+.is-notstated::before { content: "— "; color: var(--ink-mute); }
+.is-paywall { color: var(--ink-mute); font-style: normal; }
+
+.ev-products { margin: 48px 0 0; padding-top: 30px; border-top: 1px solid var(--rule); }
+.ev-products h2 { font-family: var(--serif); font-size: 18px; font-weight: 400; letter-spacing: .06em; margin: 0 0 18px; }
+.ev-prod { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+.ev-prod a { font-size: 15px; }
+
+.ev-zero {
+  margin: 0;
+  padding: 20px 22px;
+  border: 1px dashed var(--rule);
+  font-size: 13.5px;
+  line-height: 1.95;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 600px) {
+  .ev-title { font-size: 22px; }
+  .ev-summary { padding: 24px 20px 20px; margin-left: -20px; margin-right: -20px; }
+  .ev-stats { grid-template-columns: repeat(2, 1fr); gap: 22px 12px; }
+  .ev-n { font-size: 28px; }
+  .ev-warn { margin-left: -20px; margin-right: -20px; padding: 22px 20px 18px; }
+}
+
+.receipt-sheet {
+  margin: 20px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule-soft);
+}
+.receipt-sheet a { font-size: 14px; letter-spacing: .03em; text-underline-offset: 4px; }
+.receipt-sheet-sub {
+  display: block;
+  margin-top: 6px;
+  font-size: 11.5px;
+  line-height: 1.8;
+  color: var(--ink-mute);
+}

@@ -1,0 +1,222 @@
+{
+  "_note": "site/papers.json の論文から、試験で使われた量・濃度と報告された副作用を抜き出したもの。アブストラクトに書いてあったことだけ。推測で埋めていない。「記載なし」は、その論文のアブストラクトに書かれていなかったという意味であって、「0件だった」という意味ではない。",
+  "_method": "PubMed の公式API（E-utilities efetch）と PubMed の論文ページを開き、アブストラクト本文だけを根拠にした。調査日 2026-07-13。",
+  "_confirmed_vocab": {
+    "abstract": "アブストラクトを確認した",
+    "no-abstract": "PubMed にアブストラクトが存在しない（要旨非掲載）。「記載なし」とは別。本文は未確認"
+  },
+
+  "23732711": {
+    "_articles": ["sunscreen-spf", "skin-fasting", "oral-sunscreen"],
+    "_title": "Sunscreen and prevention of skin aging: a randomized trial (Ann Intern Med 2013)",
+    "measured": "皮膚のミクロトポグラフィ（microtopography）の変化を、割付を知らされていない評価者が採点した。「Change in microtopography between 1992 and 1996 in the sunscreen and β-carotene groups compared with controls, graded by assessors blinded to treatment allocation.」機械の測定値でも紅斑でも組織でもなく、型取りした皮膚表面の見た目の等級づけ",
+    "concentration": "日焼け止めは「broad-spectrum sunscreen（広域スペクトル日焼け止め）」とのみ。SPF値も塗布量もアブストラクトに記載なし。併用したβ-カロテンは 30 mg",
+    "adverse": "記載なし。有害事象という語がアブストラクトに出てこない。ただし結論に「further study is required to definitively exclude potential benefit or potential harm（β-カロテンの利益も害も決定的に否定するにはさらなる研究が必要）」とあり、これはβ-カロテンについての記述で、有害事象の集計ではない",
+    "duration": "4.5年（1992〜1996年）",
+    "confirmed": "abstract"
+  },
+
+  "10475183": {
+    "_articles": ["sunscreen-spf"],
+    "_title": "Daily sunscreen application and betacarotene supplementation in prevention of basal-cell and squamous-cell carcinomas (Lancet 1999)",
+    "measured": "基底細胞がん・有棘細胞がんの発生（治療を受けた人数と、発生した腫瘍の数の両方）。皮膚の見た目でも機械の測定値でもなく、がんの発生数",
+    "concentration": "「sun protection factor 15-plus sunscreen」（SPF15以上）。塗布量（mg/cm2）の記載はなし。塗る部位は head, neck, arms, and hands。β-カロテンは 30 mg/日",
+    "adverse": "有害事象の集計は記載なし。結論に「There was no harmful effect of daily use of sunscreen in this medium-term study.（この中期間の試験では、日焼け止めの毎日の使用による有害な影響はなかった）」とあるが、これは皮膚がん発生への影響についての記述であり、副作用（かぶれ等）を数えた記述ではない",
+    "duration": "4.5年の追跡",
+    "confirmed": "abstract"
+  },
+
+  "21135266": {
+    "_articles": ["sunscreen-spf"],
+    "_title": "Reduced melanoma after regular sunscreen use: randomized trial follow-up (J Clin Oncol 2011)",
+    "measured": "原発性メラノーマの発生（primary melanoma occurrence）。質問票・病理検査室・がん登録で把握した",
+    "concentration": "日焼け止めのSPF値・塗布量ともに記載なし（「daily or discretionary sunscreen application to head and arms」とのみ）。併用したβ-カロテンは 30 mg",
+    "adverse": "記載なし",
+    "duration": "1992年に割付、1996年まで介入。その後2006年まで観察（介入4年＋追跡10年）",
+    "confirmed": "abstract"
+  },
+
+  "19962787": {
+    "_articles": ["sunscreen-spf"],
+    "_title": "The relation between the amount of sunscreen applied and the sun protection factor in Asian skin (JAAD 2010)",
+    "measured": "in vivo の SPF 測定と紅斑。「Erythema was evaluated 20 to 24 hours after exposure to UV radiation.」紫外線照射後20〜24時間の紅斑（＝MED系の指標）",
+    "concentration": "★この記事の核。表示SPFの前提として「The declared SPF is based on the use of a sunscreen layer of 2 mg/cm(2).」、現実には「only around a quarter (0.5 mg/cm(2)) of this amount is generally used in real life.」。試験では 0.5 / 1.0 / 1.5 / 2.0 mg/cm2 の4段階を塗り分けた。用いた製品は SPF 30 と SPF 35 の2種類＋高低の標準対照品",
+    "adverse": "記載なし",
+    "duration": "記載なし（単回の塗布・照射試験。塗布後20分乾燥、照射後20〜24時間で紅斑を評価、とあるのみ）",
+    "confirmed": "abstract"
+  },
+
+  "29291958": {
+    "_articles": ["sunscreen-spf"],
+    "_title": "SPF 100+ sunscreen is more protective against sunburn than SPF 50+ in actual use (JAAD 2018)",
+    "measured": "日焼け（サンバーン）と紅斑スコア。「Erythema was clinically assessed on the day following exposure.」評価者盲検での臨床評価。機械の測定値ではなく、評価者の目による判定。「investigator-blinded evaluation identified 55.3% of the participants (110 of 199) as more sunburned on the SPF 50+ protected side and 5% (10 of 199) on the SPF 100+ protected side.」",
+    "concentration": "SPF 100+ と SPF 50+ の日焼け止めを顔の左右に塗り分けた。★塗布量（mg/cm2）の記載はなし——実使用条件下の試験のため、どれだけ塗ったかは制御されていない",
+    "adverse": "記載なし",
+    "duration": "単日。平均 6.1 ± 1.3 時間の日光曝露。著者自身が「Single-day exposure may not extrapolate to benefits of longer-term protection.」と限界を明記",
+    "confirmed": "abstract"
+  },
+
+  "34387824": {
+    "_articles": ["sunscreen-spf"],
+    "_title": "Sunscreens and Photoaging: A Review of Current Literature (Am J Clin Dermatol 2021)",
+    "measured": "ナラティブレビューのため、自ら測定していない。アブストラクトが挙げるのは扱う話題（「prevention of photoaging, dyspigmentation, DNA damage, and photocarcinogenesis」）のみ",
+    "concentration": "記載なし",
+    "adverse": "記載なし",
+    "duration": "記載なし",
+    "confirmed": "abstract"
+  },
+
+  "30945275": {
+    "_articles": ["sunscreen-spf"],
+    "_title": "The effect of sunscreen on vitamin D: a review (Br J Dermatol 2019)",
+    "measured": "血中のビタミンD。「vitamin D3 or 25 hydroxyvitamin D [25(OH)D] concentration」、および人工紫外線照射による 25(OH)D 産生。皮膚のアウトカムではなく血液の測定値",
+    "concentration": "組み入れた試験の日焼け止めについて「sun protection factor (SPF) ~16」との記述がある。塗布量の記載はなし",
+    "adverse": "有害事象の集計は記載なし。「concerns that it may increase the risk of vitamin D deficiency（ビタミンD欠乏のリスクを高めるのではという懸念）」および「concerns about vitamin D should not negate skin cancer prevention advice」という記述があるのみで、これは懸念の議論であって副作用を数えた報告ではない",
+    "duration": "記載なし（文献検索期間は 1970年〜2017年11月21日）",
+    "confirmed": "abstract"
+  },
+
+  "12077052": {
+    "_articles": ["sunscreen-spf"],
+    "_title": "Simple dosage guide for suncreans will help users (BMJ 2002)",
+    "measured": "全文が有料のため確認できていない。PubMed にアブストラクトが存在しない（「No abstract available」。出版種別は Comment / Letter）。したがって「記載なし」ではなく、要旨そのものが無い",
+    "concentration": "全文が有料のため確認できていない（要旨なし）。★スラッグ sunscreen-spf の記事でよく使われる『小さじ1杯（teaspoon）』の目安の出典とされる文献だが、その数値をこの調査では一次情報で確認できていない",
+    "adverse": "全文が有料のため確認できていない（要旨なし）",
+    "duration": "全文が有料のため確認できていない（要旨なし）。そもそも試験ではない",
+    "confirmed": "no-abstract"
+  },
+
+  "11712033": {
+    "_articles": ["sunscreen-spf"],
+    "_title": "When should sunscreen be reapplied? (JAAD 2001)",
+    "measured": "ヒトを測っていない。数学モデルによる計算。「how the time of sunscreen reapplication affects the solar ultraviolet exposure of the skin」を計算した。「A mathematical model was derived that took into account typical amounts of sunscreen application and sunscreen substantivity」",
+    "concentration": "具体的な mg/cm2 の記載はなし。塗り直しのタイミングについて「apply sunscreen liberally to exposed sites 15 to 30 minutes before going out into the sun」「reapplication of sunscreen at 20 minutes results in 60% to 85% of the ultraviolet exposure」「reapply sunscreen every 2 to 3 hours」という記述がある。★「2〜3時間ごとに塗り直す」の根拠としてよく引かれるが、これは実測ではなくモデル計算である",
+    "adverse": "記載なし（ヒト試験ではないため、そもそも観察していない）",
+    "duration": "記載なし（想定は「exposure for several hours around mid day in strong sunshine」）",
+    "confirmed": "abstract"
+  },
+
+  "33318091": {
+    "_articles": ["sunscreen-spf"],
+    "_title": "The efficacy and safety of sunscreen use for the prevention of skin cancer (CMAJ 2020)",
+    "measured": "全文が有料のため確認できていない。PubMed に「No abstract available」と明記されており、要旨そのものが存在しない。★タイトルに safety（安全性）を掲げているが、その中身をこの調査では一次情報で確認できていない",
+    "concentration": "全文が有料のため確認できていない（要旨なし）",
+    "adverse": "全文が有料のため確認できていない（要旨なし）",
+    "duration": "全文が有料のため確認できていない（要旨なし）",
+    "confirmed": "no-abstract"
+  },
+
+  "31058986": {
+    "_articles": ["sunscreen-spf"],
+    "_title": "Effect of Sunscreen Application Under Maximal Use Conditions on Plasma Concentration of Sunscreen Active Ingredients (JAMA 2019)",
+    "measured": "血液中の成分濃度。皮膚のアウトカムは1つも測っていない。「The primary outcome was the maximum plasma concentration of avobenzone.」「Secondary outcomes were the maximum plasma concentrations of oxybenzone, octocrylene, and ecamsule.」",
+    "concentration": "「Two milligrams of sunscreen per 1 cm2 was applied to 75% of body surface area 4 times per day for 4 days」＝ 2 mg/cm2 を体表面積の75%に、1日4回、4日間。★実生活ではありえない最大使用条件（maximal use conditions）であることが、試験名に明示されている",
+    "adverse": "★このテーマで有害事象を人数まで報告している数少ない論文。「The most common adverse event was rash, which developed in 1 participant with each sunscreen.（最も多かった有害事象は発疹で、各日焼け止めについて1人に発生した）」",
+    "duration": "4日間塗布。各被験者から7日間で30回採血",
+    "confirmed": "abstract"
+  },
+
+  "20924436": {
+    "_articles": ["sunscreen-spf"],
+    "_title": "Assessment of cumulative exposure to UVA through the study of asymmetrical facial skin aging (Clin Interv Aging 2010)",
+    "measured": "機械の測定値と見た目の評価の両方。「clinical scoring, hydration with Corneometer, mechanical properties with Cutometer, transepidermal water loss with AquaFlux, skin relief with fringe projection」、および「clinical scores for wrinkles, skin roughness assessed by fringe projection on the cheek, and skin heterogeneity assessed with spectrocolorimetry」",
+    "concentration": "記載なし（日焼け止めを塗る介入試験ではなく、車の運転などによる左右差を観察したパイロット研究）",
+    "adverse": "記載なし",
+    "duration": "記載なし（「over a long period of time」という曖昧な記述のみ。具体的な期間の記載がない）",
+    "confirmed": "abstract"
+  },
+
+  "41182568": {
+    "_articles": ["oral-sunscreen"],
+    "_title": "Changes in UVB-induced DNA damage and erythema after oral nicotinamide and polypodium leucotomos (Photochem Photobiol Sci 2025)",
+    "measured": "紅斑（MED）と DNA損傷の両方。「minimal erythema dose (MED)」「thymidine dimer (TT-dimers) levels in urine and skin」＝尿と皮膚（生検）のチミジン2量体。見た目の若返りではなく、紫外線ダメージの直接指標",
+    "concentration": "ニコチンアミド（NAM）2000 mg/日、または Polypodium leucotomos（PL）480 mg/日",
+    "adverse": "記載なし",
+    "duration": "30日間",
+    "confirmed": "abstract"
+  },
+
+  "41838346": {
+    "_articles": ["oral-sunscreen"],
+    "_title": "Changes in UVA-induced thymidine dimers and erythema after oral nicotinamide or polypodium leucotomos extract (Photochem Photobiol Sci 2026)",
+    "measured": "「UVA-induced erythema, assessed by minimal erythema dose (MED), and TT-dimers, quantified in urine and skin biopsies」＝ UVA による紅斑（MED）と、尿・皮膚生検のチミジン2量体",
+    "concentration": "ニコチンアミド（NAM）2000 mg/日、または PL（製品名 Heliocare Advanced）480 mg/日",
+    "adverse": "記載なし",
+    "duration": "30日間",
+    "confirmed": "abstract"
+  },
+
+  "27374032": {
+    "_articles": ["oral-sunscreen"],
+    "_title": "Skin photoprotective and antiageing effects of rosemary and grapefruit polyphenols (Food Nutr Res 2016)",
+    "_funding": "industry — 成分メーカー Monteloeder S.L.（Nutroxsun の製造元）と Nutrafur S.A. の資金。Monteloeder は試験プロトコルの設計にも関与",
+    "measured": "紅斑・脂質過酸化・見た目の混合。「Skin redness (a* value of CIELab colour space) after UVB exposure to 1 minimal erythemal dose (MED)」（パイロット試験）、および本試験で「MED, lipoperoxides (malondialdehyde) skin content, wrinkle depth (image analysis), and skin elasticity (suction and elongation method)」",
+    "concentration": "抽出物 100 mg と 250 mg の2用量。「No differences were found between the 100 and 250 mg extracts doses, indicating a plateau effect starting from 100 mg extracts dose.」（★1日あたりかどうかはアブストラクトに明記なし）",
+    "adverse": "★記載なし。メーカー資金・メーカーがプロトコル設計に関与した試験だが、有害事象への言及がアブストラクトに一切ない。背景に「A dietary approach based of these compounds could be a safe and effective method」と『安全』の語はあるが、これは前置きであって、この試験で観察された有害事象の報告ではない",
+    "duration": "★総期間の記載なし。「Some of the positive effects were noted as short as 2 weeks of product consumption.」と結論の「The long-term oral intake of Nutroxsun™」という記述のみで、試験が何週間だったかがアブストラクトから確認できない",
+    "confirmed": "abstract"
+  },
+
+  "40218997": {
+    "_articles": ["oral-sunscreen"],
+    "_title": "Effects of Eight-Week Supplementation Containing Red Orange and Polypodium leucotomos Extracts on UVB-Induced Skin Responses (Nutrients 2025)",
+    "_funding": "industry — Tosla d.o.o. の資金（COI欄に明記）",
+    "measured": "紅斑と色素沈着。「minimal erythema dose (MED), UVB-induced erythema (Δa*), and pigmentation changes (ΔMI)」。数値まで報告されている: MED が 23.8% 増加（0.447 ± 0.096 → 0.553 ± 0.142 J/cm2, p < 0.05）、紅斑強度が 46.2% 減少（2.40 ± 0.94 → 1.29 ± 1.04 au, p < 0.0001）。一方 ΔMI（日焼け反応）はプラセボと差なし",
+    "concentration": "★記載なし。「a syrup supplement containing Polypodium leucotomos extract (PLE), Red Orange Extract (ROE), and vitamins A, C, D, and E」と成分名は挙げるが、mg 量が1つも書かれていない。何をどれだけ飲めばこの結果になるのかが、アブストラクトからは分からない",
+    "adverse": "★記載なし。メーカー資金の試験だが、有害事象への言及がアブストラクトに一切ない",
+    "duration": "8週間（2週時点と8週時点で評価。2週では有意差に達しなかった）",
+    "confirmed": "abstract"
+  },
+
+  "31797305": {
+    "_articles": ["oral-sunscreen"],
+    "_title": "Prospective Evaluation of the Efficacy of a Food Supplement in Increasing Photoprotection (Dermatol Ther 2020)",
+    "_funding": "industry — 著者6名中5名が ISDIN（日焼け止め・皮膚科向け製品の企業）の社員",
+    "measured": "紅斑（MED）＋血液の抗酸化マーカー＋見た目。「minimal erythema dose (MED)」「ferric reducing antioxidant power (FRAP) and malondialdehyde (MDA) assays」「skin parameters (including radiance, elasticity, and moisture)」。★対照群もプラセボも無い非盲検試験である点に注意",
+    "concentration": "★記載なし。「a combination of actives with mainly antioxidative properties (vitamins A, C, D3, E, selenium, lycopene, lutein, as well as green tea, polypodium and grape extracts)」と成分名は列挙されるが、mg 量が1つも書かれていない",
+    "adverse": "★メーカー資金の4本のうち、有害事象を明示的に報告している唯一の論文。「safety was monitored through a self-recording of all observed adverse reactions（有害反応の自己記録により安全性を監視した）」「no adverse events were attributed by the investigators to the use of the product（試験担当医は、製品の使用に起因する有害事象はなかったとした）」「The product was well tolerated（製品の忍容性は良好だった）」。ただし『起因すると判断されなかった』のであって、有害事象そのものが0件だったとは書かれていない",
+    "duration": "12週間（摂取開始後 14日・28日・56日・84日に受診）",
+    "confirmed": "abstract"
+  },
+
+  "40196953": {
+    "_articles": ["oral-sunscreen"],
+    "_title": "The Utility of Oral Polypodium Leucotomos Extract for Dermatologic Diseases: A Systematic Review (J Drugs Dermatol 2025)",
+    "measured": "記載なし。システマティックレビューだが、アブストラクトに評価項目が書かれていない",
+    "concentration": "★記載なし。飲む日焼け止めの成分について最も強い設計（システマティックレビュー）でありながら、アブストラクトに用量が1つも書かれていない。『何mg飲めばいいか』はこのレビューの要旨からは分からない",
+    "adverse": "「encouraging safety profile（有望な安全性プロファイル）」という記述のみ。具体的な有害事象も、その件数も書かれていない。★本文が有料のため、この評価の中身は確認できていない",
+    "duration": "記載なし",
+    "confirmed": "abstract"
+  },
+
+  "38845468": {
+    "_articles": ["oral-sunscreen"],
+    "_title": "Sunproofing from within: A deep dive into oral photoprotection strategies in dermatology (Photodermatol Photoimmunol Photomed 2024)",
+    "measured": "総説のため自ら測定していない。アブストラクトにあるのは「protection against damage induced by UVR」「effects that sunlight can cause on the skin」という一般的な記述のみ",
+    "concentration": "記載なし",
+    "adverse": "記載なし",
+    "duration": "記載なし",
+    "confirmed": "abstract"
+  },
+
+  "9361129": {
+    "_articles": ["oral-sunscreen"],
+    "_title": "Topical or oral administration with an extract of Polypodium leucotomos prevents acute sunburn... (Photodermatol Photoimmunol Photomed 1997)",
+    "measured": "紅斑・色素沈着・組織の3種類。「immediate pigment darkening (IPD), minimal erythema dose (MED), minimal melanogenic dose (MMD), and minimal phototoxic dose (MPD)」に加えて「Immunohistochemical assessment of CD1a-expressing epidermal cells」＝ランゲルハンス細胞の免疫組織化学（皮膚を採って染めた）",
+    "concentration": "★記載なし。経口も外用も、用量が1つも書かれていない（「after topical application or oral ingestion」とあるのみ）。★この論文は MED が 2.8 ± 0.59 倍に増えたと報告しており、近年の試験（+2〜3割）と桁が違う。その数値の根拠となる用量が、アブストラクトからは分からない",
+    "adverse": "記載なし。★被験者の一部にソラレン（8-MOP または 5-MOP）を投与し、意図的に光毒性を起こさせている試験でありながら、有害事象の記述がない",
+    "duration": "記載なし",
+    "confirmed": "abstract"
+  },
+
+  "35684041": {
+    "_articles": ["oral-sunscreen"],
+    "_title": "Photoprotective and Antiaging Effects of a Standardized Red Orange Extract in Asian and Caucasian Subjects (Nutrients 2022)",
+    "_funding": "industry — 著者 V.Z. が Bionap srl の社員（COI欄で申告）",
+    "measured": "紅斑（MED・色差計）＋血液の抗酸化マーカー＋機械の測定値。「minimal erythema dose (MED) assessment」「UVA+B-induced skin redness was measured by colorimetry」「ferric-reducing antioxidant power (FRAP) and the malondialdehyde (MDA) assay」「skin moisturization, skin elasticity, skin radiance, the intensity of melanin staining, transepidermal water loss (TEWL), and wrinkles」",
+    "concentration": "100 mg/日",
+    "adverse": "★記載なし。メーカー社員が著者に入る試験だが、有害事象への言及がアブストラクトに一切ない",
+    "duration": "56日間",
+    "confirmed": "abstract"
+  }
+}

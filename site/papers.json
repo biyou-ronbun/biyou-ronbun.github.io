@@ -43,7 +43,11 @@
       "confirmed": "abstract",
       "articles": [
         "oral-collagen"
-      ]
+      ],
+      "measured": "機械の測定値（皮膚の水分量・弾力）と、シワ。23件のRCTのメタアナリシス",
+      "concentration": "記載なし（要旨に用量の記載がない）",
+      "adverse": "記載なし",
+      "duration": "記載なし"
     },
     {
       "pmid": "37432180",
@@ -59,7 +63,11 @@
       "confirmed": "fulltext",
       "articles": [
         "oral-collagen"
-      ]
+      ],
+      "measured": "機械の測定値（皮膚の水分量・弾力）。26件のRCTのメタアナリシス",
+      "concentration": "記載なし（要旨に用量の記載がない。コラーゲンの由来別のサブグループ解析を行ったとある）",
+      "adverse": "記載なし",
+      "duration": "記載なし（「補充期間によって効果が異なった」とあるが、具体的な週数は要旨に書かれていない）"
     },
     {
       "pmid": "23949208",
@@ -75,7 +83,11 @@
       "confirmed": "abstract",
       "articles": [
         "oral-collagen"
-      ]
+      ],
+      "measured": "機械の測定値（皮膚の弾力＝主要評価項目、水分量、経表皮水分蒸散量TEWL、皮膚の粗さ）",
+      "concentration": "コラーゲンペプチド 2.5 g/日 または 5.0 g/日（1日1回）",
+      "adverse": "著者は有害事象なしと報告（「No side effects were noted throughout the study.」＝試験を通して副作用は認められなかった）",
+      "duration": "投与8週間＋投与終了後4週間の追跡"
     },
     {
       "pmid": "29949889",
@@ -91,7 +103,11 @@
       "confirmed": "fulltext",
       "articles": [
         "oral-collagen"
-      ]
+      ],
+      "measured": "機械の測定値（水分量＝Corneometer CM825、弾力＝Cutometer MPA580、シワのパラメータ R1・R3・R4）と、シワの目視評価",
+      "concentration": "低分子コラーゲンペプチド（LMWCP）1,000 mg/日（1日1回）",
+      "adverse": "著者は有害事象なしと報告（「試験期間中、試験物質に関連する有害症状を呈した被験者はいなかった」）",
+      "duration": "12週間（0週・6週・12週に測定）"
     },
     {
       "pmid": "33774639",
@@ -107,7 +123,11 @@
       "confirmed": "abstract",
       "articles": [
         "oral-collagen"
-      ]
+      ],
+      "measured": "機械の測定値（角層と表皮の水分量、経表皮水分蒸散量TEWL、角層の天然保湿因子NMF量、弾力、皮膚の厚み）",
+      "concentration": "コラーゲンペプチド 1 g/日 または 5 g/日（1日1回）",
+      "adverse": "記載なし",
+      "duration": "12週間（0週・4週・8週・12週に評価）"
     },
     {
       "pmid": "35662250",
@@ -123,7 +143,11 @@
       "confirmed": "fulltext",
       "articles": [
         "oral-collagen"
-      ]
+      ],
+      "measured": "ヒトは血液のみ（摂取後の血中トリペプチド Gly-3Hyp-4Hyp の濃度）。皮膚のアウトカムはヒトでは1つも測っていない。ほかにマウスと培養細胞（線維芽細胞の遊走、骨芽細胞の分化）",
+      "concentration": "記載なし（ヒトが摂取した豚皮コラーゲン加水分解物の量は要旨に書かれていない。培養細胞に加えた合成ペプチドは 200 nmol/mL）",
+      "adverse": "記載なし",
+      "duration": "単回摂取（要旨に採血の追跡時間の明示なし）"
     },
     {
       "pmid": "39149544",
@@ -139,7 +163,11 @@
       "confirmed": "fulltext",
       "articles": [
         "oral-collagen"
-      ]
+      ],
+      "measured": "血液のみ（血漿中の遊離ヒドロキシプロリンとペプチド結合ヒドロキシプロリン、Pro-Hyp・Hyp-Gly・Gly-Pro-Hyp・Pro-Gly・Gly-Pro の濃度）。皮膚のアウトカムは1つも測っていない",
+      "concentration": "記載なし（要旨に摂取量の記載がない。魚・豚・牛由来で分子量の異なるコラーゲン加水分解物を単回摂取、とある）",
+      "adverse": "記載なし",
+      "duration": "単回摂取（要旨に追跡時間の明示なし）"
     },
     {
       "pmid": "28244315",
@@ -155,7 +183,11 @@
       "confirmed": "abstract",
       "articles": [
         "oral-collagen"
-      ]
+      ],
+      "measured": "ヒトは血液のみ。皮膚を測ったのはマウスだけ（マウスの皮膚中の Gly-Pro-Hyp・Pro-Hyp）",
+      "concentration": "記載なし（要旨に摂取量の記載がない）",
+      "adverse": "記載なし",
+      "duration": "記載なし"
     },
     {
       "pmid": "25877232",
@@ -171,7 +203,11 @@
       "confirmed": "abstract",
       "articles": [
         "hyaluronic-acid"
-      ]
+      ],
+      "measured": "摘出したヒト皮膚の切片（ex vivo）をラマン顕微イメージングで観察し、分子量の異なるHAの浸透を追跡。生きたヒトに塗った試験ではない。肌の見た目も水分量も測っていない",
+      "concentration": "濃度の記載なし。分子量のみ記載（低分子 20〜300 kDa、高分子 1000〜1400 kDa）",
+      "adverse": "記載なし",
+      "duration": "記載なし"
     },
     {
       "pmid": "22052267",
@@ -187,7 +223,11 @@
       "confirmed": "abstract",
       "articles": [
         "hyaluronic-acid"
-      ]
+      ],
+      "measured": "機械の測定値（皮膚の水分量、弾力 R2、シワの深さ＝平均粗さ Ra と最大粗さ Rz）と、皮膚レプリカの半自動モルフォメトリー",
+      "concentration": "0.1%（分子量の異なるHAをそれぞれ 0.1% 配合したクリーム）",
+      "adverse": "記載なし",
+      "duration": "60日間"
     },
     {
       "pmid": "38829483",
@@ -203,7 +243,11 @@
       "confirmed": "abstract",
       "articles": [
         "hyaluronic-acid"
-      ]
+      ],
+      "measured": "機械の測定値（皮膚静電容量 SCap＝角層の水分量の指標、経表皮水分蒸散量 TEWL）と、乾皮症の症状スコア",
+      "concentration": "記載なし（低分子HA・高分子HAの比較とあるが、要旨に濃度も分子量の数値も書かれていない）",
+      "adverse": "著者は有害事象なしと報告（「No side effects were found in all groups」＝どの群でも副作用は認められなかった）",
+      "duration": "4週間（0週・2週・4週に測定）"
     },
     {
       "pmid": "40911749",
@@ -219,7 +263,11 @@
       "confirmed": "abstract",
       "articles": [
         "hyaluronic-acid"
-      ]
+      ],
+      "measured": "機械の測定値（水分量、弾力、ハリ、シワの深さ、シワの容積、経表皮水分蒸散量TEWL）。RCT 7件のメタアナリシス",
+      "concentration": "記載なし（要旨に用量の記載がない）",
+      "adverse": "記載なし",
+      "duration": "記載なし"
     },
     {
       "pmid": "28761365",
@@ -235,7 +283,11 @@
       "confirmed": "abstract",
       "articles": [
         "hyaluronic-acid"
-      ]
+      ],
+      "measured": "シワのレプリカの画像解析（溝の容積比・シワ面積比・シワ容積比）と、肌の状態についてのアンケート（つや・しなやかさ・シワ）。アンケートは主観の評価であって機械の測定値ではない",
+      "concentration": "120 mg/日。分子量の異なる2種類（HA 2k と HA 300k）",
+      "adverse": "記載なし",
+      "duration": "12週間"
     },
     {
       "pmid": "34203487",
@@ -251,7 +303,11 @@
       "confirmed": "fulltext",
       "articles": [
         "hyaluronic-acid"
-      ]
+      ],
+      "measured": "シワの評価、角層の水分量、経表皮水分蒸散量TEWL、弾力（機械の測定値）と、肌の状態の画像解析",
+      "concentration": "120 mg/日（分子量は要旨に記載なし）",
+      "adverse": "記載なし",
+      "duration": "12週間"
     },
     {
       "pmid": "25383371",
@@ -267,7 +323,11 @@
       "confirmed": "fulltext",
       "articles": [
         "hyaluronic-acid"
-      ]
+      ],
+      "measured": "ラット（動物）。14Cで標識したHAの血漿中放射能・組織分布（オートラジオグラフィ）・尿糞・呼気への排泄。皮膚については「24時間後と96時間後に、血中より皮膚のほうが放射能が高かった」と報告。ヒトではない",
+      "concentration": "記載なし（要旨に投与量の数値がない）",
+      "adverse": "記載なし。（「過剰な蓄積は認められず、90%以上が呼気または尿に排泄された」との記載はあるが、これは有害事象の報告ではない）",
+      "duration": "投与後168時間（1週間）まで追跡"
     },
     {
       "pmid": "41422283",
@@ -283,7 +343,11 @@
       "confirmed": "fulltext",
       "articles": [
         "hyaluronic-acid"
-      ]
+      ],
+      "measured": "機械の測定値（顔の水分量、経表皮水分蒸散量TEWL、皮脂、弾力、シワの深さ、つや、色調、表皮の厚み、真皮密度、赤み、毛穴の大きさ）、主観的な肌の状態、前腕の天然保湿因子NMF成分（LC-MS/MS）",
+      "concentration": "ヒアルロン酸ナトリウム（分子量 1.8 MDa）60 mg/日 または 120 mg/日",
+      "adverse": "記載なし",
+      "duration": "12週間"
     },
     {
       "pmid": "39807700",
@@ -299,7 +363,11 @@
       "confirmed": "fulltext",
       "articles": [
         "hyaluronic-acid"
-      ]
+      ],
+      "measured": "機械の測定値（水分量、つや／radiance、弾力、メラニンインデックス）。RCT 12件を同定し6件を定量統合したメタアナリシス（注射のHA）",
+      "concentration": "記載なし（要旨に注射量・濃度の記載がない）",
+      "adverse": "記載なし",
+      "duration": "記載なし"
     },
     {
       "pmid": "34980969",
@@ -315,7 +383,11 @@
       "confirmed": "fulltext",
       "articles": [
         "retinol-concentration"
-      ]
+      ],
+      "measured": "システマティックレビューのため、統合した各試験が何を測ったかは要旨に記載なし。要旨が述べているのは『9件のランダム化・二重盲検・基剤対照試験のうち4件はレチノールと基剤の間に統計学的有意差を報告しなかった。残る5件は細かい表情ジワにのみ軽度の改善という弱い根拠を示すが、重大な方法論的欠陥がある』という評価のみ",
+      "concentration": "記載なし",
+      "adverse": "記載なし",
+      "duration": "記載なし"
     },
     {
       "pmid": "35778881",
@@ -331,7 +403,11 @@
       "confirmed": "fulltext",
       "articles": [
         "retinol-concentration"
-      ]
+      ],
+      "measured": "組織（生検）。前腕に閉鎖塗布し12日後に3mmの皮膚生検を採取。表皮の厚み、フィラグリンとKPRPの発現、ケラチノサイトの増殖、E-カドヘリン、フィブリリン豊富微細線維の沈着を評価。機器測定でも医師の見た目評価でもない。加えて在宅使用試験では被験者本人が忍容性を記録",
+      "concentration": "0.1% / 0.3% / 1%（＋基剤対照）。在宅使用試験は 0.3% と 1% のみ",
+      "adverse": "在宅使用試験で『0.3%レチノールは1%レチノールより忍容性が良好で、報告された有害事象はより少なく軽度だった（χ2(1)=23.97; p<0.001）』。有害事象の種類・人数は要旨に記載なし。パッチ試験については『局所の炎症の所見は検出されなかった』と記載",
+      "duration": "パッチ試験12日間 / 在宅使用試験6週間"
     },
     {
       "pmid": "20078381",
@@ -347,7 +423,11 @@
       "confirmed": "abstract",
       "articles": [
         "retinol-concentration"
-      ]
+      ],
+      "measured": "見た目の評価（photoaging improvement の率。細かいシワと深いシワ）。評価者が医師か本人かは要旨に明記なし",
+      "concentration": "0.075% と 0.04%",
+      "adverse": "『57人のうち3人が刺激（irritation）のため試験を脱落した』と明記。0.04%クリームの試験については『刺激はごくわずか（minimal irritation）』と記載",
+      "duration": "0.075%クリームは26週間 / 0.04%クリームは13週間"
     },
     {
       "pmid": "25607905",
@@ -363,7 +443,11 @@
       "confirmed": "abstract",
       "articles": [
         "retinol-concentration"
-      ]
+      ],
+      "measured": "見た目の評価（有効性と忍容性の臨床評価＋標準化デジタル写真。全体の光老化、細かいシワ、粗いシワ、肌の明るさ、まだらな色素沈着、触感の粗さ）",
+      "concentration": "レチノール 0.25% / 0.5% / 1.0%（対照はトレチノイン 0.025% / 0.05% / 0.1%）",
+      "adverse": "★方法欄に『忍容性（tolerability）の臨床評価を行った』と書いてあるが、その結果は要旨に一切書かれていない。有害事象の種類・件数・人数の記載なし。『副作用がなかった』とは書いていない",
+      "duration": "12週間"
     },
     {
       "pmid": "39128883",
@@ -379,7 +463,11 @@
       "confirmed": "fulltext",
       "articles": [
         "retinol-concentration"
-      ]
+      ],
+      "measured": "該当なし（ナラティブレビュー。一次データなし）",
+      "concentration": "記載なし",
+      "adverse": "★『レチノール、レチニルエステル、レチナールデヒドは有効で安全、忍容性が良い（efficacious, safe and well-tolerated）』と著者は述べている。ただしこれは総説の総括であって、この論文が観察・集計した有害事象の報告ではない。件数・人数なし",
+      "duration": "該当なし"
     },
     {
       "pmid": "39184919",
@@ -395,7 +483,11 @@
       "confirmed": "bibliographic",
       "articles": [
         "retinol-concentration"
-      ]
+      ],
+      "measured": "該当なし（21本の文献のナラティブレビュー）",
+      "concentration": "記載なし",
+      "adverse": "『レチノイドを皮膚に使うことにさまざまな副作用があることは否定できず、その1つが刺激（irritation）である』と記載。この論文自体が「刺激をどう減らすか」の製剤技術レビュー。件数・人数の記載なし",
+      "duration": "該当なし"
     },
     {
       "pmid": "32428912",
@@ -411,7 +503,11 @@
       "confirmed": "fulltext",
       "articles": [
         "retinol-concentration"
-      ]
+      ],
+      "measured": "機械の測定値と見た目の評価の両方。multi probe adapter と Fotomedicus 撮像システム、PRIMOS（皮膚表面の粗さ）による測定に加え、3名の独立した専門家によるVAS（視覚アナログスケール）評価",
+      "concentration": "0.3% と 0.5%（先行して基剤のみ〈液晶製剤〉の試験を実施）",
+      "adverse": "『有害事象は主に軽度または中等度の皮膚の刺激（skin irritation）だった。より頻繁で、より強い症状が左側（0.5%）で観察された』と記載。人数・件数の記載なし",
+      "duration": "12週間（先行する基剤のみの試験は8週間）"
     },
     {
       "pmid": "31222977",
@@ -427,7 +523,11 @@
       "confirmed": "abstract",
       "articles": [
         "retinol-concentration"
-      ]
+      ],
+      "measured": "見た目の評価（盲検下での専門家による画像評価）。忍容性は試験期間を通じて評価",
+      "concentration": "0.15% と 0.3%",
+      "adverse": "『8週間の試験期間中の副作用（灼熱感、乾燥、そう痒、紅斑）は軽微（minimal）であった』と記載。人数・件数の記載なし",
+      "duration": "8週間（2か月）"
     },
     {
       "pmid": "23732711",
@@ -445,7 +545,11 @@
         "sunscreen-spf",
         "skin-fasting",
         "oral-sunscreen"
-      ]
+      ],
+      "measured": "見た目の評価。皮膚のマイクロトポグラフィ（微細な凹凸）の1992年から1996年にかけての変化を、割付を知らされていない評価者が採点（光老化の程度）",
+      "concentration": "日焼け止め（広域スペクトル）の毎日使用 vs 任意使用、および β-カロテン 30mg/日 vs プラセボ の2×2要因。日焼け止めの SPF・塗布量は要旨に記載なし",
+      "adverse": "記載なし（要旨に安全性・有害事象の記載はない。ただし本文で β-カロテンについて「有益性も有害性も確定的には排除できず、さらなる研究が必要」と述べている）",
+      "duration": "4.5年間（1992〜1996年）"
     },
     {
       "pmid": "10475183",
@@ -461,7 +565,11 @@
       "confirmed": "abstract",
       "articles": [
         "sunscreen-spf"
-      ]
+      ],
+      "measured": "基底細胞がん・有棘細胞がんの発生（治療を受けた人数と、発生した腫瘍の数の両方）。皮膚の見た目でも機械の測定値でもなく、がんの発生数",
+      "concentration": "「sun protection factor 15-plus sunscreen」（SPF15以上）。塗布量（mg/cm2）の記載はなし。塗る部位は head, neck, arms, and hands。β-カロテンは 30 mg/日",
+      "adverse": "有害事象の集計は記載なし。結論に「There was no harmful effect of daily use of sunscreen in this medium-term study.（この中期間の試験では、日焼け止めの毎日の使用による有害な影響はなかった）」とあるが、これは皮膚がん発生への影響についての記述であり、副作用（かぶれ等）を数えた記述ではない",
+      "duration": "4.5年の追跡"
     },
     {
       "pmid": "21135266",
@@ -477,7 +585,11 @@
       "confirmed": "abstract",
       "articles": [
         "sunscreen-spf"
-      ]
+      ],
+      "measured": "原発性メラノーマの発生（primary melanoma occurrence）。質問票・病理検査室・がん登録で把握した",
+      "concentration": "日焼け止めのSPF値・塗布量ともに記載なし（「daily or discretionary sunscreen application to head and arms」とのみ）。併用したβ-カロテンは 30 mg",
+      "adverse": "記載なし",
+      "duration": "1992年に割付、1996年まで介入。その後2006年まで観察（介入4年＋追跡10年）"
     },
     {
       "pmid": "19962787",
@@ -493,7 +605,11 @@
       "confirmed": "abstract",
       "articles": [
         "sunscreen-spf"
-      ]
+      ],
+      "measured": "in vivo の SPF 測定と紅斑。「Erythema was evaluated 20 to 24 hours after exposure to UV radiation.」紫外線照射後20〜24時間の紅斑（＝MED系の指標）",
+      "concentration": "★この記事の核。表示SPFの前提として「The declared SPF is based on the use of a sunscreen layer of 2 mg/cm(2).」、現実には「only around a quarter (0.5 mg/cm(2)) of this amount is generally used in real life.」。試験では 0.5 / 1.0 / 1.5 / 2.0 mg/cm2 の4段階を塗り分けた。用いた製品は SPF 30 と SPF 35 の2種類＋高低の標準対照品",
+      "adverse": "記載なし",
+      "duration": "記載なし（単回の塗布・照射試験。塗布後20分乾燥、照射後20〜24時間で紅斑を評価、とあるのみ）"
     },
     {
       "pmid": "29291958",
@@ -509,7 +625,11 @@
       "confirmed": "abstract",
       "articles": [
         "sunscreen-spf"
-      ]
+      ],
+      "measured": "日焼け（サンバーン）と紅斑スコア。「Erythema was clinically assessed on the day following exposure.」評価者盲検での臨床評価。機械の測定値ではなく、評価者の目による判定。「investigator-blinded evaluation identified 55.3% of the participants (110 of 199) as more sunburned on the SPF 50+ protected side and 5% (10 of 199) on the SPF 100+ protected side.」",
+      "concentration": "SPF 100+ と SPF 50+ の日焼け止めを顔の左右に塗り分けた。★塗布量（mg/cm2）の記載はなし——実使用条件下の試験のため、どれだけ塗ったかは制御されていない",
+      "adverse": "記載なし",
+      "duration": "単日。平均 6.1 ± 1.3 時間の日光曝露。著者自身が「Single-day exposure may not extrapolate to benefits of longer-term protection.」と限界を明記"
     },
     {
       "pmid": "34387824",
@@ -525,7 +645,11 @@
       "confirmed": "fulltext",
       "articles": [
         "sunscreen-spf"
-      ]
+      ],
+      "measured": "ナラティブレビューのため、自ら測定していない。アブストラクトが挙げるのは扱う話題（「prevention of photoaging, dyspigmentation, DNA damage, and photocarcinogenesis」）のみ",
+      "concentration": "記載なし",
+      "adverse": "記載なし",
+      "duration": "記載なし"
     },
     {
       "pmid": "30945275",
@@ -541,7 +665,11 @@
       "confirmed": "abstract",
       "articles": [
         "sunscreen-spf"
-      ]
+      ],
+      "measured": "血中のビタミンD。「vitamin D3 or 25 hydroxyvitamin D [25(OH)D] concentration」、および人工紫外線照射による 25(OH)D 産生。皮膚のアウトカムではなく血液の測定値",
+      "concentration": "組み入れた試験の日焼け止めについて「sun protection factor (SPF) ~16」との記述がある。塗布量の記載はなし",
+      "adverse": "有害事象の集計は記載なし。「concerns that it may increase the risk of vitamin D deficiency（ビタミンD欠乏のリスクを高めるのではという懸念）」および「concerns about vitamin D should not negate skin cancer prevention advice」という記述があるのみで、これは懸念の議論であって副作用を数えた報告ではない",
+      "duration": "記載なし（文献検索期間は 1970年〜2017年11月21日）"
     },
     {
       "pmid": "12077052",
@@ -557,7 +685,11 @@
       "confirmed": "fulltext",
       "articles": [
         "sunscreen-spf"
-      ]
+      ],
+      "measured": "全文が有料のため確認できていない。PubMed にアブストラクトが存在しない（「No abstract available」。出版種別は Comment / Letter）。したがって「記載なし」ではなく、要旨そのものが無い",
+      "concentration": "全文が有料のため確認できていない（要旨なし）。★スラッグ sunscreen-spf の記事でよく使われる『小さじ1杯（teaspoon）』の目安の出典とされる文献だが、その数値をこの調査では一次情報で確認できていない",
+      "adverse": "全文が有料のため確認できていない（要旨なし）",
+      "duration": "全文が有料のため確認できていない（要旨なし）。そもそも試験ではない"
     },
     {
       "pmid": "11712033",
@@ -573,7 +705,11 @@
       "confirmed": "abstract",
       "articles": [
         "sunscreen-spf"
-      ]
+      ],
+      "measured": "ヒトを測っていない。数学モデルによる計算。「how the time of sunscreen reapplication affects the solar ultraviolet exposure of the skin」を計算した。「A mathematical model was derived that took into account typical amounts of sunscreen application and sunscreen substantivity」",
+      "concentration": "具体的な mg/cm2 の記載はなし。塗り直しのタイミングについて「apply sunscreen liberally to exposed sites 15 to 30 minutes before going out into the sun」「reapplication of sunscreen at 20 minutes results in 60% to 85% of the ultraviolet exposure」「reapply sunscreen every 2 to 3 hours」という記述がある。★「2〜3時間ごとに塗り直す」の根拠としてよく引かれるが、これは実測ではなくモデル計算である",
+      "adverse": "記載なし（ヒト試験ではないため、そもそも観察していない）",
+      "duration": "記載なし（想定は「exposure for several hours around mid day in strong sunshine」）"
     },
     {
       "pmid": "33318091",
@@ -589,7 +725,11 @@
       "confirmed": "fulltext",
       "articles": [
         "sunscreen-spf"
-      ]
+      ],
+      "measured": "全文が有料のため確認できていない。PubMed に「No abstract available」と明記されており、要旨そのものが存在しない。★タイトルに safety（安全性）を掲げているが、その中身をこの調査では一次情報で確認できていない",
+      "concentration": "全文が有料のため確認できていない（要旨なし）",
+      "adverse": "全文が有料のため確認できていない（要旨なし）",
+      "duration": "全文が有料のため確認できていない（要旨なし）"
     },
     {
       "pmid": "31058986",
@@ -605,7 +745,11 @@
       "confirmed": "abstract",
       "articles": [
         "sunscreen-spf"
-      ]
+      ],
+      "measured": "血液中の成分濃度。皮膚のアウトカムは1つも測っていない。「The primary outcome was the maximum plasma concentration of avobenzone.」「Secondary outcomes were the maximum plasma concentrations of oxybenzone, octocrylene, and ecamsule.」",
+      "concentration": "「Two milligrams of sunscreen per 1 cm2 was applied to 75% of body surface area 4 times per day for 4 days」＝ 2 mg/cm2 を体表面積の75%に、1日4回、4日間。★実生活ではありえない最大使用条件（maximal use conditions）であることが、試験名に明示されている",
+      "adverse": "★このテーマで有害事象を人数まで報告している数少ない論文。「The most common adverse event was rash, which developed in 1 participant with each sunscreen.（最も多かった有害事象は発疹で、各日焼け止めについて1人に発生した）」",
+      "duration": "4日間塗布。各被験者から7日間で30回採血"
     },
     {
       "pmid": "20924436",
@@ -621,7 +765,11 @@
       "confirmed": "fulltext",
       "articles": [
         "sunscreen-spf"
-      ]
+      ],
+      "measured": "機械の測定値と見た目の評価の両方。「clinical scoring, hydration with Corneometer, mechanical properties with Cutometer, transepidermal water loss with AquaFlux, skin relief with fringe projection」、および「clinical scores for wrinkles, skin roughness assessed by fringe projection on the cheek, and skin heterogeneity assessed with spectrocolorimetry」",
+      "concentration": "記載なし（日焼け止めを塗る介入試験ではなく、車の運転などによる左右差を観察したパイロット研究）",
+      "adverse": "記載なし",
+      "duration": "記載なし（「over a long period of time」という曖昧な記述のみ。具体的な期間の記載がない）"
     },
     {
       "pmid": "33026578",
@@ -637,7 +785,11 @@
       "confirmed": "fulltext",
       "articles": [
         "skin-fasting"
-      ]
+      ],
+      "measured": "見た目・自覚症状の評価。乾燥・かゆみ・鱗屑・赤み・シワという「乾燥肌の典型的な症状」を、被験者の自覚評価（コホートI・II）と客観評価（コホートIのみ）で毎日採点。機器測定（TEWL・水分量）を行ったという記載は要旨にはない",
+      "concentration": "該当なし（濃度の概念がない研究）。条件は「顔の片側だけ、長年使ってきた保湿剤を中止する」（反対側はいつものスキンケアを継続）。保湿剤の製品名・濃度の記載なし",
+      "adverse": "記載なし（乾燥・かゆみ・赤み・鱗屑は、有害事象ではなく評価項目そのものとして測定されている）",
+      "duration": "コホートI は冬に2週間、コホートII は夏に3週間。要旨では14日目までの比較と、最長21日までの回復経過が報告されている"
     },
     {
       "pmid": "10086859",
@@ -653,7 +805,11 @@
       "confirmed": "abstract",
       "articles": [
         "skin-fasting"
-      ]
+      ],
+      "measured": "機械の測定値。経表皮水分蒸散量（TEWL）と電気容量（皮膚の水分量）。さらにラウリル硫酸ナトリウム（SLS）のパッチテストで刺激への反応を評価",
+      "concentration": "保湿剤を片腕に1日3回・4週間塗布（反対の腕を対照とする）。保湿剤の製品名・成分濃度は要旨に記載なし。刺激物質としてラウリル硫酸ナトリウムを用いたが、その濃度も要旨に記載なし",
+      "adverse": "記載なし。ただし結果として「保湿剤を塗った腕のほうが、SLS 曝露後の TEWL が有意に高かった（＝刺激物質に対して弱くなった可能性）」と報告している。これは有害事象の報告ではなく、この試験の主要な結果",
+      "duration": "4週間の塗布＋その後のパッチテスト"
     },
     {
       "pmid": "32087126",
@@ -669,7 +825,11 @@
       "confirmed": "abstract",
       "articles": [
         "skin-fasting"
-      ]
+      ],
+      "measured": "臨床診断。2歳時点での湿疹の有無（UK working party 基準）。副次評価に EASI（医師評価）と POEM（保護者評価）",
+      "concentration": "保湿剤（Diprobase クリームまたは DoubleBase ジェル）を生後1年間、毎日全身に塗布＋標準的スキンケア指導 vs 標準的スキンケア指導のみ。保湿剤の成分濃度は要旨に記載なし",
+      "adverse": "報告あり。生後1年間の1人あたり皮膚感染症の平均回数が、保湿群 0.23回（SD 0.68）に対し対照群 0.15回（SD 0.46）で、調整発生率比 1.55（95%CI 1.15〜2.09）。著者は「皮膚感染症のリスクが上がる可能性を示す所見がある」と結論に明記している",
+      "duration": "介入は生後1年間、評価は2歳時点"
     },
     {
       "pmid": "31189482",
@@ -685,7 +845,11 @@
       "confirmed": "fulltext",
       "articles": [
         "skin-fasting"
-      ]
+      ],
+      "measured": "皮膚表面の化学組成（質量分析）と微生物叢（16S rRNA）の多様性。細菌・古細菌・化学物質の多様性の変化を追跡。皮膚の見た目や水分量は測定していない",
+      "concentration": "該当なし（濃度の概念がない研究）。条件は4製品（フェイスローション、保湿剤、フットパウダー、デオドラント）を、使用中止期→指定製品の使用期→中止期という3フェーズで使う／使わないの切り替え。製品の濃度の記載なし",
+      "adverse": "記載なし",
+      "duration": "9週間（被験者11人・25〜40歳）"
     },
     {
       "pmid": "35335373",
@@ -701,7 +865,11 @@
       "confirmed": "fulltext",
       "articles": [
         "skin-fasting"
-      ]
+      ],
+      "measured": "該当なし（レビュー。一次データを測定していない。界面活性剤の物理化学的性質・生物学的活性を文献から整理したもの）",
+      "concentration": "該当なし（濃度の概念がない研究＝レビューで、自ら試験を行っていない）",
+      "adverse": "記載なし",
+      "duration": "該当なし（レビュー）"
     },
     {
       "pmid": "35053992",
@@ -717,7 +885,11 @@
       "confirmed": "fulltext",
       "articles": [
         "bathing-dryness"
-      ]
+      ],
+      "measured": "機械の測定値。皮膚温、pH、経表皮水分蒸散量（TEWL）、紅斑、角層水分量（SCH）を、水への曝露の前後で測定",
+      "concentration": "該当なし（濃度の概念がない研究）。条件は温水／冷水への浸漬と、TempTest による高温部（44℃）・低温部（4℃）への接触。浸漬時の水温と浸漬時間の具体的な数値は要旨に記載なし",
+      "adverse": "記載なし",
+      "duration": "記載なし（曝露の前後で測定する単回の観察。追跡期間の記載なし）"
     },
     {
       "pmid": "34455630",
@@ -733,7 +905,11 @@
       "confirmed": "fulltext",
       "articles": [
         "bathing-dryness"
-      ]
+      ],
+      "measured": "機械の測定値。静電容量（capacitance＝角層の水分量）と経表皮水分蒸散量（TEWL）を、浸漬の前後で測定",
+      "concentration": "該当なし（濃度の概念がない研究）。条件は前腕内側を水に浸す時間で、3分・5分・10分・15分・20分の5群にランダム割付。水温の記載は要旨になし",
+      "adverse": "記載なし",
+      "duration": "記載なし（浸漬前後の単回測定。追跡期間の記載なし）"
     },
     {
       "pmid": "19706087",
@@ -749,7 +925,11 @@
       "confirmed": "fulltext",
       "articles": [
         "bathing-dryness"
-      ]
+      ],
+      "measured": "機械の測定値。皮膚の水分量（hydration）を、処置後90分間にわたって測定",
+      "concentration": "該当なし（濃度の概念がない研究）。条件は4つのレジメンのクロスオーバー比較（入浴のみ／入浴＋直後に保湿剤／入浴＋時間をおいて保湿剤／保湿剤のみ）。入浴時間・水温・保湿剤の製品名や濃度は要旨に記載なし",
+      "adverse": "記載なし",
+      "duration": "記載なし（各処置後90分間の測定。試験全体の期間は要旨に記載なし）"
     },
     {
       "pmid": "34743412",
@@ -765,7 +945,11 @@
       "confirmed": "fulltext",
       "articles": [
         "bathing-dryness"
-      ]
+      ],
+      "measured": "機械の測定値＋角層の生化学。角層水分量（SCW）、トリプシン様活性、角層のデスモグレイン1局在スコア",
+      "concentration": "保湿剤の塗布量として 0.5 / 1.0 / 2.0 mg/cm² の3条件を比較。塗布タイミングは入浴直後（5分以内）と入浴90分後、頻度は1日1回と1日2回を比較。保湿剤そのものの成分濃度は要旨に記載なし",
+      "adverse": "記載なし",
+      "duration": "乾燥肌の患者を対象とした後半の試験は8週間（前半の健常者での比較は期間の記載なし）"
     },
     {
       "pmid": "18199943",
@@ -781,7 +965,11 @@
       "confirmed": "abstract",
       "articles": [
         "bathing-dryness"
-      ]
+      ],
+      "measured": "機械の測定値。経表皮水分蒸散量（TEWL）、皮膚水分量（コルネオメーター）、皮膚pH、紅斑",
+      "concentration": "該当なし（濃度の概念がない研究）。条件は洗浄方法（石鹸＋水 vs 水のみ）と乾燥方法（タオルでこする／タオルで押さえる／自然乾燥）の6条件。石鹸の濃度・水温・洗浄時間は要旨に記載なし",
+      "adverse": "記載なし",
+      "duration": "記載なし（片腕につき3手技、各手技を2時間の休止をはさんで2回反復。試験全体の期間は要旨に記載なし）"
     },
     {
       "pmid": "25073884",
@@ -797,7 +985,11 @@
       "confirmed": "abstract",
       "articles": [
         "bathing-dryness"
-      ]
+      ],
+      "measured": "機械の測定値。前腕内側の皮膚pHを、洗浄前と洗浄後6時間にわたって測定",
+      "concentration": "該当なし（濃度の概念がない研究）。条件は「石鹸系洗浄剤を5年以上使ってきた群」と「弱酸性洗浄剤を5年以上使ってきた群」の比較で、測定時は両群とも固形石鹸で洗浄。洗浄剤の濃度の記載なし",
+      "adverse": "記載なし",
+      "duration": "洗浄後6時間の追跡（被験者の使用歴は5年以上）"
     },
     {
       "pmid": "25423895",
@@ -813,7 +1005,11 @@
       "confirmed": "abstract",
       "articles": [
         "bathing-dryness"
-      ]
+      ],
+      "measured": "臨床所見と細菌検査。緑膿菌性毛包炎と診断された10人の診療録の後ろ向きレビューと、ナイロンタオルからの緑膿菌の分離",
+      "concentration": "該当なし（濃度の概念がない研究）。条件は入浴時に浴室に置いたナイロンタオル／スポンジで体をこすっていたかどうか",
+      "adverse": "この研究の対象そのものが有害事象。緑膿菌性毛包炎の患者10人（男2・女8）のうち8人が、入浴時にナイロンタオルまたはスポンジで体をこすっていた。検査した2人の2人ともでナイロンタオルから緑膿菌が分離された。4人は1〜3年にわたり再発。ナイロンタオルの使用中止で全例が速やかに軽快し、再発しなかった",
+      "duration": "記載なし（後ろ向きの症例集積。ただし4人については1〜3年にわたる再発を記録）"
     },
     {
       "pmid": "37128827",
@@ -829,7 +1025,11 @@
       "confirmed": "abstract",
       "articles": [
         "vitamin-c-derivatives"
-      ]
+      ],
+      "measured": "システマティックレビュー。統合した試験が測ったものとして、皮膚の topography（きめ・シワ）、生検データ、客観的な色素沈着の評価、水分量が挙げられている",
+      "concentration": "記載なし（要旨にビタミンCの濃度は一切書かれていない）",
+      "adverse": "記載なし",
+      "duration": "記載なし（『目に見える変化には長期の使用が必要かもしれない』との記述はあるが、期間の数値はない）"
     },
     {
       "pmid": "10522500",
@@ -845,7 +1045,11 @@
       "confirmed": "abstract",
       "articles": [
         "vitamin-c-derivatives"
-      ]
+      ],
+      "measured": "機械の測定値と見た目の評価の両方。光学プロフィロメトリー（皮膚レプリカのコンピュータ画像解析。Ra・Rz・shadows）＋医師による0〜9点の臨床評価＋写真評価＋本人の自己評価質問票",
+      "concentration": "記載なし（製品名『Cellex-C high-potency serum』とのみ。アスコルビン酸の%は書かれていない）。塗布量は1日3滴（0.5mL）",
+      "adverse": "★方法欄に『本人の自己評価質問票で有害作用（灼熱感、刺すような感覚、発赤、落屑、乾燥、色調変化、かゆみ、発疹）を報告させた』と書いてあるが、その結果は要旨に一切書かれていない。『副作用がなかった』とは書いていない",
+      "duration": "3か月"
     },
     {
       "pmid": "11207686",
@@ -861,7 +1065,11 @@
       "confirmed": "abstract",
       "articles": [
         "vitamin-c-derivatives"
-      ]
+      ],
+      "measured": "組織中濃度の測定（ブタ皮膚のL-アスコルビン酸レベルを測り、経皮送達量を求めた）。ヒトの見た目でも、シワ・シミの機器測定でもない",
+      "concentration": "『最適な経皮吸収のための最大濃度は20%だった』と記載。加えて『L-アスコルビン酸は皮膚に入るためにpH3.5未満で製剤化されなければならない』。誘導体（マグネシウムアスコルビルリン酸、アスコルビル-6-パルミテート、デヒドロアスコルビン酸）も試したが、その濃度の記載はない",
+      "adverse": "記載なし（ブタ皮膚の試験。ヒト被験者はいない）",
+      "duration": "記載なし（『3日間の連日塗布で組織レベルが飽和した』『組織からの消失半減期は約4日』との記述のみ）"
     },
     {
       "pmid": "8543691",
@@ -877,7 +1085,11 @@
       "confirmed": "abstract",
       "articles": [
         "vitamin-c-derivatives"
-      ]
+      ],
+      "measured": "3つが混在。①摘出ヒト皮膚での経皮吸収（塗布48時間後に1.6%が残存）②in vitro のメラニン産生（チロシナーゼ、ヒトメラノーマ細胞）③患者での『明るくなる効果（lightening effect）』＝見た目の評価。ただし誰がどう評価したかは要旨に記載なし",
+      "concentration": "10% VC-PMG クリーム",
+      "adverse": "記載なし",
+      "duration": "記載なし（塗布期間の記載が一切ない。経皮吸収の48時間というデータのみ）"
     },
     {
       "pmid": "20367669",
@@ -893,7 +1105,11 @@
       "confirmed": "abstract",
       "articles": [
         "vitamin-c-derivatives"
-      ]
+      ],
+      "measured": "見た目の評価と病変数。医師による全般評価スコア（IGA）、本人による全般評価スコア、皮疹の数（lesion counts）、皮膚忍容性、有害事象",
+      "concentration": "アスコルビルリン酸ナトリウム（APS）5% ローション",
+      "adverse": "『APS 5%ローションの有害事象の頻度と皮膚忍容性のプロファイルは、基剤（vehicle）と同程度だった』と記載。有害事象の内容・件数・人数の記載はない",
+      "duration": "12週間"
     },
     {
       "pmid": "34679221",
@@ -909,7 +1125,11 @@
       "confirmed": "abstract",
       "articles": [
         "vitamin-c-derivatives"
-      ]
+      ],
+      "measured": "組織への送達量と酸化ストレスの指標。生きた摘出ヒト皮膚での送達量、およびヒト再構成表皮（RHE）モデルでのMDA・SOD・カタラーゼ。ヒト被験者はいない",
+      "concentration": "アスコルビン酸（AA）15%、アスコルビン酸2-グルコシド（AA2G）1.8%",
+      "adverse": "記載なし（ヒト被験者も動物も用いていない）",
+      "duration": "記載なし（『AA当量の最大フラックスは12時間、吸収は24時間まで継続』との記述のみ）"
     },
     {
       "pmid": "11896774",
@@ -925,7 +1145,11 @@
       "confirmed": "abstract",
       "articles": [
         "vitamin-c-derivatives"
-      ]
+      ],
+      "measured": "見た目の評価と組織（生検）の両方。シワ・色素沈着・炎症・水分の臨床評価（開始前と4・8・12週）＋12週時点で4人に2mmパンチ生検（H&E染色、I型コラーゲンmRNAのin situハイブリダイゼーション）＋本人の質問票",
+      "concentration": "アスコルビン酸10%（水溶性）＋テトラヘキシルデシルアスコルビン酸7%（脂溶性）を無水ポリシリコンゲル基剤に配合",
+      "adverse": "『炎症の所見が認められた患者はいなかった（No patients were found to have any evidence of inflammation.）』と記載。ただし炎症は有効性の評価項目としても挙がっており、有害事象そのものの集計は要旨にない。この一文以外に副作用の記載はない",
+      "duration": "12週間"
     },
     {
       "pmid": "18603326",
@@ -941,7 +1165,11 @@
       "confirmed": "abstract",
       "articles": [
         "vitamin-c-derivatives"
-      ]
+      ],
+      "measured": "紫外線ダメージの指標（シワ・シミの改善ではない）。紅斑、サンバーン細胞、免疫組織化学によるチミンダイマーとp53、リアルタイムPCRによるサイトカイン（IL-1α、IL-6、IL-8、IL-10、TNF-α）",
+      "concentration": "L-アスコルビン酸15%、α-トコフェロール1%、フェルラ酸0.5%（CEFer）",
+      "adverse": "記載なし",
+      "duration": "4日間（塗布し、その後に紫外線照射）"
     },
     {
       "pmid": "16185284",
@@ -957,7 +1185,11 @@
       "confirmed": "abstract",
       "articles": [
         "vitamin-c-derivatives"
-      ]
+      ],
+      "measured": "紫外線ダメージの指標。紅斑とサンバーン細胞の形成、カスパーゼ3・7の誘導、チミンダイマーの形成。光防御の評価はブタ皮膚",
+      "concentration": "L-アスコルビン酸15%、α-トコフェロール1%（フェルラ酸の濃度は要旨に記載なし）",
+      "adverse": "記載なし",
+      "duration": "記載なし"
     },
     {
       "pmid": "17291309",
@@ -973,7 +1205,11 @@
       "confirmed": "bibliographic",
       "articles": [
         "vitamin-c-derivatives"
-      ]
+      ],
+      "measured": "★確認できていない。PubMed に要旨が掲載されていない（No abstract available）。3ページの短報で、全文は有料",
+      "concentration": "★確認できていない。要旨が存在しないため、APPS の濃度は分からない。「記載なし」ではなく「確認できていない」",
+      "adverse": "★全文が有料かつ要旨が非掲載のため、副作用の記載の有無を確認できていない。これは「記載なし」ではない",
+      "duration": "★確認できていない（要旨が存在しない）"
     },
     {
       "pmid": "29104718",
@@ -989,7 +1225,11 @@
       "confirmed": "fulltext",
       "articles": [
         "vitamin-c-derivatives"
-      ]
+      ],
+      "measured": "該当なし（ナラティブレビュー。一次データなし）",
+      "concentration": "★「試験で使われた濃度」は該当なし。本文で著者は『生物学的に意味を持つには8%超が必要』『評判の良い製品は10〜20%』『20%を超えても生物学的意義は増えず、むしろ刺激を起こしうる』と述べている。これは著者の推奨であって、この論文が行った試験の濃度ではない。よく引用される「10〜20%が最適」の出典はここだが、レビューの記述である",
+      "adverse": "本文に『20%を超える濃度は、いくらかの刺激（some irritation）を起こしうる』との記述。件数・人数・出典となる試験の記載はない。著者は外用ビタミンCの安全性プロファイルは良好としている",
+      "duration": "該当なし"
     },
     {
       "pmid": "5837896",
@@ -1005,7 +1245,11 @@
       "confirmed": "bibliographic",
       "articles": [
         "turnover-28days"
-      ]
+      ],
+      "measured": "全文が有料のため確認できていない（PubMed に要旨が掲載されておらず、本文は有料。「No abstract available」）",
+      "concentration": "全文が有料のため確認できていない",
+      "adverse": "全文が有料のため確認できていない",
+      "duration": "全文が有料のため確認できていない"
     },
     {
       "pmid": "4551262",
@@ -1021,7 +1265,11 @@
       "confirmed": "bibliographic",
       "articles": [
         "turnover-28days"
-      ]
+      ],
+      "measured": "全文が有料のため確認できていない（PubMed に要旨が掲載されておらず、本文は有料。「No abstract available」）",
+      "concentration": "全文が有料のため確認できていない",
+      "adverse": "全文が有料のため確認できていない",
+      "duration": "全文が有料のため確認できていない"
     },
     {
       "pmid": "871385",
@@ -1037,7 +1285,11 @@
       "confirmed": "abstract",
       "articles": [
         "turnover-28days"
-      ]
+      ],
+      "measured": "細胞の入れ替わりの推定。角層の落屑（desquamation）速度を測り、そこから表皮の入れ替わりに要する時間を数理モデルで導出。部位はヒトの前腕内側。要旨では表皮全体のターンオーバー時間を45日と算出している",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "記載なし（被験者数・観察期間とも要旨に記載なし）"
     },
     {
       "pmid": "6725985",
@@ -1053,7 +1305,11 @@
       "confirmed": "abstract",
       "articles": [
         "turnover-28days"
-      ]
+      ],
+      "measured": "細胞の入れ替わりの追跡。トリチウムチミジンを用いたオートラジオグラフィで細胞増殖動態を解析。細胞周期（Tc）311時間、DNA合成時間（ts）14時間、標識率（LI）2.7%±1.2、増殖分画（GF）60%。ここから表皮全体の平均ターンオーバー時間を39日と算出している",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "記載なし（DNA合成時間の算出には正常な被験者11人の複合データを使用。観察期間の記載なし）"
     },
     {
       "pmid": "7865480",
@@ -1069,7 +1325,11 @@
       "confirmed": "abstract",
       "articles": [
         "turnover-28days"
-      ]
+      ],
+      "measured": "該当なし（新しい実測はしていない。Weinstein らの既存データ［J Invest Dermatol 82: 623-628, 1984］を、表皮を増殖層・分化層・角層の3区画に分けて再計算したもの。ターンオーバー時間は39日ではなく47〜48日になると述べている）",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "記載なし（被験者を用いた試験ではない）"
     },
     {
       "pmid": "6827031",
@@ -1085,7 +1345,11 @@
       "confirmed": "abstract",
       "articles": [
         "turnover-28days"
-      ]
+      ],
+      "measured": "細胞の入れ替わりの追跡。蛍光色素ダンシルクロライドを皮膚に付け、その消退を非侵襲的に追うことで角層の通過時間（stratum corneum transit time）を測定。若年成人で約20日、高齢者ではそれより10日以上長かったと報告",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "記載なし（被験者数・年齢範囲・観察期間とも要旨に記載なし。「正常なヒトのボランティア」とのみ）"
     },
     {
       "pmid": "42430369",
@@ -1101,7 +1365,11 @@
       "confirmed": "fulltext",
       "articles": [
         "pdrn-salmon-dna"
-      ]
+      ],
+      "measured": "培養ヒト線維芽細胞のシグナル伝達（PI3K-Akt / TGF-β・Smad / オートファジー）、再構築表皮モデル・ブタ皮膚・摘出ヒト皮膚での浸透（共焦点ラマン分光）、UV照射した摘出ヒト皮膚の表皮の厚みとコラーゲン等の発現。ヒトでは、ランダム化二重盲検・顔面左右比較で目もとのシワ・真皮の厚み・真皮の密度・目の下のふくらみ（機械の測定値）",
+      "concentration": "0.1% PDRN-850K アイクリーム（対照は反対側の顔に塗った 0.1% レチノール）",
+      "adverse": "有害事象の件数・内訳の記載はない。要旨の記載は「with good tolerability（良好な忍容性を伴って）」の一句のみ",
+      "duration": "ヒト試験は28日間"
     },
     {
       "pmid": "25473210",
@@ -1117,7 +1385,11 @@
       "confirmed": "abstract",
       "articles": [
         "pdrn-salmon-dna"
-      ]
+      ],
+      "measured": "マウス25匹（顕微鏡・染色による持続性と有効性）。ヒト72人では、目尻のシワについて有効性と安全性を同一の2名の医師が評価（要旨は評価項目の名称を明示していない）。動物では弾力・コラーゲン組成・皮膚表面の粗さ・シワの深さ",
+      "concentration": "記載なし（注射量・濃度の記載はない。2週おきに計3回注射、とだけ書かれている）",
+      "adverse": "「安全性のアウトカムでは、予期しない有害事象はなかった（in safety outcomes there were no unexpected adverse effects）」。人数・内訳の記載はなし",
+      "duration": "2週おきに計3回注射、計12週間の観察"
     },
     {
       "pmid": "26839493",
@@ -1133,7 +1405,11 @@
       "confirmed": "fulltext",
       "articles": [
         "pdrn-salmon-dna"
-      ]
+      ],
+      "measured": "該当なし（PMID 25473210 の撤回通知。要旨は存在しない）",
+      "concentration": "記載なし",
+      "adverse": "記載なし",
+      "duration": "記載なし"
     },
     {
       "pmid": "39313949",
@@ -1149,7 +1425,11 @@
       "confirmed": "abstract",
       "articles": [
         "pdrn-salmon-dna"
-      ]
+      ],
+      "measured": "見た目の評価のみ。Crow's Feet Grading Scale（目尻のシワの5段階評価）の改善率と、Global Aesthetic Improvement Scale（総合的な見た目の改善）。機械の測定値は要旨に出てこない",
+      "concentration": "記載なし（注射量・濃度の記載はない）",
+      "adverse": "「両フィラーとも良好な安全性プロファイルを示し、有害事象は軽度で忍容可能だった。試験期間中、重篤な有害事象の報告はなかった」。人数・件数の記載はなし",
+      "duration": "12週間（主要評価は12週時点。2週・4週にも評価）"
     },
     {
       "pmid": "32248707",
@@ -1165,7 +1445,11 @@
       "confirmed": "abstract",
       "articles": [
         "pdrn-salmon-dna"
-      ]
+      ],
+      "measured": "見た目の評価（VAS、GAIS）と機械の測定値（弾力・水分・粗さ・毛穴容積・真皮密度）の両方",
+      "concentration": "記載なし（注射量・濃度の記載はない。2週おきに計3回注射、とだけ書かれている）",
+      "adverse": "「重篤な有害事象の報告はなかった（No serious adverse events were reported）」。人数・件数の記載はなし。軽度の有害事象があったかどうかは要旨からは分からない",
+      "duration": "2週おきに計3回注射（追跡期間は要旨に記載なし）"
     },
     {
       "pmid": "35209068",
@@ -1181,7 +1465,11 @@
       "confirmed": "abstract",
       "articles": [
         "pdrn-salmon-dna"
-      ]
+      ],
+      "measured": "動物（UV-B を照射した動物モデル）。NRF2/HO-1、SOD活性、メラニン量、コラーゲン・弾性線維の発現、MMPの発現。ヒトは1人も測っていない。しかも手で塗ったのではなく、マイクロニードリング機器で皮膚に穴を開けて送達している",
+      "concentration": "記載なし（PDRN・ビタミンC・ナイアシンアミドの配合濃度は要旨に書かれていない）",
+      "adverse": "記載なし",
+      "duration": "記載なし"
     },
     {
       "pmid": "41892958",
@@ -1197,7 +1485,11 @@
       "confirmed": "abstract",
       "articles": [
         "pdrn-salmon-dna"
-      ]
+      ],
+      "measured": "培養細胞（CHO細胞のADORA2A受容体活性化、線維芽細胞のコラーゲン・HA産生、オートファジー関連遺伝子）と、プラセボ・HA対照つき二重盲検ヒト試験。ヒトで測ったものとして要旨が挙げるのは「皮膚のふっくら感（plumpness）・水分・つや（radiance）・老化のサインの軽減」。どの機器で測ったかは要旨に書かれていない",
+      "concentration": "記載なし（抽出物の配合濃度の記載はない）",
+      "adverse": "記載なし",
+      "duration": "記載なし（要旨にヒト試験の期間の記載がない）"
     },
     {
       "pmid": "39486723",
@@ -1213,7 +1505,11 @@
       "confirmed": "abstract",
       "articles": [
         "pdrn-salmon-dna"
-      ]
+      ],
+      "measured": "該当なし（総説。一次データを持たない）",
+      "concentration": "用量の記載はなし。PDRN の性状として「主にサーモンから抽出された分子量 50〜1500 kDa の DNA 断片、有効成分の純度 >95%」と記載",
+      "adverse": "総説として「in vivo 試験および臨床試験は、この物質を非毒性（non-toxic）であると確認している」と述べている。ただしこれは総説の要約であり、この論文自身が測った有害事象ではない。具体的な有害事象・件数の記載はない",
+      "duration": "記載なし"
     },
     {
       "pmid": "31066077",
@@ -1229,7 +1525,11 @@
       "confirmed": "bibliographic",
       "articles": [
         "vitamin-c-derivatives"
-      ]
+      ],
+      "measured": "★確認できていない。PubMed にも Europe PMC にも要旨が存在しない（abstractText フィールドが無いことを確認）。Contact Dermatitis 誌の2ページの短報で、全文は有料",
+      "concentration": "★確認できていない。要旨が存在しないため、3-O-エチルアスコルビン酸の配合濃度は分からない",
+      "adverse": "★タイトルが『顔用アンチエイジング化粧品中の3-O-エチルアスコルビン酸によるアレルギー性接触皮膚炎の新たな1例』であり、有害事象そのものを報告した症例報告である。ただし全文が有料かつ要旨が非掲載のため、症例の詳細（重症度・経過・パッチテストの結果）は確認できていない。1例の症例報告であり、頻度は分からない",
+      "duration": "★確認できていない（要旨が存在しない）"
     },
     {
       "pmid": "41182568",
@@ -1245,7 +1545,11 @@
       "confirmed": "abstract",
       "articles": [
         "oral-sunscreen"
-      ]
+      ],
+      "measured": "紅斑（MED）と DNA損傷の両方。「minimal erythema dose (MED)」「thymidine dimer (TT-dimers) levels in urine and skin」＝尿と皮膚（生検）のチミジン2量体。見た目の若返りではなく、紫外線ダメージの直接指標",
+      "concentration": "ニコチンアミド（NAM）2000 mg/日、または Polypodium leucotomos（PL）480 mg/日",
+      "adverse": "記載なし",
+      "duration": "30日間"
     },
     {
       "pmid": "41838346",
@@ -1261,7 +1565,11 @@
       "confirmed": "abstract",
       "articles": [
         "oral-sunscreen"
-      ]
+      ],
+      "measured": "「UVA-induced erythema, assessed by minimal erythema dose (MED), and TT-dimers, quantified in urine and skin biopsies」＝ UVA による紅斑（MED）と、尿・皮膚生検のチミジン2量体",
+      "concentration": "ニコチンアミド（NAM）2000 mg/日、または PL（製品名 Heliocare Advanced）480 mg/日",
+      "adverse": "記載なし",
+      "duration": "30日間"
     },
     {
       "pmid": "27374032",
@@ -1277,7 +1585,11 @@
       "confirmed": "fulltext",
       "articles": [
         "oral-sunscreen"
-      ]
+      ],
+      "measured": "紅斑・脂質過酸化・見た目の混合。「Skin redness (a* value of CIELab colour space) after UVB exposure to 1 minimal erythemal dose (MED)」（パイロット試験）、および本試験で「MED, lipoperoxides (malondialdehyde) skin content, wrinkle depth (image analysis), and skin elasticity (suction and elongation method)」",
+      "concentration": "抽出物 100 mg と 250 mg の2用量。「No differences were found between the 100 and 250 mg extracts doses, indicating a plateau effect starting from 100 mg extracts dose.」（★1日あたりかどうかはアブストラクトに明記なし）",
+      "adverse": "★記載なし。メーカー資金・メーカーがプロトコル設計に関与した試験だが、有害事象への言及がアブストラクトに一切ない。背景に「A dietary approach based of these compounds could be a safe and effective method」と『安全』の語はあるが、これは前置きであって、この試験で観察された有害事象の報告ではない",
+      "duration": "★総期間の記載なし。「Some of the positive effects were noted as short as 2 weeks of product consumption.」と結論の「The long-term oral intake of Nutroxsun™」という記述のみで、試験が何週間だったかがアブストラクトから確認できない"
     },
     {
       "pmid": "40218997",
@@ -1293,7 +1605,11 @@
       "confirmed": "abstract",
       "articles": [
         "oral-sunscreen"
-      ]
+      ],
+      "measured": "紅斑と色素沈着。「minimal erythema dose (MED), UVB-induced erythema (Δa*), and pigmentation changes (ΔMI)」。数値まで報告されている: MED が 23.8% 増加（0.447 ± 0.096 → 0.553 ± 0.142 J/cm2, p < 0.05）、紅斑強度が 46.2% 減少（2.40 ± 0.94 → 1.29 ± 1.04 au, p < 0.0001）。一方 ΔMI（日焼け反応）はプラセボと差なし",
+      "concentration": "★記載なし。「a syrup supplement containing Polypodium leucotomos extract (PLE), Red Orange Extract (ROE), and vitamins A, C, D, and E」と成分名は挙げるが、mg 量が1つも書かれていない。何をどれだけ飲めばこの結果になるのかが、アブストラクトからは分からない",
+      "adverse": "★記載なし。メーカー資金の試験だが、有害事象への言及がアブストラクトに一切ない",
+      "duration": "8週間（2週時点と8週時点で評価。2週では有意差に達しなかった）"
     },
     {
       "pmid": "31797305",
@@ -1309,7 +1625,11 @@
       "confirmed": "abstract",
       "articles": [
         "oral-sunscreen"
-      ]
+      ],
+      "measured": "紅斑（MED）＋血液の抗酸化マーカー＋見た目。「minimal erythema dose (MED)」「ferric reducing antioxidant power (FRAP) and malondialdehyde (MDA) assays」「skin parameters (including radiance, elasticity, and moisture)」。★対照群もプラセボも無い非盲検試験である点に注意",
+      "concentration": "★記載なし。「a combination of actives with mainly antioxidative properties (vitamins A, C, D3, E, selenium, lycopene, lutein, as well as green tea, polypodium and grape extracts)」と成分名は列挙されるが、mg 量が1つも書かれていない",
+      "adverse": "★メーカー資金の4本のうち、有害事象を明示的に報告している唯一の論文。「safety was monitored through a self-recording of all observed adverse reactions（有害反応の自己記録により安全性を監視した）」「no adverse events were attributed by the investigators to the use of the product（試験担当医は、製品の使用に起因する有害事象はなかったとした）」「The product was well tolerated（製品の忍容性は良好だった）」。ただし『起因すると判断されなかった』のであって、有害事象そのものが0件だったとは書かれていない",
+      "duration": "12週間（摂取開始後 14日・28日・56日・84日に受診）"
     },
     {
       "pmid": "40196953",
@@ -1325,7 +1645,11 @@
       "confirmed": "abstract",
       "articles": [
         "oral-sunscreen"
-      ]
+      ],
+      "measured": "記載なし。システマティックレビューだが、アブストラクトに評価項目が書かれていない",
+      "concentration": "★記載なし。飲む日焼け止めの成分について最も強い設計（システマティックレビュー）でありながら、アブストラクトに用量が1つも書かれていない。『何mg飲めばいいか』はこのレビューの要旨からは分からない",
+      "adverse": "「encouraging safety profile（有望な安全性プロファイル）」という記述のみ。具体的な有害事象も、その件数も書かれていない。★本文が有料のため、この評価の中身は確認できていない",
+      "duration": "記載なし"
     },
     {
       "pmid": "38845468",
@@ -1341,7 +1665,11 @@
       "confirmed": "abstract",
       "articles": [
         "oral-sunscreen"
-      ]
+      ],
+      "measured": "総説のため自ら測定していない。アブストラクトにあるのは「protection against damage induced by UVR」「effects that sunlight can cause on the skin」という一般的な記述のみ",
+      "concentration": "記載なし",
+      "adverse": "記載なし",
+      "duration": "記載なし"
     },
     {
       "pmid": "9361129",
@@ -1357,7 +1685,11 @@
       "confirmed": "abstract",
       "articles": [
         "oral-sunscreen"
-      ]
+      ],
+      "measured": "紅斑・色素沈着・組織の3種類。「immediate pigment darkening (IPD), minimal erythema dose (MED), minimal melanogenic dose (MMD), and minimal phototoxic dose (MPD)」に加えて「Immunohistochemical assessment of CD1a-expressing epidermal cells」＝ランゲルハンス細胞の免疫組織化学（皮膚を採って染めた）",
+      "concentration": "★記載なし。経口も外用も、用量が1つも書かれていない（「after topical application or oral ingestion」とあるのみ）。★この論文は MED が 2.8 ± 0.59 倍に増えたと報告しており、近年の試験（+2〜3割）と桁が違う。その数値の根拠となる用量が、アブストラクトからは分からない",
+      "adverse": "記載なし。★被験者の一部にソラレン（8-MOP または 5-MOP）を投与し、意図的に光毒性を起こさせている試験でありながら、有害事象の記述がない",
+      "duration": "記載なし"
     },
     {
       "pmid": "35684041",
@@ -1373,7 +1705,11 @@
       "confirmed": "abstract",
       "articles": [
         "oral-sunscreen"
-      ]
+      ],
+      "measured": "紅斑（MED・色差計）＋血液の抗酸化マーカー＋機械の測定値。「minimal erythema dose (MED) assessment」「UVA+B-induced skin redness was measured by colorimetry」「ferric-reducing antioxidant power (FRAP) and the malondialdehyde (MDA) assay」「skin moisturization, skin elasticity, skin radiance, the intensity of melanin staining, transepidermal water loss (TEWL), and wrinkles」",
+      "concentration": "100 mg/日",
+      "adverse": "★記載なし。メーカー社員が著者に入る試験だが、有害事象への言及がアブストラクトに一切ない",
+      "duration": "56日間"
     },
     {
       "pmid": "41751449",
@@ -1389,7 +1725,11 @@
       "confirmed": "abstract",
       "articles": [
         "pdrn-salmon-dna"
-      ]
+      ],
+      "measured": "マウス（LPSで急性肺障害を起こしたモデル）と培養細胞（RAW 264.7 マクロファージ）。測っているのは発熱・肺水腫・気管支肺胞洗浄液と血清の炎症性サイトカイン／ケモカイン・肺の組織像。皮膚のアウトカムは1つも測っていない",
+      "concentration": "記載なし（要旨に投与量の記載がない。培養細胞で「用量依存的に」抑制したとあるだけ）",
+      "adverse": "記載なし",
+      "duration": "記載なし"
     },
     {
       "pmid": "8511753",
@@ -1405,7 +1745,11 @@
       "confirmed": "abstract",
       "articles": [
         "pdrn-salmon-dna"
-      ]
+      ],
+      "measured": "ラット（薬物動態）。放射性ヨウ素で標識したデフィブロタイドの血漿中放射能・半減期・バイオアベイラビリティ・尿糞への排泄・組織分布。皮膚は組織分布の記載に挙がっていない",
+      "concentration": "記載なし（要旨に投与量の数値がない。「静脈内・経口ともに、血漿中総放射能のAUCは用量依存的だった」とあるだけで、用量そのものは書かれていない）",
+      "adverse": "記載なし。（「反復経口投与後、血漿中の総放射能の有意な蓄積は観察されなかった」との記載はあるが、これは有害事象の報告ではない）",
+      "duration": "記載なし"
     },
     {
       "pmid": "33567185",

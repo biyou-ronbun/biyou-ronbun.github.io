@@ -1,0 +1,289 @@
+{
+  "_note": "site/papers.json の論文（pdrn-salmon-dna / oral-collagen / hyaluronic-acid の3記事、計27本）から、試験で使われた量・濃度と報告された副作用を抜き出したもの。すべて PubMed の要旨を実際に開いて確認した。要旨に書いてあったことだけを記録している。",
+  "_caution": [
+    "★ 『記載なし』は『副作用が0件だった』という意味ではない。『要旨に何も書いていない』という意味である。この2つを混同しないこと。",
+    "★ すべて要旨（abstract）のみの確認。有料の本文に用量や有害事象が書かれている可能性は否定できない。要旨に無かった、という事実だけを記録している。",
+    "★ 用量・濃度は、要旨の本文に書かれていたものだけを採った。図表や本文からしか読めない数値は『記載なし』にしてある。",
+    "★ 撤回された論文は retracted: true。消していない。記事は撤回を明記したうえで引用している。"
+  ],
+  "_confirmed_at": "2026-07-13",
+
+  "42430369": {
+    "_article": "pdrn-salmon-dna",
+    "measured": "培養ヒト線維芽細胞のシグナル伝達（PI3K-Akt / TGF-β・Smad / オートファジー）、再構築表皮モデル・ブタ皮膚・摘出ヒト皮膚での浸透（共焦点ラマン分光）、UV照射した摘出ヒト皮膚の表皮の厚みとコラーゲン等の発現。ヒトでは、ランダム化二重盲検・顔面左右比較で目もとのシワ・真皮の厚み・真皮の密度・目の下のふくらみ（機械の測定値）",
+    "concentration": "0.1% PDRN-850K アイクリーム（対照は反対側の顔に塗った 0.1% レチノール）",
+    "adverse": "有害事象の件数・内訳の記載はない。要旨の記載は「with good tolerability（良好な忍容性を伴って）」の一句のみ",
+    "duration": "ヒト試験は28日間",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "25473210": {
+    "_article": "pdrn-salmon-dna",
+    "measured": "マウス25匹（顕微鏡・染色による持続性と有効性）。ヒト72人では、目尻のシワについて有効性と安全性を同一の2名の医師が評価（要旨は評価項目の名称を明示していない）。動物では弾力・コラーゲン組成・皮膚表面の粗さ・シワの深さ",
+    "concentration": "記載なし（注射量・濃度の記載はない。2週おきに計3回注射、とだけ書かれている）",
+    "adverse": "「安全性のアウトカムでは、予期しない有害事象はなかった（in safety outcomes there were no unexpected adverse effects）」。人数・内訳の記載はなし",
+    "duration": "2週おきに計3回注射、計12週間の観察",
+    "confirmed": "abstract",
+    "retracted": true,
+    "_retraction": "J Korean Med Sci. 2016;31(2):330（PMID 26839493）で撤回。理由は利益相反の誤った開示と資金提供元の誤った通知。なお要旨自身が「臨床試験の主要・副次の客観的な有効性評価項目で、2群間に統計学的有意差はなかった」と述べている"
+  },
+
+  "26839493": {
+    "_article": "pdrn-salmon-dna",
+    "measured": "該当なし（PMID 25473210 の撤回通知。要旨は存在しない）",
+    "concentration": "記載なし",
+    "adverse": "記載なし",
+    "duration": "記載なし",
+    "confirmed": "bibliographic",
+    "retracted": false,
+    "_note": "この論文自体が『撤回通知』であって、撤回された論文ではない。PubMed に要旨は掲載されていない（No abstract available）"
+  },
+
+  "39313949": {
+    "_article": "pdrn-salmon-dna",
+    "measured": "見た目の評価のみ。Crow's Feet Grading Scale（目尻のシワの5段階評価）の改善率と、Global Aesthetic Improvement Scale（総合的な見た目の改善）。機械の測定値は要旨に出てこない",
+    "concentration": "記載なし（注射量・濃度の記載はない）",
+    "adverse": "「両フィラーとも良好な安全性プロファイルを示し、有害事象は軽度で忍容可能だった。試験期間中、重篤な有害事象の報告はなかった」。人数・件数の記載はなし",
+    "duration": "12週間（主要評価は12週時点。2週・4週にも評価）",
+    "confirmed": "abstract",
+    "retracted": true,
+    "_retraction": "RETRACTION: J Cosmet Dermatol. 2026;25(3):e70794 で撤回。撤回の理由は確認できなかった"
+  },
+
+  "32248707": {
+    "_article": "pdrn-salmon-dna",
+    "measured": "見た目の評価（VAS、GAIS）と機械の測定値（弾力・水分・粗さ・毛穴容積・真皮密度）の両方",
+    "concentration": "記載なし（注射量・濃度の記載はない。2週おきに計3回注射、とだけ書かれている）",
+    "adverse": "「重篤な有害事象の報告はなかった（No serious adverse events were reported）」。人数・件数の記載はなし。軽度の有害事象があったかどうかは要旨からは分からない",
+    "duration": "2週おきに計3回注射（追跡期間は要旨に記載なし）",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "35209068": {
+    "_article": "pdrn-salmon-dna",
+    "measured": "動物（UV-B を照射した動物モデル）。NRF2/HO-1、SOD活性、メラニン量、コラーゲン・弾性線維の発現、MMPの発現。ヒトは1人も測っていない。しかも手で塗ったのではなく、マイクロニードリング機器で皮膚に穴を開けて送達している",
+    "concentration": "記載なし（PDRN・ビタミンC・ナイアシンアミドの配合濃度は要旨に書かれていない）",
+    "adverse": "記載なし",
+    "duration": "記載なし",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "41892958": {
+    "_article": "pdrn-salmon-dna",
+    "measured": "培養細胞（CHO細胞のADORA2A受容体活性化、線維芽細胞のコラーゲン・HA産生、オートファジー関連遺伝子）と、プラセボ・HA対照つき二重盲検ヒト試験。ヒトで測ったものとして要旨が挙げるのは「皮膚のふっくら感（plumpness）・水分・つや（radiance）・老化のサインの軽減」。どの機器で測ったかは要旨に書かれていない",
+    "concentration": "記載なし（抽出物の配合濃度の記載はない）",
+    "adverse": "記載なし",
+    "duration": "記載なし（要旨にヒト試験の期間の記載がない）",
+    "confirmed": "abstract",
+    "retracted": false,
+    "_note": "素材は紅藻 Porphyridium の抽出物であって、サーモン由来PDRNではない"
+  },
+
+  "39486723": {
+    "_article": "pdrn-salmon-dna",
+    "measured": "該当なし（総説。一次データを持たない）",
+    "concentration": "用量の記載はなし。PDRN の性状として「主にサーモンから抽出された分子量 50〜1500 kDa の DNA 断片、有効成分の純度 >95%」と記載",
+    "adverse": "総説として「in vivo 試験および臨床試験は、この物質を非毒性（non-toxic）であると確認している」と述べている。ただしこれは総説の要約であり、この論文自身が測った有害事象ではない。具体的な有害事象・件数の記載はない",
+    "duration": "記載なし",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "41751449": {
+    "_article": "pdrn-salmon-dna",
+    "measured": "マウス（LPSで急性肺障害を起こしたモデル）と培養細胞（RAW 264.7 マクロファージ）。測っているのは発熱・肺水腫・気管支肺胞洗浄液と血清の炎症性サイトカイン／ケモカイン・肺の組織像。皮膚のアウトカムは1つも測っていない",
+    "concentration": "記載なし（要旨に投与量の記載がない。培養細胞で「用量依存的に」抑制したとあるだけ）",
+    "adverse": "記載なし",
+    "duration": "記載なし",
+    "confirmed": "abstract",
+    "retracted": false,
+    "_note": "PDRN の由来はアマノリ属（海藻）で、サーモンではない"
+  },
+
+  "8511753": {
+    "_article": "pdrn-salmon-dna",
+    "measured": "ラット（薬物動態）。放射性ヨウ素で標識したデフィブロタイドの血漿中放射能・半減期・バイオアベイラビリティ・尿糞への排泄・組織分布。皮膚は組織分布の記載に挙がっていない",
+    "concentration": "記載なし（要旨に投与量の数値がない。「静脈内・経口ともに、血漿中総放射能のAUCは用量依存的だった」とあるだけで、用量そのものは書かれていない）",
+    "adverse": "記載なし。（「反復経口投与後、血漿中の総放射能の有意な蓄積は観察されなかった」との記載はあるが、これは有害事象の報告ではない）",
+    "duration": "記載なし",
+    "confirmed": "abstract",
+    "retracted": false,
+    "_note": "対象はデフィブロタイド（PDRN系の医薬品）であって、化粧品・サプリのPDRNそのものではない"
+  },
+
+  "40324552": {
+    "_article": "oral-collagen",
+    "measured": "機械の測定値（皮膚の水分量・弾力）と、シワ。23件のRCTのメタアナリシス",
+    "concentration": "記載なし（要旨に用量の記載がない）",
+    "adverse": "記載なし",
+    "duration": "記載なし",
+    "confirmed": "abstract",
+    "retracted": false,
+    "_note": "★ 要旨自身が「製薬企業の資金提供を受けていない研究では、効果は認められなかった（studies not receiving pharmaceutical funding revealed no effect）」と述べている"
+  },
+
+  "37432180": {
+    "_article": "oral-collagen",
+    "measured": "機械の測定値（皮膚の水分量・弾力）。26件のRCTのメタアナリシス",
+    "concentration": "記載なし（要旨に用量の記載がない。コラーゲンの由来別のサブグループ解析を行ったとある）",
+    "adverse": "記載なし",
+    "duration": "記載なし（「補充期間によって効果が異なった」とあるが、具体的な週数は要旨に書かれていない）",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "23949208": {
+    "_article": "oral-collagen",
+    "measured": "機械の測定値（皮膚の弾力＝主要評価項目、水分量、経表皮水分蒸散量TEWL、皮膚の粗さ）",
+    "concentration": "コラーゲンペプチド 2.5 g/日 または 5.0 g/日（1日1回）",
+    "adverse": "著者は有害事象なしと報告（「No side effects were noted throughout the study.」＝試験を通して副作用は認められなかった）",
+    "duration": "投与8週間＋投与終了後4週間の追跡",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "29949889": {
+    "_article": "oral-collagen",
+    "measured": "機械の測定値（水分量＝Corneometer CM825、弾力＝Cutometer MPA580、シワのパラメータ R1・R3・R4）と、シワの目視評価",
+    "concentration": "低分子コラーゲンペプチド（LMWCP）1,000 mg/日（1日1回）",
+    "adverse": "著者は有害事象なしと報告（「試験期間中、試験物質に関連する有害症状を呈した被験者はいなかった」）",
+    "duration": "12週間（0週・6週・12週に測定）",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "33774639": {
+    "_article": "oral-collagen",
+    "measured": "機械の測定値（角層と表皮の水分量、経表皮水分蒸散量TEWL、角層の天然保湿因子NMF量、弾力、皮膚の厚み）",
+    "concentration": "コラーゲンペプチド 1 g/日 または 5 g/日（1日1回）",
+    "adverse": "記載なし",
+    "duration": "12週間（0週・4週・8週・12週に評価）",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "35662250": {
+    "_article": "oral-collagen",
+    "measured": "ヒトは血液のみ（摂取後の血中トリペプチド Gly-3Hyp-4Hyp の濃度）。皮膚のアウトカムはヒトでは1つも測っていない。ほかにマウスと培養細胞（線維芽細胞の遊走、骨芽細胞の分化）",
+    "concentration": "記載なし（ヒトが摂取した豚皮コラーゲン加水分解物の量は要旨に書かれていない。培養細胞に加えた合成ペプチドは 200 nmol/mL）",
+    "adverse": "記載なし",
+    "duration": "単回摂取（要旨に採血の追跡時間の明示なし）",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "39149544": {
+    "_article": "oral-collagen",
+    "measured": "血液のみ（血漿中の遊離ヒドロキシプロリンとペプチド結合ヒドロキシプロリン、Pro-Hyp・Hyp-Gly・Gly-Pro-Hyp・Pro-Gly・Gly-Pro の濃度）。皮膚のアウトカムは1つも測っていない",
+    "concentration": "記載なし（要旨に摂取量の記載がない。魚・豚・牛由来で分子量の異なるコラーゲン加水分解物を単回摂取、とある）",
+    "adverse": "記載なし",
+    "duration": "単回摂取（要旨に追跡時間の明示なし）",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "28244315": {
+    "_article": "oral-collagen",
+    "measured": "ヒトは血液のみ。皮膚を測ったのはマウスだけ（マウスの皮膚中の Gly-Pro-Hyp・Pro-Hyp）",
+    "concentration": "記載なし（要旨に摂取量の記載がない）",
+    "adverse": "記載なし",
+    "duration": "記載なし",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "25877232": {
+    "_article": "hyaluronic-acid",
+    "measured": "摘出したヒト皮膚の切片（ex vivo）をラマン顕微イメージングで観察し、分子量の異なるHAの浸透を追跡。生きたヒトに塗った試験ではない。肌の見た目も水分量も測っていない",
+    "concentration": "濃度の記載なし。分子量のみ記載（低分子 20〜300 kDa、高分子 1000〜1400 kDa）",
+    "adverse": "記載なし",
+    "duration": "記載なし",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "22052267": {
+    "_article": "hyaluronic-acid",
+    "measured": "機械の測定値（皮膚の水分量、弾力 R2、シワの深さ＝平均粗さ Ra と最大粗さ Rz）と、皮膚レプリカの半自動モルフォメトリー",
+    "concentration": "0.1%（分子量の異なるHAをそれぞれ 0.1% 配合したクリーム）",
+    "adverse": "記載なし",
+    "duration": "60日間",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "38829483": {
+    "_article": "hyaluronic-acid",
+    "measured": "機械の測定値（皮膚静電容量 SCap＝角層の水分量の指標、経表皮水分蒸散量 TEWL）と、乾皮症の症状スコア",
+    "concentration": "記載なし（低分子HA・高分子HAの比較とあるが、要旨に濃度も分子量の数値も書かれていない）",
+    "adverse": "著者は有害事象なしと報告（「No side effects were found in all groups」＝どの群でも副作用は認められなかった）",
+    "duration": "4週間（0週・2週・4週に測定）",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "40911749": {
+    "_article": "hyaluronic-acid",
+    "measured": "機械の測定値（水分量、弾力、ハリ、シワの深さ、シワの容積、経表皮水分蒸散量TEWL）。RCT 7件のメタアナリシス",
+    "concentration": "記載なし（要旨に用量の記載がない）",
+    "adverse": "記載なし",
+    "duration": "記載なし",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "28761365": {
+    "_article": "hyaluronic-acid",
+    "measured": "シワのレプリカの画像解析（溝の容積比・シワ面積比・シワ容積比）と、肌の状態についてのアンケート（つや・しなやかさ・シワ）。アンケートは主観の評価であって機械の測定値ではない",
+    "concentration": "120 mg/日。分子量の異なる2種類（HA 2k と HA 300k）",
+    "adverse": "記載なし",
+    "duration": "12週間",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "34203487": {
+    "_article": "hyaluronic-acid",
+    "measured": "シワの評価、角層の水分量、経表皮水分蒸散量TEWL、弾力（機械の測定値）と、肌の状態の画像解析",
+    "concentration": "120 mg/日（分子量は要旨に記載なし）",
+    "adverse": "記載なし",
+    "duration": "12週間",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "25383371": {
+    "_article": "hyaluronic-acid",
+    "measured": "ラット（動物）。14Cで標識したHAの血漿中放射能・組織分布（オートラジオグラフィ）・尿糞・呼気への排泄。皮膚については「24時間後と96時間後に、血中より皮膚のほうが放射能が高かった」と報告。ヒトではない",
+    "concentration": "記載なし（要旨に投与量の数値がない）",
+    "adverse": "記載なし。（「過剰な蓄積は認められず、90%以上が呼気または尿に排泄された」との記載はあるが、これは有害事象の報告ではない）",
+    "duration": "投与後168時間（1週間）まで追跡",
+    "confirmed": "abstract",
+    "retracted": false
+  },
+
+  "41422283": {
+    "_article": "hyaluronic-acid",
+    "measured": "機械の測定値（顔の水分量、経表皮水分蒸散量TEWL、皮脂、弾力、シワの深さ、つや、色調、表皮の厚み、真皮密度、赤み、毛穴の大きさ）、主観的な肌の状態、前腕の天然保湿因子NMF成分（LC-MS/MS）",
+    "concentration": "ヒアルロン酸ナトリウム（分子量 1.8 MDa）60 mg/日 または 120 mg/日",
+    "adverse": "記載なし",
+    "duration": "12週間",
+    "confirmed": "abstract",
+    "retracted": false,
+    "_note": "★ 150人を割り付けた企業資金のRCTだが、要旨に安全性・忍容性・有害事象への言及が一切ない"
+  },
+
+  "39807700": {
+    "_article": "hyaluronic-acid",
+    "measured": "機械の測定値（水分量、つや／radiance、弾力、メラニンインデックス）。RCT 12件を同定し6件を定量統合したメタアナリシス（注射のHA）",
+    "concentration": "記載なし（要旨に注射量・濃度の記載がない）",
+    "adverse": "記載なし",
+    "duration": "記載なし",
+    "confirmed": "abstract",
+    "retracted": false,
+    "_note": "水分（SMD 1.34, 95%CI 0.14-2.54）とつや（SMD 0.51, 95%CI 0.22-0.80）は有意。弾力（SMD 0.25, 95%CI -0.20-0.70, p=0.27）とメラニンインデックスは有意差なし"
+  }
+}
