@@ -324,6 +324,9 @@ for (const [key, p] of ledger) {
 // 薬機法66条は「何人も」が対象。効能を書いた瞬間、罰せられるのは
 // 広告主ではなく、書いた側です。商品説明にも同じ検査をかけます。
 
+// 商品リンクが生きているかを、あとでまとめて確かめる
+const productUrls = [];
+
 for (const [slug, entry] of Object.entries(products)) {
   if (slug.startsWith('_')) continue;
   for (const item of entry.items ?? []) {
@@ -391,6 +394,51 @@ for (const [slug, entry] of Object.entries(products)) {
     if (!/^https?:\/\//.test(item.url)) {
       failures.push(`${slug}: 商品「${item.name}」の url が不正です`);
     }
+
+    // ★ 商品名に、期間限定の煽りが入っていないか
+    //
+    //   楽天の商品名には、こういうものが平気で入っています。
+    //     「7/19 19:59までまとめ買いで最大1000円OFF!」
+    //     「≪15日はジェットの日！全商品P2倍！≫」
+    //
+    //   **その日を過ぎたら、記事に嘘が残ります。**
+    //   人が見ていない自動運転のブログでは、必ず腐ります。
+    //
+    //   そして、うちは「急がせない」ことを商品にしています。
+    //   **「今だけ」「残りわずか」は、判断を急がせる技術です。**
+    //   うちが読者に渡したいのは、急がずに自分で確かめる目です。
+    const PROMO = [
+      /\d+\/\d+.{0,12}まで/,   // 「7/19 19:59まで」
+      /\d+%?\s*OFF/i,
+      /\d+円OFF/,
+      /P\d+倍/i,
+      /ポイント\d+倍/,
+      /期間限定/,
+      /タイムセール/,
+      /クーポン/,
+      /今だけ/,
+      /残りわずか/,
+    ];
+    for (const re of PROMO) {
+      const m = item.name.match(re);
+      if (m) {
+        failures.push(
+          `${slug}: 商品名に期間限定の煽りが入っています →「${m[0]}」\n` +
+            `      商品名: ${item.name.slice(0, 60)}\n` +
+            `\n` +
+            `      **その日を過ぎたら、記事に嘘が残ります。**\n` +
+            `      人が見ていない自動運転のブログでは、必ず腐ります。\n` +
+            `\n` +
+            `      そして、うちは「急がせない」ことを商品にしています。\n` +
+            `      **「今だけ」「◯円OFF」は、判断を急がせる技術です。**\n` +
+            `      楽天の商品名から、その部分を取り除いてください。`
+        );
+        break;
+      }
+    }
+
+    // 商品リンクが生きているか（後でまとめて確かめる）
+    productUrls.push({ slug, name: item.name, url: item.url });
   }
 }
 
@@ -590,6 +638,49 @@ function seenRetraction(slug, pmid, title) {
     kind: 'retracted',
   });
   correctionsChanged = true;
+}
+
+// ---- 商品リンクが生きているか ----------------------------------------
+//
+// ★ 商品リンクは、放っておくと腐ります。
+//
+//   商品が売り切れる → リンクが 404 になる → **読者が壊れたリンクを踏む。**
+//
+//   人が見ていない自動運転のブログでは、これは必ず起きます。
+//   **「機械が検証している」と看板を掲げているブログが、死んだリンクを出し続けたら、
+//     その看板が嘘になります。**
+//
+// ★ 取得できなかったときは、公開を止めません（ネットワークの一時的な問題かもしれない）。
+//   **ただし「取得できなかった」と警告します。0 とも「生きている」とも書きません。**
+
+if (productUrls.length) {
+  console.log(`商品リンク ${productUrls.length} 本が生きているか、確かめます...`);
+
+  for (const p of productUrls) {
+    try {
+      const res = await fetch(p.url, {
+        method: 'GET',
+        redirect: 'follow',
+        headers: { 'User-Agent': 'Mozilla/5.0 (biyou-ronbun link check)' },
+      });
+      if (res.status === 404 || res.status === 410) {
+        failures.push(
+          `${p.slug}: 商品「${p.name}」のリンクが死んでいます（HTTP ${res.status}）\n` +
+            `      ${p.url}\n` +
+            `      **読者が壊れたリンクを踏みます。** 商品を差し替えるか、外してください。`
+        );
+      } else if (!res.ok) {
+        warnings.push(
+          `${p.slug}: 商品「${p.name}」のリンクが HTTP ${res.status} を返しました（公開は止めません）`
+        );
+      }
+    } catch (e) {
+      warnings.push(
+        `${p.slug}: 商品「${p.name}」のリンクを確かめられませんでした — ${e.message}\n` +
+          `      （「死んでいる」ではなく「確かめられなかった」です。混同しないこと）`
+      );
+    }
+  }
 }
 
 console.log(`PubMed に ${allPmids.size} 件の PMID を問い合わせます...`);
