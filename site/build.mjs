@@ -1646,11 +1646,45 @@ console.log(`  built  tag/ (${tags.length} 個)`);
     'no-source': '出典が見つかりませんでした',
   };
 
+  // ★ 出どころで絞れるようにする。読者は「ニュース」を探して来ない。
+  //   「FDAが何か言った」「韓国で何かあった」で来る。
+  //
+  //   ★ ただし、絞り込みで**新しいページを1枚も作らない。**
+  //     出どころごとにページを作れば、それは「表」であり「蓄積の目次」です（却下済みの形）。
+  //     読者のブラウザの中で隠すだけにします。
+  const sources = [...new Set(items.map((n) => n.source).filter(Boolean))];
+  const srcCount = (s) => items.filter((n) => n.source === s).length;
+
+  const filterHtml = sources.length
+    ? `<nav class="news-filter" aria-label="出どころで絞る">
+  <button class="news-chip is-on" data-src="">すべて<span class="news-chip-n">${items.length}</span></button>
+  ${sources
+    .map(
+      (s) =>
+        `<button class="news-chip" data-src="${escapeAttr(s)}">${escapeHtml(s)}<span class="news-chip-n">${srcCount(s)}</span></button>`
+    )
+    .join('\n  ')}
+</nav>
+<script>
+document.querySelectorAll('.news-chip').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var s = b.dataset.src;
+    document.querySelectorAll('.news-chip').forEach(function (x) { x.classList.toggle('is-on', x === b); });
+    document.querySelectorAll('.news-item').forEach(function (it) {
+      it.hidden = Boolean(s) && it.dataset.src !== s;
+    });
+  });
+});
+</script>`
+    : '';
+
   const html = items.length
-    ? items
+    ? filterHtml +
+      '\n' +
+      items
         .map(
-          (n) => `<article class="news-item is-${escapeAttr(n.traced)}">
-  <p class="news-date"><time datetime="${escapeAttr(n.date)}">${escapeHtml(n.date.replace(/-/g, '.'))}</time></p>
+          (n) => `<article class="news-item is-${escapeAttr(n.traced)}" data-src="${escapeAttr(n.source ?? '')}">
+  <p class="news-date"><time datetime="${escapeAttr(n.date)}">${escapeHtml(n.date.replace(/-/g, '.'))}</time>${n.source ? `<span class="news-src">${escapeHtml(n.source)}</span>` : ''}</p>
   <h2 class="news-title">${escapeHtml(n.title)}</h2>
 
   <p class="news-what"><span class="news-tag">発表されたこと</span>${escapeHtml(n.claim)}</p>

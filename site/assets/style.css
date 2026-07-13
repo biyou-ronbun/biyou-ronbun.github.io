@@ -2646,3 +2646,51 @@ a { color: var(--rose); }
   line-height: 1.8;
   color: var(--ink-mute);
 }
+
+/* ---------- ニュースの出どころ ----------
+   ★ 出どころごとにページを作らない。読者のブラウザの中で隠すだけ。
+     ページを作れば、それは「蓄積の表」＝却下済みの形になる。 */
+
+.news-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 34px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.news-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 15px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 12.5px;
+  letter-spacing: .04em;
+  cursor: pointer;
+}
+
+.news-chip:hover { border-color: var(--ink); color: var(--ink); }
+
+.news-chip.is-on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+}
+
+.news-chip-n { font-size: 10.5px; opacity: .7; }
+
+.news-src {
+  margin-left: 12px;
+  padding: 2px 9px;
+  border: 1px solid var(--rule);
+  font-size: 10.5px;
+  letter-spacing: .08em;
+  color: var(--ink-mute);
+}
+
+.news-item[hidden] { display: none; }
