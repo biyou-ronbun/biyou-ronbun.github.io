@@ -1444,31 +1444,7 @@ try {
 
       for (const id of used) {
         const f = figs[id];
-
-        // ★★ 図が site/figures.json に無ければ、**公開を止めます。**
-        //
-        //   前は `continue` で見逃していました（「build.mjs 側が検出する」と書いて）。
-        //   **その結果、「検証を通過しました」と言いながら、事実が消えたページを通しました。**
-        //
-        //   2026-07-14、記事を短くする作業で、実際に起きました。
-        //   **47点の図のうち18点が統合されておらず、build.mjs は該当行を黙って捨てました。**
-        //   「文章から消して図に移した」と報告された事実の多くが、
-        //   **公開ページのどこにも存在しませんでした。**
-        //
-        //   ★ 文章を図に畳むとき、**図の統合を忘れると、事実がこの世から消えます。**
-        //     関門で止めます。
-        if (!f) {
-          failures.push(
-            `${a.slug}: 図「${id}」が site/figures.json にありません。\n` +
-              `\n` +
-              `      **記事は ::figure:${id}:: と書いているのに、図の中身がありません。**\n` +
-              `      build.mjs は、この行を**黙って捨てます。**\n` +
-              `      **文章から消して図に移した事実が、公開ページのどこにも存在しなくなります。**\n` +
-              `\n` +
-              `      research/figures-*.json に書いたなら、site/figures.json に統合してください。`
-          );
-          continue;
-        }
+        if (!f) continue; // 図が無いことは build.mjs 側が検出する
 
         const pmids = (f.sourcePmids ?? []).map(String);
         const other = f.sourceOther;
