@@ -1406,6 +1406,48 @@
       "articles": [
         "pdrn-salmon-dna"
       ]
+    },
+    {
+      "pmid": "33567185",
+      "title": "Once-Weekly Semaglutide in Adults with Overweight or Obesity",
+      "journal": "The New England Journal of Medicine",
+      "year": 2021,
+      "design": "二重盲検ランダム化比較試験（STEP 1）。週1回のセマグルチド2.4mg皮下注射またはプラセボを68週間、生活習慣への介入と併用",
+      "evidenceType": "rct",
+      "subjects": "BMI 30以上（体重に関連する併存疾患が1つ以上ある場合は27以上）で、糖尿病のない成人1,961人。BMIが標準の範囲にある人は組み入れられていない",
+      "fundingType": "industry",
+      "fundingNote": "要旨の末尾に「Funded by Novo Nordisk; STEP 1 ClinicalTrials.gov number, NCT03548935」と明記。著者一覧にも Novo Nordisk（デンマーク・ソボー）所属の3名が含まれる",
+      "coiNote": "PubMedの記録にCOIの個別記載はない。組み入れ基準はBMI 30以上、または27以上かつ体重関連の併存疾患が1つ以上。痩身・美容を目的とする人を対象にした試験ではない",
+      "confirmed": "abstract",
+      "articles": []
+    },
+    {
+      "pmid": "42162206",
+      "title": "Effects of GLP-1 Receptor Agonists on Skin Quality: A Comprehensive Literature Review",
+      "journal": "Aesthetic Plastic Surgery",
+      "year": 2026,
+      "design": "文献レビュー（PRISMAに沿って40件を選定。臨床試験・症例報告・観察研究を含む）",
+      "evidenceType": "review",
+      "subjects": "GLP-1受容体作動薬を使ったヒトの報告40件。個々の研究の規模と設計はさまざま",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供の記載がない。著者の所属はカンプス・ビオメディコ大学病院（ローマ）と個人開業",
+      "coiNote": "著者は利益相反なしと申告。皮下脂肪が急速に減ることに伴う顔の容積の減少（いわゆる Ozempic face）、真皮の菲薄化、弾力の低下を挙げているが、結論で「今後の前向き研究が必要」と述べており、前向き試験に基づくものではない",
+      "confirmed": "abstract",
+      "articles": []
+    },
+    {
+      "pmid": "39645647",
+      "title": "The Role of GLP-1 Agonists in Esthetic Medicine: Exploring the Impact of Semaglutide on Body Contouring and Skin Health",
+      "journal": "Journal of Cosmetic Dermatology",
+      "year": 2025,
+      "design": "総説（コメンタリー）。既存の文献と臨床上の観察をまとめたもの",
+      "evidenceType": "review",
+      "subjects": "新たにヒトを測ったものではない",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供の記載がない",
+      "coiNote": "著者らは L Oreal、LVMH Research、Vivacy、Galderma、Merz、Fillmed などから謝礼・研究支援を受けていると申告している。顔の容積の減少や皮膚のたるみへの対処としてフィラー・生体刺激剤・機器・外科手術を挙げる立場の総説であり、そこに挙がる製品の企業と申告された関係が重なっている。要旨自身が「実証データの不足」を認めている",
+      "confirmed": "abstract",
+      "articles": []
     }
   ]
 }
