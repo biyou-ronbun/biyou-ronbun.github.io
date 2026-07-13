@@ -20,6 +20,7 @@
 import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkEnglish, EN_AFFILIATE_DISCLOSURE } from './tone-en.mjs';
 
 const SITE = dirname(fileURLToPath(import.meta.url));
 const ROOT = dirname(SITE);
@@ -710,6 +711,61 @@ try {
         );
       }
     }
+  }
+}
+
+// ---- 英語の記事の検査 -------------------------------------------------
+//
+// ★ **うちの商品は記事ではなく「関門」です。そして、その関門は英語を読めませんでした。**
+//
+//   verify.mjs が止めているのは、日本語の禁止表現だけです。
+//   英語で書いた瞬間、"This ingredient doesn't work." と書いても、機械は止めません。
+//
+//   **関門を通していない記事を公開することは、うちが批判してきた形そのものです。**
+//
+//   だから、**英語記事を1本も出さないうちに、関門を先に作りました。**
+//   作っておけば、英語をやると決めた日に安全に始められます。
+//   作っていなければ、その日に事故を起こします。
+//
+// ★ 英語の記事が1本も無ければ、この検査は何もしません。
+//   articles.json の lang: "en" が目印です。
+
+{
+  const english = meta.filter((a) => a.published && a.lang === 'en');
+
+  for (const a of english) {
+    const mdPath = join(ROOT, 'articles', `${a.slug}.md`);
+    if (!existsSync(mdPath)) continue;
+
+    const text = readFileSync(mdPath, 'utf8');
+    const problems = checkEnglish(text);
+
+    for (const p of problems) {
+      failures.push(`${a.slug} [英語]: ${p}`);
+    }
+
+    // アフィリエイトを入れたら、開示を必須にする
+    //   16 CFR §255.5 Example 11 = **アフィリエイトリンクを貼るブロガーそのもの**が対象。
+    //   日本語では薬機法66条が「何人も」なので最初から縛られていましたが、
+    //   英語圏では**アフィリエイトを1本入れた瞬間に、FTC の射程が開きます。**
+    const prod = existsSync(join(SITE, 'products.json'))
+      ? JSON.parse(readFileSync(join(SITE, 'products.json'), 'utf8'))
+      : {};
+    const hasAffiliate = (prod[a.slug]?.items ?? []).some((i) => i.url);
+
+    if (hasAffiliate && !EN_AFFILIATE_DISCLOSURE.test(text)) {
+      failures.push(
+        `${a.slug} [英語]: アフィリエイトのリンクがあるのに、開示文がありません\n` +
+          `      16 CFR §255.5: "such connection must be disclosed clearly and conspicuously"\n` +
+          `      **アフィリエイトを1本入れた瞬間、FTC の射程が開きます。**\n` +
+          `      （日本語では薬機法66条が「何人も」なので、最初から縛られていました）\n` +
+          `      ★ 開示はフッターではなく、読者が判断する場所に置くこと。**開示は、集計を救いません。**`
+      );
+    }
+  }
+
+  if (english.length) {
+    console.log(`  英語の記事 ${english.length} 本を検査しました`);
   }
 }
 
