@@ -933,9 +933,15 @@ if (priceTargets.length) {
         html = buf.toString('utf8');
       }
 
+      // ★ 楽天の価格は "price": には入っていない。**順番が大事。**
+      //   （"price":{"minPrice":2100.0} という形なので、"price"\s*:\s*\d は必ず外す）
+      //   実際に、この間違いで「基準に合う商品 0 件」と5回誤報した。
+      //   **「0件」と「読めていない」は、別の事実。**
       const pm =
-        html.match(/"price"\s*:\s*"?(\d{2,7})/) ??
-        html.match(/itemprop="price"[^>]*content="(\d+)"/);
+        html.match(/"taxIncludedPrice"\s*:\s*(\d{2,7})/) ??
+        html.match(/itemprop="price"[^>]*content="(\d+)"/) ??
+        html.match(/"minPrice"\s*:\s*(\d{2,7})/) ??
+        html.match(/data-price="(\d+)"/);
 
       if (!pm) {
         prices[t.slug] = { name: t.name, failed: true };
