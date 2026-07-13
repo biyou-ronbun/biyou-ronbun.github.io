@@ -1457,6 +1457,191 @@ ${rows}
 }
 console.log(`  built  evidence/ (${evidenceSheets.length} 個)`);
 
+// ---- 成分ごとの証拠（索引） ---------------------------------------------
+//
+// ★★ これは「成分辞典」です。2026-07-13、オーナーが却下を解除しました。
+//
+//   却下されていた理由は、「辞典」という名前ではありませんでした。**中身でした。**
+//
+//     ✗ 解説を書くこと … うちの言葉で成分を語れば、それは論文ではなく「意見」
+//     ✗ 判定を持つこと … 順位・点数・おすすめ
+//
+//   **だから、この索引は解説を1行も書きません。数字だけを並べます。**
+//   **そして、順位を付けません。並び順は「論文の多い順」です。**
+//
+//   ★ 「論文の多い順」は判定ではありません。**数えただけです。**
+//     「効く順」に並べた瞬間、それは判定になり、資産になり、最後に売られます。
+//
+//   ★ 解説を1行でも書きたくなったら、そこが線です。
+//     **書きたいことがあるなら、それは記事に書いてください。**
+
+{
+  const rows = evidenceSheets
+    .map(({ a, papers }) => {
+      const n = papers.length;
+      const noAdverse = papers.filter((p) => isNotStated(p.adverse)).length;
+      const noDose = papers.filter((p) => isNotStated(p.concentration)).length;
+      const industry = papers.filter((p) => p.fundingType === 'industry').length;
+      const items = itemsFor(a.slug);
+      return { a, n, noAdverse, noDose, industry, products: items.length };
+    })
+    .sort((x, y) => y.n - x.n); // ★ 論文の多い順。**効く順ではない**
+
+  const totalPapers = rows.reduce((s, r) => s + r.n, 0);
+  const totalNoAdverse = rows.reduce((s, r) => s + r.noAdverse, 0);
+
+  const html = rows
+    .map(
+      (r) => `    <tr>
+      <td class="ing-name"><a href="evidence/${escapeAttr(r.a.slug)}.html">${escapeHtml(r.a.title)}</a></td>
+      <td class="ing-n">${r.n}</td>
+      <td class="ing-n${r.industry ? ' is-mark' : ''}">${r.industry}</td>
+      <td class="ing-n${r.noAdverse ? ' is-mark' : ''}">${r.noAdverse}</td>
+      <td class="ing-n${r.noDose ? ' is-mark' : ''}">${r.noDose}</td>
+      <td class="ing-n">${r.products}</td>
+    </tr>`
+    )
+    .join('\n');
+
+  const content = `<section class="hero is-narrow">
+  <p class="hero-lead">成分ごとの証拠</p>
+  <p class="hero-body">記事ごとに、根拠にした論文を<strong>1本ずつ表にしています。</strong>何が測られ、どの濃度で試され、<strong>どんな副作用が報告されたか。</strong></p>
+  <p class="hero-body"><strong>解説は1行も書いていません。数字だけです。</strong>「効く順」にも並べていません。<strong>並び順は、論文の多い順です。</strong></p>
+</section>
+
+<section class="ing-summary">
+  <ul class="ev-stats">
+    <li><span class="ev-n">${totalPapers}</span><span class="ev-l">論文</span></li>
+    <li><span class="ev-n">${totalNoAdverse}</span><span class="ev-l">副作用の<br>記載なし</span></li>
+    <li><span class="ev-n">${rows.length}</span><span class="ev-l">テーマ</span></li>
+  </ul>
+  <p class="ev-note"><strong>★ 「副作用の記載なし」は、「副作用がなかった」ではありません。</strong>その論文が、副作用について<strong>何も書いていない</strong>という意味です。<strong>起きなかったとは、どこにも書かれていません。</strong></p>
+</section>
+
+<div class="ev-tablewrap">
+<table class="ev-table ing-table">
+  <thead>
+    <tr>
+      <th>テーマ</th>
+      <th>論文</th>
+      <th>メーカー<br>資金</th>
+      <th>副作用の<br>記載なし</th>
+      <th>濃度の<br>記載なし</th>
+      <th>基準に<br>合う商品</th>
+    </tr>
+  </thead>
+  <tbody>
+${html}
+  </tbody>
+</table>
+</div>
+
+<p class="back-to-index"><a class="back-link" href="index.html">記事一覧へ</a></p>`;
+
+  write(
+    join(DIST, 'ingredients.html'),
+    renderPage({
+      ad: true,
+      content,
+      headTitle: `成分ごとの証拠 | ${cfg.title}`,
+      metaDesc: `${rows.length}テーマ・論文${totalPapers}本の、測定内容・試験で使われた濃度・報告された副作用の一覧。うち${totalNoAdverse}本は副作用について何も書いていません。`,
+      canonical: `${baseUrl}/ingredients.html`,
+      ogType: 'website',
+      rootPath: '',
+      ogSlug: '_home',
+    })
+  );
+  console.log('  built  ingredients.html（成分ごとの証拠）');
+}
+
+// ---- 基準に合う商品（一覧） ---------------------------------------------
+//
+// ★★ これは「商品データベース」です。2026-07-13、オーナーが却下を解除しました。
+//
+//   ★ ただし、**順位も点数も「おすすめ」もありません。**
+//
+//     並んでいるのは「記事から基準が導けた商品」だけです。
+//     **基準が導けなかった記事には、商品がありません。** それも、そのまま出します。
+//
+//   ★ 「おすすめ順」に並べたくなったら、そこが線です。
+//     **並べる根拠が、どこにもありません。** 発明するしかない。それは判定です。
+
+{
+  const rows = meta
+    .filter((a) => a.published !== false)
+    .map((a) => ({ a, items: itemsFor(a.slug), hasEntry: Boolean(products[a.slug]) }))
+    .filter((r) => r.hasEntry);
+
+  const withItems = rows.filter((r) => r.items.length);
+  const without = rows.filter((r) => !r.items.length);
+
+  const cards = withItems
+    .flatMap(({ a, items }) =>
+      items.map(
+        (i) => `  <li class="prod">
+    ${
+      i.image
+        ? `<a class="prod-thumb" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener" tabindex="-1" aria-hidden="true"><img src="${escapeAttr(i.image)}" alt="" loading="lazy" width="300" height="300"></a>`
+        : ''
+    }
+    <div class="prod-text">
+      <a class="prod-name" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">${escapeHtml(i.name)}</a>
+      <span class="prod-criterion">${escapeHtml(i.criterion)}</span>
+      <span class="prod-from">この基準は <a href="articles/${escapeAttr(a.slug)}.html">${escapeHtml(a.title)}</a> から導いています</span>
+      <a class="prod-go" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">楽天で見る<span class="prod-go-note">広告</span></a>
+    </div>
+  </li>`
+      )
+    )
+    .join('\n');
+
+  const zeroList = without
+    .map(
+      ({ a }) =>
+        `    <li><a href="articles/${escapeAttr(a.slug)}.html">${escapeHtml(a.title)}</a></li>`
+    )
+    .join('\n');
+
+  const content = `<section class="hero is-narrow">
+  <p class="hero-lead">基準に合う商品</p>
+  <p class="hero-body">下は<strong>広告リンク</strong>です。ここから購入されると、このブログに収益が入ります。</p>
+  <p class="hero-body"><strong>「効く順」でも「人気順」でもありません。順位も点数もありません。</strong>記事が示した<strong>「選び方の基準」に合うかどうか、それだけ</strong>です。</p>
+</section>
+
+<ul class="products-list is-page">
+${cards}
+</ul>
+
+${
+  without.length
+    ? `<section class="prod-zero-block">
+  <h2>商品を置いていない記事</h2>
+  <p><strong>${without.length} 本あります。</strong>結論が「根拠が見つかりませんでした」なので、<strong>商品を選ぶ基準そのものが、記事から導けません。</strong>だから、何も置いていません。</p>
+  <ul class="prod-zero-list">
+${zeroList}
+  </ul>
+</section>`
+    : ''
+}
+
+<p class="back-to-index"><a class="back-link" href="index.html">記事一覧へ</a></p>`;
+
+  write(
+    join(DIST, 'products.html'),
+    renderPage({
+      ad: true,
+      content,
+      headTitle: `基準に合う商品 | ${cfg.title}`,
+      metaDesc: `記事が示した「選び方の基準」に合う商品だけを並べています。順位も点数もありません。基準が導けない記事には、商品を置いていません。`,
+      canonical: `${baseUrl}/products.html`,
+      ogType: 'website',
+      rootPath: '',
+      ogSlug: '_home',
+    })
+  );
+  console.log(`  built  products.html（基準に合う商品 ${withItems.length} / 置かない ${without.length}）`);
+}
+
 // ---- サイト内検索用のデータ ---------------------------------------------
 //
 // サーバーが無いので、検索は読者のブラウザの中で行う。
@@ -2101,6 +2286,9 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <url><loc>${baseUrl}/verified.html</loc></url>
 <url><loc>${baseUrl}/contact.html</loc></url>
 <url><loc>${baseUrl}/privacy.html</loc></url>
+<url><loc>${baseUrl}/ingredients.html</loc></url>
+<url><loc>${baseUrl}/products.html</loc></url>
+${evidenceSheets.map(({ a }) => `<url><loc>${baseUrl}/evidence/${a.slug}.html</loc><lastmod>${a.date}</lastmod></url>`).join('\n')}
 ${categories.map((c) => `<url><loc>${baseUrl}/category/${catSlug(c)}.html</loc></url>`).join('\n')}
 ${tags.map(([t]) => `<url><loc>${baseUrl}/tag/${tagSlug(t)}.html</loc></url>`).join('\n')}
 ${published

@@ -2694,3 +2694,65 @@ a { color: var(--rose); }
 }
 
 .news-item[hidden] { display: none; }
+
+/* ---------- 成分ごとの証拠（索引） / 基準に合う商品 ----------
+   ★ どちらも「判定」を持たない。
+     順位・点数・おすすめ・星 —— 1つも無い。
+     並び順は「論文の多い順」。**効く順ではない。数えただけ。** */
+
+.ing-summary {
+  margin: 36px 0 0;
+  padding: 30px 28px 24px;
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--ink);
+  background: var(--bg-raised);
+}
+
+.ing-summary .ev-stats { grid-template-columns: repeat(3, 1fr); margin-bottom: 22px; }
+.ing-summary .ev-note { padding-top: 20px; border-top: 1px solid var(--rule-soft); margin: 0; }
+
+.ing-table th { text-align: right; }
+.ing-table th:first-child { text-align: left; }
+.ing-name { min-width: 240px; }
+.ing-name a { font-family: var(--serif); font-size: 15px; line-height: 1.6; }
+.ing-n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* 「記載なし」が 0 でない欄に、印を付ける。**空白であることが、発見だから。** */
+.ing-n.is-mark { background: var(--bg-wash); }
+
+.products-list.is-page { gap: 34px; margin-top: 40px; }
+.products-list.is-page .prod { padding-top: 34px; }
+
+.prod-from {
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.85;
+  color: var(--ink-mute);
+}
+
+.prod-zero-block {
+  margin: 56px 0 0;
+  padding: 30px 28px 24px;
+  border: 1px dashed var(--rule);
+}
+
+.prod-zero-block h2 {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: .06em;
+  margin: 0 0 14px;
+}
+
+.prod-zero-block p { margin: 0 0 18px; font-size: 13.5px; line-height: 1.95; color: var(--ink-soft); }
+
+.prod-zero-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.prod-zero-list a { font-size: 14px; text-underline-offset: 4px; }
+
+@media (max-width: 600px) {
+  .ing-summary { padding: 24px 20px 20px; margin-left: -20px; margin-right: -20px; }
+  .ing-summary .ev-stats { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .ing-name { min-width: 150px; }
+  .prod-zero-block { padding: 24px 20px 20px; }
+}
