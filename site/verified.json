@@ -9,7 +9,44 @@
     "**論文の内容が正しいかどうかは、機械には判定できません。** 医師の監修もありません。",
     "そう書いてあることが、この仕組みの価値です。"
   ],
-  "verifiedAt": "2026-07-13T12:57:35.986Z",
+  "verifiedAt": "2026-07-13T13:04:38.836Z",
+  "prices": {
+    "sunscreen-spf": {
+      "name": "スキンアクア スーパーモイスチャーUVジェル 110g",
+      "price": 818,
+      "volume": 110,
+      "perMl": 7.4,
+      "at": "2026-07-13"
+    },
+    "retinol-concentration": {
+      "name": "COSRX RX ザ・レチノール 0.3 クリーム 20ml",
+      "price": 2800,
+      "volume": 20,
+      "perMl": 140,
+      "at": "2026-07-13"
+    },
+    "vitamin-c-derivatives": {
+      "name": "Paula's Choice C15 スーパーブースター 20ml",
+      "price": 9900,
+      "volume": 20,
+      "perMl": 495,
+      "at": "2026-07-13"
+    },
+    "hyaluronic-acid": {
+      "name": "肌ラボ 極潤ヒアルロン液 化粧水 170mL",
+      "price": 857,
+      "volume": 170,
+      "perMl": 5,
+      "at": "2026-07-13"
+    },
+    "bathing-dryness": {
+      "name": "ヴァセリン アドバンスドリペア ボディローション 400ml 2個セット",
+      "price": 2100,
+      "volume": 800,
+      "perMl": 2.6,
+      "at": "2026-07-13"
+    }
+  },
   "articles": {
     "oral-sunscreen": {
       "pmids": [

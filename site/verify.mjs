@@ -491,6 +491,11 @@ for (const [key, p] of ledger) {
 // 商品リンクが生きているかを、あとでまとめて確かめる
 const productUrls = [];
 
+// ★ 価格を取り直す対象。**products.json には価格を書かない。**
+//   価格は変わる。書けば、いつか嘘になる。
+const priceTargets = [];
+const prices = {}; // slug → { name, price, volume, perMl, at } または { name, failed: true }
+
 for (const [slug, entry] of Object.entries(products)) {
   if (slug.startsWith('_')) continue;
   for (const item of entry.items ?? []) {
@@ -627,6 +632,26 @@ for (const [slug, entry] of Object.entries(products)) {
     // 商品リンクが生きているか（後でまとめて確かめる）
     productUrls.push({ slug, name: item.name, url: item.url });
     if (item.image) productUrls.push({ slug, name: `${item.name}（画像）`, url: item.image });
+
+    // ★★ 価格は products.json に**書かない。** 公開のたびに機械が取る。
+    //
+    //   楽天の価格は変わります。**記事に古い価格が残れば、それは嘘です。**
+    //   （同じ理由で「7/19まで」「20%OFF」を商品名から弾いています）
+    //
+    //   ★ 取れなかったら「取得失敗」と記録し、**0 とは書きません。**
+    //     「0円だった」と「値段を数えられなかった」は、別の事実です（CLAUDE.md 第4条）。
+    if (item.volume) {
+      // アフィリエイトURLの ?pc= に、商品ページのURLが入っている
+      const m = item.url.match(/[?&]pc=([^&]+)/);
+      if (m) {
+        priceTargets.push({
+          slug,
+          name: item.name,
+          volume: item.volume,
+          itemUrl: decodeURIComponent(m[1]),
+        });
+      }
+    }
   }
 }
 
@@ -866,6 +891,75 @@ if (productUrls.length) {
       warnings.push(
         `${p.slug}: 商品「${p.name}」のリンクを確かめられませんでした — ${e.message}\n` +
           `      （「死んでいる」ではなく「確かめられなかった」です。混同しないこと）`
+      );
+    }
+  }
+}
+
+// ---- 商品の価格を、公開のたびに取り直す --------------------------------
+//
+// ★ products.json に価格を書かない。**書けば、いつか嘘になる。**
+//
+// ★ 「1mLあたりいくらか」は判定ではありません。**算数です。**
+//   だから、これで並べても「うちの順位」は生まれません。
+//   企業が上位に来る方法は「値下げする」ことだけ。**掲載料では買えません。**
+//
+// ★ 取れなかったら「取得失敗」。**0 と書かない。**（CLAUDE.md 第4条）
+
+if (priceTargets.length) {
+  console.log(`商品 ${priceTargets.length} 点の価格を、いま取り直します...`);
+
+  for (const t of priceTargets) {
+    try {
+      const res = await fetch(t.itemUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36',
+          'Accept-Language': 'ja',
+        },
+      });
+      const buf = Buffer.from(await res.arrayBuffer());
+
+      // ★★ 楽天の商品ページは EUC-JP のことがある。
+      //   UTF-8 として読むと日本語が壊れ、**「0件」という嘘の結果が出る。**
+      //   （実際に一度、それで「該当0件」と誤報した）
+      let cs =
+        (res.headers.get('content-type') ?? '').match(/charset=([\w-]+)/i)?.[1] ??
+        buf.toString('latin1', 0, 3000).match(/charset=["']?([\w-]+)/i)?.[1] ??
+        'utf-8';
+      let html;
+      try {
+        html = new TextDecoder(cs).decode(buf);
+      } catch {
+        html = buf.toString('utf8');
+      }
+
+      const pm =
+        html.match(/"price"\s*:\s*"?(\d{2,7})/) ??
+        html.match(/itemprop="price"[^>]*content="(\d+)"/);
+
+      if (!pm) {
+        prices[t.slug] = { name: t.name, failed: true };
+        warnings.push(
+          `${t.slug}: 商品「${t.name}」の価格を**取得できませんでした**。\n` +
+            `      （「0円」ではありません。**数えられなかった**のです。混同しないこと）`
+        );
+        continue;
+      }
+
+      const price = Number(pm[1]);
+      prices[t.slug] = {
+        name: t.name,
+        price,
+        volume: t.volume,
+        perMl: Math.round((price / t.volume) * 10) / 10,
+        at: new Date().toISOString().slice(0, 10),
+      };
+      console.log(`  ${String(price).padStart(6)}円 / ${String(t.volume).padStart(4)}mL = ${prices[t.slug].perMl} 円/mL  ${t.name.slice(0, 30)}`);
+    } catch (e) {
+      prices[t.slug] = { name: t.name, failed: true };
+      warnings.push(
+        `${t.slug}: 商品「${t.name}」の価格を**取得できませんでした** — ${e.message}\n` +
+          `      （「0円」ではありません。**数えられなかった**のです）`
       );
     }
   }
@@ -1416,6 +1510,15 @@ const receipt = {
     'そう書いてあることが、この仕組みの価値です。',
   ],
   verifiedAt: new Date().toISOString(),
+
+  // ★ 商品の価格。**公開のたびに機械が取り直したもの。**
+  //
+  //   products.json には価格を書きません。**書けば、いつか嘘になります。**
+  //   build.mjs は、このファイルを**読むだけ**です。書けません。
+  //
+  //   failed: true は「取得できなかった」。**「0円だった」ではありません。**
+  prices,
+
   articles: Object.fromEntries(
     articles.map((a) => {
       const pmids = [...new Set(a.pmids.map((p) => p.pmid))];

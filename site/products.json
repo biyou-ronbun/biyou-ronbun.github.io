@@ -96,7 +96,8 @@
         "criterion": "SPF値では選んでいません（効果が確かめられたのは SPF15+ で、「SPF50が必要」を裏付ける長期試験は見つかりませんでした）。選んだ基準は、顔と首に「指2本分」を毎日塗り切れること。110g という容量、伸びるジェルのテクスチャ、そして毎日使い切れる価格です",
         "basis": "つまり、伸ばすべきは数字ではなく、量のほうです。",
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bc2e7b.6cf1a546.55bc2e7c.df1fb43f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fjetdrug%2F4987241190850-01%2F",
-        "image": "https://shop.r10s.jp/jetdrug/cabinet/p02-03/4987241190850-01.jpg?_ex=300x300"
+        "image": "https://shop.r10s.jp/jetdrug/cabinet/p02-03/4987241190850-01.jpg?_ex=300x300",
+        "volume": 110
       }
     ]
   },
@@ -107,7 +108,8 @@
         "criterion": "レチノールの濃度が「0.3%」と商品名に明示されています。記事の基準は0.1〜0.3%。高濃度を選ぶ理由が、臨床試験のデータからは出てきませんでした",
         "basis": "濃度を上げても見た目は変わらず、副作用だけがはっきり増えていました",
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bc5e25.d4bc4d77.55bc5e26.bf633cf3/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosrx-official%2Ftherx_retinolcream03%2F",
-        "image": "https://shop.r10s.jp/cosrx-official/cabinet/08926095/10101955/imgrc0115565484.jpg?_ex=300x300"
+        "image": "https://shop.r10s.jp/cosrx-official/cabinet/08926095/10101955/imgrc0115565484.jpg?_ex=300x300",
+        "volume": 20
       }
     ]
   },
@@ -122,7 +124,8 @@
           "新しくて高機能とされる誘導体ほど、ヒトでの根拠が薄い"
         ],
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bc86fa.ff1bdfd5.55bc86fb.ba62e819/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpaulaschoicejapan%2F7770%2F",
-        "image": "https://shop.r10s.jp/paulaschoicejapan/cabinet/serum/10620282/imgrc0117136129.jpg?_ex=300x300"
+        "image": "https://shop.r10s.jp/paulaschoicejapan/cabinet/serum/10620282/imgrc0117136129.jpg?_ex=300x300",
+        "volume": 20
       }
     ]
   },
@@ -133,7 +136,8 @@
         "criterion": "塗るタイプのもの。飲むタイプではありません",
         "basis": "塗るほうは独立資金でも確認され、飲むほうは独立資金の試験が1本もありませんでした",
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bc5eca.ec0121d7.55bc5ecb.3cd4a3bc/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmebox%2Fj4987241155712%2F",
-        "image": "https://shop.r10s.jp/cosmebox/cabinet/item50/j4987241155712_1.jpg?_ex=300x300"
+        "image": "https://shop.r10s.jp/cosmebox/cabinet/item50/j4987241155712_1.jpg?_ex=300x300",
+        "volume": 170
       }
     ]
   },
@@ -144,7 +148,8 @@
         "criterion": "入浴後に塗るものです。「3分以内」は気にしなくて構いません。試験で分かれ目になっていたのは速さではなく「塗るか塗らないか」でした。だから選んだ基準は、毎日続けられること。400mlが2本という容量と、1本あたりの価格です",
         "basis": "「3分以内に保湿」の\"3分\"に、根拠は見つかりませんでした",
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bc5fd4.8f34ee51.55bc5fd5.56d64767/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbeautyeveryday%2F4902111778396%2F",
-        "image": "https://shop.r10s.jp/beautyeveryday/cabinet/11613251/imgrc0184363060.jpg?_ex=300x300"
+        "image": "https://shop.r10s.jp/beautyeveryday/cabinet/11613251/imgrc0184363060.jpg?_ex=300x300",
+        "volume": 800
       }
     ]
   },

@@ -2787,3 +2787,59 @@ a { color: var(--rose); }
 @media (max-width: 600px) {
   .ing-norank { margin-left: -20px; margin-right: -20px; padding: 22px 20px 18px; }
 }
+
+/* 1mLあたりの単価。★ 判定ではなく、算数。 */
+.prod-price {
+  display: block;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--bg-wash);
+  border-left: 2px solid var(--ink);
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.prod-price-at {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--ink-mute);
+  letter-spacing: .02em;
+}
+
+.products-order {
+  margin: -12px 0 24px;
+  padding: 14px 16px;
+  border: 1px dashed var(--rule);
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--ink-soft);
+}
+
+/* 商品一覧。★ 記事ごとにグループを分ける。カテゴリをまたいだ順位は無い。 */
+.prod-group {
+  margin: 48px 0 0;
+  padding-top: 36px;
+  border-top: 1px solid var(--rule);
+}
+.prod-group:first-of-type { border-top: 0; padding-top: 0; }
+
+.prod-group-title {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: .03em;
+  margin: 0 0 12px;
+}
+.prod-group-crit {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.95;
+  color: var(--ink-soft);
+}
+.prod-group-from {
+  margin: 0 0 22px;
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--ink-mute);
+}

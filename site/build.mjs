@@ -176,8 +176,54 @@ const products = JSON.parse(read(join(SITE, 'products.json')));
 // 商品を1つでも出す記事には、PR表記が自動で付く。
 // これは景品表示法（ステマ規制）の義務なので、外せない仕組みにしてある。
 
-const itemsFor = (slug) =>
-  (products[slug]?.items ?? []).filter((i) => i.url && i.name);
+// ★★ 商品の並び順は「1mLあたりの価格が安い順」。
+//
+//   **これは判定ではありません。算数です。**
+//
+//   並んでいるのは「記事が示した基準を、全部満たしている商品」だけです。
+//   **基準を満たすかどうかは、順位ではなく、通るか通らないかです。**
+//   通ったものの中で、あとは単価の安い順に並べているだけ。
+//
+//   ★ 「効く順」は作れません。
+//     比較できる効果量を持つ論文が 88本中7本しかなく、測っているものもバラバラ
+//     （皮脂の量 / 紫外線で赤くなるまでの時間 / シワの深さ / 水分量）。
+//     **1つの物差しに乗せる方法が、存在しません。**
+//
+//   ★ 「根拠の強い順」も作りません。実際に計算したら 1位がコラーゲンでした。
+//     コラーゲンの記事の結論は「独立資金の試験は効果を支持していない」。
+//     **「1位」が「一番いい」ではなく「一番はっきり分かっている」になり、逆の意味に読まれます。**
+//
+//   ★ そして、単価の順位は**売れません。**
+//     企業が上位に来る方法は「値下げする」ことだけ。**掲載料では買えない。**
+//     判定を持たなければ、売る対象が存在しません。
+//
+//   ★ 価格は verify.mjs が**公開のたびに取り直します。** products.json には書きません。
+//     **書けば、いつか嘘になります。**
+//     取れなかった商品は、単価を出さずに末尾に置きます（「0円」とは書きません）。
+
+const priceOf = (slug, name) => {
+  const p = verified?.prices?.[slug];
+  if (!p || p.failed || p.name !== name) return null;
+  return p;
+};
+
+const itemsFor = (slug) => {
+  const items = (products[slug]?.items ?? []).filter((i) => i.url && i.name);
+  return items
+    .map((i) => ({ ...i, _price: priceOf(slug, i.name) }))
+    .sort((a, b) => {
+      // 価格が取れなかったものは、いちばん後ろ。**推測で順位を付けない。**
+      const x = a._price?.perMl ?? Infinity;
+      const y = b._price?.perMl ?? Infinity;
+      return x - y;
+    });
+};
+
+// 「1mLあたり◯円（YYYY-MM-DD時点）」の表示。取れなければ、何も書かない。
+const perMlLabel = (i) =>
+  i._price
+    ? `<span class="prod-price"><strong>1mLあたり ${i._price.perMl} 円</strong><span class="prod-price-at">${escapeHtml(i._price.at)} に機械が取得。<strong>価格は変わります</strong></span></span>`
+    : '';
 
 const prBanner = (slug) =>
   itemsFor(slug).length
@@ -202,6 +248,7 @@ const productBlock = (slug) => {
       <div class="prod-text">
         <a class="prod-name" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">${escapeHtml(i.name)}</a>
         <span class="prod-criterion">${escapeHtml(i.criterion)}</span>
+        ${perMlLabel(i)}
         <a class="prod-go" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">楽天で見る<span class="prod-go-note">広告</span></a>
       </div>
     </li>`
@@ -211,6 +258,7 @@ const productBlock = (slug) => {
   return `<aside class="products">
   <p class="products-title">この記事の基準に合うもの</p>
   <p class="products-lead">下は<strong>広告リンク</strong>です。ここから購入されると、このブログに収益が入ります。<strong>効果を保証するものではありません。</strong>「効く順」でも「人気順」でもありません。<strong>この記事が示した「選び方の基準」に合うかどうか、それだけです。</strong>基準に合うものが無いときは、何も置いていません。</p>
+  <p class="products-order"><strong>並び順は「1mLあたりの価格が安い順」です。</strong>これは<strong>順位ではなく、算数</strong>です。<strong>下の商品は、どれも基準を全部満たしています。</strong>満たすかどうかは通るか通らないかで、上下はありません。価格は<strong>公開のたびに機械が取り直しています</strong>が、<strong>変わります。</strong>必ず楽天のページでご確認ください。</p>
   <ul class="products-list">
 ${rows}
   </ul>
@@ -1625,10 +1673,23 @@ ${sortScript}
   const withItems = rows.filter((r) => r.items.length);
   const without = rows.filter((r) => !r.items.length);
 
+  // ★★ 記事ごとにグループを分ける。**カテゴリをまたいで並べない。**
+  //
+  //   日焼け止めとレチノール美容液の「1mLあたりの単価」を比べても、何も分かりません。
+  //   **単価の比較は、同じ基準の中でだけ意味を持ちます。**
+  //
+  //   グループ内は、単価の安い順（itemsFor が並べ替え済み）。
+  //   **グループ間には、順位がありません。**
   const cards = withItems
-    .flatMap(({ a, items }) =>
-      items.map(
-        (i) => `  <li class="prod">
+    .map(
+      ({ a, items }) => `<section class="prod-group">
+  <h2 class="prod-group-title">${escapeHtml(a.title)}</h2>
+  <p class="prod-group-crit">${escapeHtml(items[0].criterion)}</p>
+  <p class="prod-group-from">この基準は <a href="articles/${escapeAttr(a.slug)}.html">記事</a> から導いています${items.length > 1 ? '。<strong>下は1mLあたりの価格が安い順です（順位ではなく、算数です）</strong>' : ''}</p>
+  <ul class="products-list is-page">
+${items
+  .map(
+    (i) => `    <li class="prod">
     ${
       i.image
         ? `<a class="prod-thumb" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener" tabindex="-1" aria-hidden="true"><img src="${escapeAttr(i.image)}" alt="" loading="lazy" width="300" height="300"></a>`
@@ -1636,12 +1697,14 @@ ${sortScript}
     }
     <div class="prod-text">
       <a class="prod-name" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">${escapeHtml(i.name)}</a>
-      <span class="prod-criterion">${escapeHtml(i.criterion)}</span>
-      <span class="prod-from">この基準は <a href="articles/${escapeAttr(a.slug)}.html">${escapeHtml(a.title)}</a> から導いています</span>
+      ${perMlLabel(i)}
       <a class="prod-go" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">楽天で見る<span class="prod-go-note">広告</span></a>
     </div>
   </li>`
-      )
+  )
+  .join('\n')}
+  </ul>
+</section>`
     )
     .join('\n');
 
@@ -1655,12 +1718,11 @@ ${sortScript}
   const content = `<section class="hero is-narrow">
   <p class="hero-lead">基準に合う商品</p>
   <p class="hero-body">下は<strong>広告リンク</strong>です。ここから購入されると、このブログに収益が入ります。</p>
-  <p class="hero-body"><strong>「効く順」でも「人気順」でもありません。順位も点数もありません。</strong>記事が示した<strong>「選び方の基準」に合うかどうか、それだけ</strong>です。</p>
+  <p class="hero-body"><strong>「効く順」でも「人気順」でもありません。</strong>記事が示した<strong>「選び方の基準」に合うかどうか、それだけ</strong>です。</p>
+  <p class="hero-body"><strong>記事をまたいだ順位は、ありません。</strong>日焼け止めとレチノール美容液の単価を比べても、何も分からないからです。<strong>単価の比較は、同じ基準の中でだけ意味を持ちます。</strong></p>
 </section>
 
-<ul class="products-list is-page">
 ${cards}
-</ul>
 
 ${
   without.length
