@@ -109,6 +109,38 @@
         "count": 0,
         "searchedOn": "2026-07-12"
       }
+    ],
+    "oral-sunscreen": [
+      {
+        "query": "\"Polypodium leucotomos\" AND (randomized OR \"randomized controlled trial\"[pt])",
+        "count": 30,
+        "searchedOn": "2026-07-13"
+      },
+      {
+        "query": "\"oral photoprotection\" AND (supplement OR systemic)",
+        "count": 8,
+        "searchedOn": "2026-07-13"
+      },
+      {
+        "query": "(Nutroxsun OR \"Rosmarinus officinalis\" AND Citrus) AND (skin AND ultraviolet)",
+        "count": 2,
+        "searchedOn": "2026-07-13"
+      },
+      {
+        "query": "oral supplement AND topical sunscreen AND (compared OR comparison OR versus) AND (erythema OR \"sun protection factor\")",
+        "count": 1,
+        "searchedOn": "2026-07-13"
+      },
+      {
+        "query": "(\"Polypodium leucotomos\" OR \"oral photoprotection\" OR \"systemic photoprotection\") AND (wrinkle OR wrinkles OR photoaging OR photoageing OR \"skin cancer\") AND (\"randomized controlled trial\"[pt])",
+        "count": 5,
+        "searchedOn": "2026-07-13"
+      },
+      {
+        "query": "(oral OR systemic OR dietary) AND (photoprotection OR photoprotective) AND (\"sun protection factor\" OR \"SPF equivalent\")",
+        "count": 30,
+        "searchedOn": "2026-07-13"
+      }
     ]
   }
 }

@@ -443,7 +443,8 @@
       "confirmed": "abstract",
       "articles": [
         "sunscreen-spf",
-        "skin-fasting"
+        "skin-fasting",
+        "oral-sunscreen"
       ]
     },
     {
@@ -1228,6 +1229,150 @@
       "confirmed": "bibliographic",
       "articles": [
         "vitamin-c-derivatives"
+      ]
+    },
+    {
+      "pmid": "41182568",
+      "title": "Changes in ultraviolet B radiation-induced DNA damage and erythema after oral nicotinamide and polypodium leucotomos in healthy volunteers: an intraindividual controlled trial",
+      "journal": "Photochemical & Photobiological Sciences",
+      "year": 2025,
+      "design": "個体内対照試験（著者自身が限界として「非ランダム化」と明記）",
+      "evidenceType": "clinical-trial",
+      "subjects": "健康なボランティア47人・肌タイプI〜III・デンマーク・30日間",
+      "fundingType": "none",
+      "fundingNote": "資金提供の記載なし。著者9名全員が「利益相反なし」と申告し、所属はすべて大学病院・大学（オールボー大学病院、コペンハーゲン大学病院ビスペビャウ、コペンハーゲン大学、グルノーブル・アルプ大学）。企業所属の著者はいない",
+      "coiNote": "全著者が利益相反なしと申告。API で全文を確認",
+      "confirmed": "abstract",
+      "articles": [
+        "oral-sunscreen"
+      ]
+    },
+    {
+      "pmid": "41838346",
+      "title": "Changes in ultraviolet a radiation-induced thymidine dimers and erythema after oral nicotinamide or polypodium leucotomos extract in healthy volunteers: a randomized intraindividual trial",
+      "journal": "Photochemical & Photobiological Sciences",
+      "year": 2026,
+      "design": "ランダム化個体内試験",
+      "evidenceType": "rct",
+      "subjects": "健康なボランティア50人・肌タイプI〜III・デンマーク・30日間",
+      "fundingType": "none",
+      "fundingNote": "資金提供の記載なし。著者全員が「利益相反なし」と申告。所属は大学病院・大学。論文1（PMID 41182568）と同じ研究グループ",
+      "coiNote": "全著者が利益相反なしと申告。API で全文を確認",
+      "confirmed": "abstract",
+      "articles": [
+        "oral-sunscreen"
+      ]
+    },
+    {
+      "pmid": "27374032",
+      "title": "Skin photoprotective and antiageing effects of a combination of rosemary (Rosmarinus officinalis) and grapefruit (Citrus paradisi) polyphenols",
+      "journal": "Food & Nutrition Research",
+      "year": 2016,
+      "design": "ランダム化・並行群間・プラセボ対照・盲検試験",
+      "evidenceType": "rct",
+      "subjects": "イタリアの女性90人・平均約52歳・肌タイプI〜III（約6割がタイプIII）・2か月",
+      "fundingType": "industry",
+      "fundingNote": "全文（PMC4931025）の funding 節に明記——「This study was funded by Monteloeder S.L. and Nutrafur S.A. Monteloeder was involved in the design of the study protocol and provided the test products samples.」Monteloeder S.L. は、この試験の対象成分ニュートロックスサンの製造元。資金提供に加えて試験プロトコルの設計にも関与している",
+      "coiNote": "著者8名の所属: Caturla N = Monteloeder S.L.（成分メーカー）、Castillo J・Benavente-García O = Nutrafur S.A.（原料企業、Frutarom Group）、Nobile V・Michelotti A・Cestone E = Complife Group（受託試験会社）。残り2名は Miguel Hernández 大学",
+      "confirmed": "fulltext",
+      "articles": [
+        "oral-sunscreen"
+      ]
+    },
+    {
+      "pmid": "40218997",
+      "title": "Effects of Eight-Week Supplementation Containing Red Orange and Polypodium leucotomos Extracts on UVB-Induced Skin Responses: A Randomized Double-Blind Placebo-Controlled Trial",
+      "journal": "Nutrients",
+      "year": 2025,
+      "design": "ランダム化・二重盲検・プラセボ対照試験",
+      "evidenceType": "rct",
+      "subjects": "色白の参加者54人（各群27人）・肌タイプI〜III・スロベニア・8週間",
+      "fundingType": "industry",
+      "fundingNote": "COI 欄に「this study received funding from Tosla d.o.o.」と明記（資金提供者は試験設計・データ収集・解析・執筆・公表の判断に関与していないと申告）。資金提供欄はスロベニア研究革新庁と Tosla d.o.o. の併記",
+      "coiNote": "著者の所属は VIST 応用科学大学・栄養研究所・リュブリャナ大学医療センター。企業所属の著者は記載されていない",
+      "confirmed": "abstract",
+      "articles": [
+        "oral-sunscreen"
+      ]
+    },
+    {
+      "pmid": "31797305",
+      "title": "Prospective Evaluation of the Efficacy of a Food Supplement in Increasing Photoprotection and Improving Selective Markers Related to Skin Photo-Ageing",
+      "journal": "Dermatology and Therapy",
+      "year": 2020,
+      "design": "非盲検（open）・単施設・前向き試験。対照群なし・プラセボなし",
+      "evidenceType": "clinical-trial",
+      "subjects": "30人（女性27人・男性3人）・肌タイプI〜III・12週間",
+      "fundingType": "industry",
+      "fundingNote": "資金提供の記載はないが、著者6名のうち5名（Granger C, Aladrén S, Delgado J, Garre A, Trullas C）が ISDIN 社員であることを COI 欄で申告している。ISDIN は日焼け止め・皮膚科向け製品を扱う企業",
+      "coiNote": "残る1名 Gilaberte Y はサラゴサの Miguel Servet 大学病院皮膚科",
+      "confirmed": "abstract",
+      "articles": [
+        "oral-sunscreen"
+      ]
+    },
+    {
+      "pmid": "40196953",
+      "title": "The Utility of Oral Polypodium Leucotomos Extract for Dermatologic Diseases: A Systematic Review",
+      "journal": "Journal of Drugs in Dermatology",
+      "year": 2025,
+      "design": "システマティックレビュー（AHRQ・PRISMA 準拠と記載）",
+      "evidenceType": "systematic-review",
+      "subjects": "152件中21件を組入れ（うちランダム化比較試験11件）",
+      "fundingType": "unverified",
+      "fundingNote": "PubMed の記録に資金提供・COI の記載がない。本文が有料のため一次情報で確認できていない",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "articles": [
+        "oral-sunscreen"
+      ]
+    },
+    {
+      "pmid": "38845468",
+      "title": "Sunproofing from within: A deep dive into oral photoprotection strategies in dermatology",
+      "journal": "Photodermatology, Photoimmunology & Photomedicine",
+      "year": 2024,
+      "design": "総説",
+      "evidenceType": "review",
+      "subjects": "（総説）",
+      "fundingType": "unverified",
+      "fundingNote": "PubMed の記録に資金提供・COI の記載がない。著者の所属に Probity Medical Research（受託試験機関）を含む",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "articles": [
+        "oral-sunscreen"
+      ]
+    },
+    {
+      "pmid": "9361129",
+      "title": "Topical or oral administration with an extract of Polypodium leucotomos prevents acute sunburn and psoralen-induced phototoxic reactions as well as depletion of Langerhans cells in human skin",
+      "journal": "Photodermatology, Photoimmunology & Photomedicine",
+      "year": 1997,
+      "design": "臨床試験（PubMed の種別はランダム化比較試験）",
+      "evidenceType": "rct",
+      "subjects": "健康なボランティア21人（一部はソラレン投与下）",
+      "fundingType": "unverified",
+      "fundingNote": "PubMed の記録に資金提供・COI の記載がない",
+      "coiNote": "報告された MED の上昇（2.8倍）は、近年の試験（+2〜3割）と桁が異なる。単独で引用しないこと",
+      "confirmed": "abstract",
+      "articles": [
+        "oral-sunscreen"
+      ]
+    },
+    {
+      "pmid": "35684041",
+      "title": "Photoprotective and Antiaging Effects of a Standardized Red Orange (Citrus sinensis (L.) Osbeck) Extract in Asian and Caucasian Subjects: A Randomized, Double-Blind, Controlled Study",
+      "journal": "Nutrients",
+      "year": 2022,
+      "design": "ランダム化・二重盲検・対照試験",
+      "evidenceType": "rct",
+      "subjects": "アジア人と白人 計110人・56日間（このテーマでアジア人を含む数少ない試験）",
+      "fundingType": "industry",
+      "fundingNote": "COI 欄で著者 V.Z. が Bionap srl の社員であることを申告。資金提供者は試験設計・解析・執筆・公表の判断に関与していないと記載",
+      "coiNote": "具体的な数値がアブストラクトに記載されていないため、数値は未確認",
+      "confirmed": "abstract",
+      "articles": [
+        "oral-sunscreen"
       ]
     }
   ]
