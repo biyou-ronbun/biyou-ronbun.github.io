@@ -1493,20 +1493,69 @@ console.log(`  built  evidence/ (${evidenceSheets.length} 個)`);
   const html = rows
     .map(
       (r) => `    <tr>
-      <td class="ing-name"><a href="evidence/${escapeAttr(r.a.slug)}.html">${escapeHtml(r.a.title)}</a></td>
-      <td class="ing-n">${r.n}</td>
-      <td class="ing-n${r.industry ? ' is-mark' : ''}">${r.industry}</td>
-      <td class="ing-n${r.noAdverse ? ' is-mark' : ''}">${r.noAdverse}</td>
-      <td class="ing-n${r.noDose ? ' is-mark' : ''}">${r.noDose}</td>
-      <td class="ing-n">${r.products}</td>
+      <td class="ing-name" data-v="${escapeAttr(r.a.title)}"><a href="evidence/${escapeAttr(r.a.slug)}.html">${escapeHtml(r.a.title)}</a></td>
+      <td class="ing-n" data-v="${r.n}">${r.n}</td>
+      <td class="ing-n${r.industry ? ' is-mark' : ''}" data-v="${r.industry}">${r.industry}</td>
+      <td class="ing-n${r.noAdverse ? ' is-mark' : ''}" data-v="${r.noAdverse}">${r.noAdverse}</td>
+      <td class="ing-n${r.noDose ? ' is-mark' : ''}" data-v="${r.noDose}">${r.noDose}</td>
+      <td class="ing-n" data-v="${r.products}">${r.products}</td>
     </tr>`
     )
     .join('\n');
 
+  // ★★ 並べ替えは、読者がする。**うちは順位を決めない。**
+  //
+  //   「効果のランキング」は作れない。**比較できる効果量が 89本中7本しかない。**
+  //   測っているものもバラバラ（皮脂量・MED・シワの深さ・水分量）。
+  //   **1つの物差しに乗せる方法が存在しない。** 重みを発明すれば、それは捏造。
+  //
+  //   「根拠の強さのランキング」は作れる。**だが、作らない。** 実際に計算して確かめた:
+  //
+  //     1位 コラーゲン ← 記事の結論は「独立資金の試験は効果を支持していない」
+  //
+  //   **読者は「1位 コラーゲン」を「コラーゲンが一番いい」と読む。数字は逆を意味している。**
+  //   スコアが測っているのは**引用した論文の質**であって、**成分の良さではない。**
+  //   **どんな重みを付けても、この2つは一致しない。**
+  //
+  //   そして下位3つ（ターンオーバー / ビタミンC誘導体 / PDRN）は、
+  //   **CLAUDE.md が名指しで却下している「糾弾リストの目次」そのもの。**
+  //
+  //   ★ だから、重みは読者が決める。
+  //     **重みが読者のものなら、うちに「判定」という資産は生まれない。売る対象が存在しない。**
+  const sortScript = `<script>
+(function () {
+  var t = document.getElementById('ing-table');
+  if (!t) return;
+  var tb = t.tBodies[0];
+  t.querySelectorAll('th[data-col]').forEach(function (th) {
+    th.addEventListener('click', function () {
+      var i = Number(th.dataset.col);
+      var num = th.dataset.type === 'n';
+      var desc = th.getAttribute('aria-sort') !== 'descending';
+      t.querySelectorAll('th[data-col]').forEach(function (x) { x.setAttribute('aria-sort', 'none'); });
+      th.setAttribute('aria-sort', desc ? 'descending' : 'ascending');
+      var rows = Array.prototype.slice.call(tb.rows);
+      rows.sort(function (a, b) {
+        var x = a.cells[i].dataset.v, y = b.cells[i].dataset.v;
+        var r = num ? Number(x) - Number(y) : String(x).localeCompare(String(y), 'ja');
+        return desc ? -r : r;
+      });
+      rows.forEach(function (r) { tb.appendChild(r); });
+    });
+  });
+})();
+</script>`;
+
   const content = `<section class="hero is-narrow">
   <p class="hero-lead">成分ごとの証拠</p>
   <p class="hero-body">記事ごとに、根拠にした論文を<strong>1本ずつ表にしています。</strong>何が測られ、どの濃度で試され、<strong>どんな副作用が報告されたか。</strong></p>
-  <p class="hero-body"><strong>解説は1行も書いていません。数字だけです。</strong>「効く順」にも並べていません。<strong>並び順は、論文の多い順です。</strong></p>
+  <p class="hero-body"><strong>解説は1行も書いていません。数字だけです。</strong></p>
+</section>
+
+<section class="ing-norank">
+  <p><strong>★ 順位は付けていません。並べ替えは、あなたがしてください。</strong>見出しを押すと並び替わります。</p>
+  <p class="ev-note"><strong>「効く順」は、作れませんでした。</strong>比較できる効果量を持つ論文が、88本中<strong>7本</strong>しかありません。しかもその7本が測っているものはバラバラです（皮脂の量、紫外線で赤くなるまでの時間、シワの深さ、水分量）。<strong>1つの物差しに乗せる方法が、ありません。</strong>重みを決めれば順位は作れますが、<strong>その重みには何の根拠もありません。</strong></p>
+  <p class="ev-note"><strong>「根拠の強い順」も、作りませんでした。</strong>こちらは計算できます。実際に計算したら、<strong>1位はコラーゲンでした。</strong>コラーゲンの記事の結論は「<strong>独立資金の試験は、効果を支持していなかった</strong>」です。<strong>「1位」は「一番いい」ではなく「一番はっきり分かっている」でした。数字が、逆の意味に読まれます。</strong></p>
 </section>
 
 <section class="ing-summary">
@@ -1519,15 +1568,15 @@ console.log(`  built  evidence/ (${evidenceSheets.length} 個)`);
 </section>
 
 <div class="ev-tablewrap">
-<table class="ev-table ing-table">
+<table class="ev-table ing-table" id="ing-table">
   <thead>
     <tr>
-      <th>テーマ</th>
-      <th>論文</th>
-      <th>メーカー<br>資金</th>
-      <th>副作用の<br>記載なし</th>
-      <th>濃度の<br>記載なし</th>
-      <th>基準に<br>合う商品</th>
+      <th data-col="0" data-type="s" aria-sort="none">テーマ</th>
+      <th data-col="1" data-type="n" aria-sort="none">論文</th>
+      <th data-col="2" data-type="n" aria-sort="none">メーカー<br>資金</th>
+      <th data-col="3" data-type="n" aria-sort="none">副作用の<br>記載なし</th>
+      <th data-col="4" data-type="n" aria-sort="none">濃度の<br>記載なし</th>
+      <th data-col="5" data-type="n" aria-sort="none">基準に<br>合う商品</th>
     </tr>
   </thead>
   <tbody>
@@ -1535,6 +1584,7 @@ ${html}
   </tbody>
 </table>
 </div>
+${sortScript}
 
 <p class="back-to-index"><a class="back-link" href="index.html">記事一覧へ</a></p>`;
 

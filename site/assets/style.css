@@ -2756,3 +2756,34 @@ a { color: var(--rose); }
   .ing-name { min-width: 150px; }
   .prod-zero-block { padding: 24px 20px 20px; }
 }
+
+/* 並べ替えは読者がする。★ うちは順位を決めない。 */
+.ing-norank {
+  margin: 26px 0 0;
+  padding: 26px 26px 20px;
+  border-left: 3px solid var(--ink);
+  background: var(--bg-wash);
+}
+.ing-norank p { margin: 0 0 12px; font-size: 14px; line-height: 1.95; }
+.ing-norank p:last-child { margin-bottom: 0; }
+
+.ing-table th[data-col] {
+  cursor: pointer;
+  user-select: none;
+  padding-right: 16px;
+  position: relative;
+}
+.ing-table th[data-col]:hover { color: var(--ink); }
+.ing-table th[data-col]::after {
+  content: "↕";
+  position: absolute;
+  right: 2px;
+  opacity: .35;
+  font-size: 10px;
+}
+.ing-table th[aria-sort="descending"]::after { content: "↓"; opacity: 1; }
+.ing-table th[aria-sort="ascending"]::after  { content: "↑"; opacity: 1; }
+
+@media (max-width: 600px) {
+  .ing-norank { margin-left: -20px; margin-right: -20px; padding: 22px 20px 18px; }
+}
