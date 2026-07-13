@@ -1374,6 +1374,38 @@
       "articles": [
         "oral-sunscreen"
       ]
+    },
+    {
+      "pmid": "41751449",
+      "title": "Oral and Intranasal Administration of Polydeoxyribonucleotide Isolated from Porphyra sp. Ameliorates Acute Lung Injury via Suppressing Proinflammatory Cytokine Production in Mice",
+      "journal": "Current Issues in Molecular Biology",
+      "year": 2026,
+      "design": "動物実験（LPS で急性肺障害を起こしたマウスに、経口・経鼻で投与）＋ 培養細胞（RAW 264.7）",
+      "evidenceType": "animal",
+      "subjects": "マウス。ヒトではない",
+      "fundingType": "industry",
+      "fundingNote": "資金提供は中小ベンチャー企業部・山林庁（韓国）。ただし著者4名のうち2名（Lee WS、Han J）の所属が All In One GENETECH Ltd. と DERMARE Co., Ltd. の2社",
+      "coiNote": "著者2名が上記2社に雇用されていることを明記したうえで、残りの著者は商業的・金銭的関係が無いと申告している。測っているのは肺の炎症であって、皮膚のアウトカムは1つも測っていない。PDRN の由来はアマノリ属（海藻）で、サーモンではない",
+      "confirmed": "abstract",
+      "articles": [
+        "pdrn-salmon-dna"
+      ]
+    },
+    {
+      "pmid": "8511753",
+      "title": "Pharmacokinetics, absorption, distribution and disposition of [125I]-defibrotide following intravenous or oral administration in the rat",
+      "journal": "Thrombosis Research",
+      "year": 1993,
+      "design": "動物実験（ラットの薬物動態。放射性ヨウ素で標識したデフィブロタイドを静脈内または経口で投与）",
+      "evidenceType": "animal",
+      "subjects": "ラット。ヒトではない",
+      "fundingType": "unverified",
+      "fundingNote": "PubMed の記録に資金提供・COI の記載がない。第1著者の所属は Inveresk Research International（受託研究機関）で、共著者に Crinos 社系の研究者名（Pescador R、Mantovani M、Prino G）が並ぶが、所属の記載は PubMed に無く確認できていない",
+      "coiNote": "経口投与後のバイオアベイラビリティを「見かけ上（apparently）58%」と報告している。ただし測定しているのは放射能の量であって、PDRN が分解されずに届いたかどうかではない。組織分布で高値だったのは血流の多い臓器・甲状腺・大動脈壁で、皮膚は測定対象に挙げられていない。対象はデフィブロタイド（PDRN 系の医薬品）であって、化粧品・サプリの PDRN そのものではない",
+      "confirmed": "abstract",
+      "articles": [
+        "pdrn-salmon-dna"
+      ]
     }
   ]
 }
