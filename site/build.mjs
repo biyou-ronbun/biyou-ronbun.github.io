@@ -217,6 +217,8 @@ const tpl = {
   membership: read(join(SITE, 'templates', 'membership.html')),
   tokushoho: read(join(SITE, 'templates', 'tokushoho.html')),
   cta:     read(join(SITE, 'templates', 'cta.html')),
+  // 英語の「装置」ページ。記事ではない。うちの検証の手続きそのものを見せる1枚。
+  'verified-en': read(join(SITE, 'templates', 'verified-en.html')),
 };
 
 // カテゴリ名 → URL に使える名前。
@@ -524,8 +526,11 @@ const jsonLd = (a) => {
   return `<script type="application/ld+json">${JSON.stringify(data)}</script>`;
 };
 
-const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath, ogSlug, article, noindex }) =>
+const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath, ogSlug, article, noindex, lang }) =>
   fill(tpl.layout, {
+    // ★ 英語のページに lang="ja" のままだと、
+    //   Google は「日本語のページに、なぜか英語が書いてある」と判断します。
+    LANG: lang ?? cfg.language ?? 'ja',
     // ★ 指定が無いと、Google は画像を小さくしか出しません（Discover にも載りません）。
     //   うちの画像は「論文の数値グラフ」です。**小さく出されると、意味が消えます。**
     //   max-snippet:-1 は、説明文の長さの制限を外す指定（「ここまでは言えません」が切られないように）。
@@ -564,6 +569,9 @@ const renderPage = ({ content, headTitle, metaDesc, canonical, ogType, rootPath,
           cfg.xUrl && `      <a href="${escapeAttr(cfg.xUrl)}" target="_blank" rel="noopener me">X</a>`,
           cfg.noteUrl && `      <a href="${escapeAttr(cfg.noteUrl)}" target="_blank" rel="noopener me">note</a>`,
           cfg.hatenaUrl && `      <a href="${escapeAttr(cfg.hatenaUrl)}" target="_blank" rel="noopener me">はてなブログ</a>`,
+          // 英語の「装置」ページ。日本語の読者には関係が無いので、目立たせない。
+          // ★ ただし置く。ここが、英語圏から被リンクが入ってくる唯一の入口。
+          `      <a href="${rootPath}verified.html" hreflang="en">English: How this is verified</a>`,
         ]
           .filter(Boolean)
           .join('\n')}\n    </p>`
@@ -1632,6 +1640,108 @@ ${backstage}
   process.exitCode = 1;
 }
 
+// ---- 英語の「装置」ページ（/verified.html） -------------------------------
+//
+// ★ これは記事ではありません。**うちの検証の手続きそのもの**を見せる1枚です。
+//
+//   英語圏の調査の結論:
+//     ・PubMed の検索式を読者に渡している媒体      … 0件
+//     ・撤回論文を機械で監視している媒体            … 0件
+//     ・「AI が書いています」と開示している媒体      … 0件
+//
+//   **隙間はある。ただし、英語記事を出してはいけない。**
+//   うちの商品は記事ではなく関門で、その関門を通していない記事を出すことは、
+//   うちが批判してきた形そのものだからです。
+//
+//   **だから、出すのは記事ではなく装置です。ページは1枚だけ。**
+//   Google の「量産」リスクはゼロ。届く相手は一般検索ユーザーではなく、
+//   **検証の手続きそのものを面白がる集団（r/SkincareScience、化粧品化学者）。**
+//   **彼らは被リンクを持っています。うちに決定的に足りないものです。**
+//
+// ★ このページの数字は、すべて機械が数えます。**手で書いた数字を1つも載せません。**
+
+{
+  const searchList = Object.entries(searches);
+  const totalSearches = searchList.reduce((n, [, l]) => n + l.length, 0);
+  const zeroSearches = searchList.flatMap(([slug, l]) =>
+    l.filter((s) => s.count === 0).map((s) => ({ slug, ...s }))
+  );
+
+  const papersAll = existsSync(join(SITE, 'papers.json'))
+    ? JSON.parse(read(join(SITE, 'papers.json'))).papers ?? []
+    : [];
+
+  const industry = papersAll.filter((p) => p.fundingType === 'industry').length;
+
+  const numbers = `<div class="table-scroll">
+<table class="en-table">
+  <tbody>
+    <tr><th>Articles published</th><td>${published.length}</td></tr>
+    <tr><th>Papers queried against PubMed</th><td>${papersAll.length}</td></tr>
+    <tr><th>…of which industry-funded</th><td>${industry}</td></tr>
+    <tr><th><strong>Retracted papers found</strong></th><td><strong>${corrections.length}</strong></td></tr>
+    <tr><th><strong>PubMed queries handed to readers</strong></th><td><strong>${totalSearches}</strong></td></tr>
+    <tr><th>…of which returned zero results</th><td>${zeroSearches.length}</td></tr>
+    <tr><th>Last verified</th><td>${(verified?.verifiedAt ?? '').slice(0, 10)}</td></tr>
+  </tbody>
+</table>
+</div>`;
+
+  // 実際に投げた検索を1つ、見本として出す（機械が選ぶ。手で選ばない）
+  const sample = searches['turnover-28days']?.[0];
+  const sampleBlock = sample
+    ? `<aside class="redo">
+  <p class="redo-title">Example: "skin renews itself every 28 days"</p>
+  <p class="redo-lead">The single most repeated number in the beauty industry. We went looking for the paper that measured it.</p>
+  <ul class="redo-list">
+    <li>
+      <a href="https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(sample.query)}" target="_blank" rel="noopener"><code>${escapeHtml(sample.query)}</code></a>
+      <span class="redo-meta"><strong>${sample.count} results</strong> as of ${escapeHtml(sample.searchedOn)}</span>
+    </li>
+  </ul>
+  <p class="redo-note">Six results. <strong>All six are about rat lungs, rabbit vitreous humour, chicken bile acids, dog carnitine metabolism.</strong> The words "turnover" and "28 days" simply co-occur.<br><strong>We could not find a paper that measured human epidermal turnover at 28 days.</strong> The studies that did measure it report 39, 45, and 47–48 days.</p>
+</aside>`
+    : '';
+
+  const zeroBlock = zeroSearches.length
+    ? `<div class="table-scroll">
+<table class="en-table">
+  <thead><tr><th>Query</th><th>Results</th></tr></thead>
+  <tbody>
+${zeroSearches
+  .map(
+    (z) =>
+      `    <tr><td><a href="https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(z.query)}" target="_blank" rel="noopener"><code>${escapeHtml(z.query)}</code></a></td><td><strong>0</strong></td></tr>`
+  )
+  .join('\n')}
+  </tbody>
+</table>
+</div>
+<p class="en-note">Run them. <strong>The zero is the finding.</strong></p>`
+    : '';
+
+  write(
+    join(DIST, 'verified.html'),
+    renderPage({
+      content: fill(tpl['verified-en'], {
+        VERIFIED_NUMBERS: numbers,
+        SEARCH_EXAMPLE: sampleBlock,
+        ZERO_SEARCHES: zeroBlock,
+        ROOT: '',
+      }),
+      headTitle: 'How this blog is verified | Evidence, checked by machine',
+      metaDesc:
+        'Every cited paper is checked against PubMed for existence, title match, and retraction, before publication. Every PubMed query we ran is handed back to you, clickable. Written by AI, and we say so.',
+      canonical: `${baseUrl}/verified.html`,
+      ogType: 'website',
+      rootPath: '',
+      ogSlug: '_home',
+      lang: 'en',
+    })
+  );
+  console.log('  built  verified.html (英語の装置)');
+}
+
 // ---- 404 ---------------------------------------------------------------
 
 write(
@@ -1721,6 +1831,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <url><loc>${baseUrl}/about.html</loc></url>
 <url><loc>${baseUrl}/news.html</loc></url>
 <url><loc>${baseUrl}/check.html</loc></url>
+<url><loc>${baseUrl}/verified.html</loc></url>
 <url><loc>${baseUrl}/contact.html</loc></url>
 <url><loc>${baseUrl}/privacy.html</loc></url>
 ${categories.map((c) => `<url><loc>${baseUrl}/category/${catSlug(c)}.html</loc></url>`).join('\n')}

@@ -1,0 +1,107 @@
+<article class="post en">
+  <header class="post-header">
+    <h1 class="post-title">How this blog is verified</h1>
+    <p class="post-subtitle">Every claim, checked by machine. Every search, handed back to you.</p>
+  </header>
+
+  <div class="post-body">
+
+<p><strong>This is a Japanese beauty blog.</strong> The articles are in Japanese, and they are written by AI.</p>
+
+<p>This page is in English because the <em>machinery</em> is not in Japanese. <strong>The PubMed queries are already in English.</strong> You can run them yourself, right now, without reading a word of Japanese.</p>
+
+<p><strong>We are not asking you to trust us.</strong> We are handing you the tools to check.</p>
+
+<hr>
+
+<h2>What the machine checks, before anything is published</h2>
+
+<p>Every article is written by AI. <strong>We do not hide this.</strong></p>
+
+<p>Before an article goes live, a program queries the <a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">PubMed E-utilities API</a> for <strong>every single PMID cited</strong>, and checks three things.</p>
+
+<ol class="en-list">
+  <li><strong>Does the paper exist?</strong><br>A PMID that resolves to nothing is a fabricated citation. The build stops.</li>
+  <li><strong>Does the title match?</strong><br>A real PMID attached to a different paper's title is the most common form of citation fraud, and the hardest to spot by eye. The build stops.</li>
+  <li><strong>Has the paper been retracted?</strong><br>PubMed's <code>pubtype</code> field carries <code>Retracted Publication</code>. If a cited paper has been retracted and the article does not say so, <strong>the build stops.</strong></li>
+</ol>
+
+<p><strong>If one paper fails, the site does not publish.</strong> Not the article — the site.</p>
+
+{{VERIFIED_NUMBERS}}
+
+<p class="en-note">These numbers are written by the verification script itself (<code>site/verify.mjs</code> → <code>site/verified.json</code>). <strong>No human, and no AI agent, can type them by hand.</strong> There is no field in the article metadata where "verified: true" could be written. An article that has not passed the check cannot carry the receipt.</p>
+
+<hr>
+
+<h2>The part nobody else does: we hand you the search</h2>
+
+<p>Here is the problem with evidence-based beauty writing, including the good kind.</p>
+
+<p><strong>A writer says "I read thirty papers." The article cites two.</strong> What happened to the other twenty-eight? Which query was run? What came back? <strong>You cannot check. You can only trust.</strong></p>
+
+<p>Our core claim is almost always the same shape: <strong>"we looked for the source of this, and could not find it."</strong></p>
+
+<p><strong>That claim was, for a long time, the one thing on this site with no evidence behind it.</strong> The existence of papers was machine-verified. The titles were machine-verified. The retractions were machine-verified. <strong>But "we looked" was just us saying so.</strong></p>
+
+<p>So now the machine records the search, as a side effect of running it. Not the agent — <strong>the search tool itself writes the log.</strong> Every article ends with the queries, the counts, and the dates:</p>
+
+{{SEARCH_EXAMPLE}}
+
+<p><strong>Click it. It runs in your browser, against PubMed, right now.</strong></p>
+
+<p>And if a search returns nothing, <strong>that is the strongest thing this blog can publish</strong> — because you can confirm the nothing yourself.</p>
+
+{{ZERO_SEARCHES}}
+
+<hr>
+
+<h2>Two things this machinery caught, in its first week</h2>
+
+<h3>1. Our own flagship article was imprecise</h3>
+
+<p>The article on the "28-day skin turnover cycle" said: <em>"the PubMed search returns 0 results."</em></p>
+
+<p><strong>It returns six.</strong> All six are about rat lungs, rabbit vitreous humour, chicken bile acids, dog carnitine metabolism. <strong>None of them are about skin at all.</strong></p>
+
+<p>The conclusion held. <strong>The sentence did not.</strong> We rewrote it to show the query, the count, and what actually came back.</p>
+
+<h3>2. A retracted paper is still being cited in marketing</h3>
+
+<p>The first Phase III trial of polynucleotide (PDRN, "salmon DNA") filler was <strong>retracted in 2016</strong> — for misstated conflict-of-interest and funding disclosures. A 2025 trial in the same field was retracted in 2026.</p>
+
+<p><strong>The machine found both.</strong> They are logged in an append-only corrections ledger, and the entry <strong>cannot be removed by deleting the citation</strong> — which is precisely the loophole the ledger exists to close.</p>
+
+<hr>
+
+<h2>What the machine does <em>not</em> check</h2>
+
+<p>This is the part that matters most, and it is the part that other "science-backed" beauty sites do not write.</p>
+
+<ul class="en-list">
+  <li><strong>Whether the papers are any good.</strong> A machine can confirm a paper exists. It cannot confirm the paper is right.</li>
+  <li><strong>Whether we searched well.</strong> The log proves we ran <em>a</em> query. It does not prove we ran <em>the right</em> query. <strong>A badly written query returns zero results, and zero results are our strongest evidence.</strong> That is a real hazard, and we say so.</li>
+  <li><strong>Medical accuracy.</strong> <strong>There is no doctor reviewing this.</strong> No dermatologist. No physician. We say so on every article.</li>
+</ul>
+
+<p><strong>We do not recommend products. We do not rank anything. We do not score anything. We have no certification mark.</strong></p>
+
+<p>That is not modesty. It is structural. <strong>A verdict is an asset, and assets attract buyers.</strong> Consumer Reports refused advertising for 86 years — and now charges manufacturers a fee to display the "CR Recommended" mark. <strong>Willpower does not hold that line. Not having the asset does.</strong></p>
+
+<hr>
+
+<h2>Everything here is open</h2>
+
+<p>The articles, the verification script, the PubMed query logs, the corrections ledger, the figure data with its provenance — <strong>all of it is in a public repository.</strong></p>
+
+<p><strong>There is nothing behind a paywall. There is nothing hidden.</strong></p>
+
+<p class="en-cta">
+  <a class="back-link" href="{{ROOT}}index.html">The blog (Japanese)</a>
+  <a class="back-link" href="https://github.com/biyou-ronbun/biyou-ronbun.github.io" target="_blank" rel="noopener">The source code</a>
+</p>
+
+<p class="en-note"><strong>If you find a mistake in the machinery, or in an article, we want to know.</strong> That is not a courtesy — a blog whose entire product is "we checked" has no defence against being wrong except being corrected.</p>
+
+  </div>
+</article>
