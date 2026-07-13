@@ -77,6 +77,44 @@ const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 //   ・見出し（# で始まる行）
 //   ・「」の中（引用の途中で切ると、意味が変わる）
 
+// ---- 太字の番号つき項目を、小見出しに格上げする ----------------------
+//
+// 元記事はこう書かれています。
+//
+//   **1. 「28日は嘘だ」とは書けません。**
+//   見つからなかったのは「28日を裏付ける論文」であって……
+//
+// これは**紙の書き方**です。スマホでは、太字と本文が地続きに見えて、
+// **どこで話が変わったのかが分かりません。**
+//
+// 小見出し（###）に格上げすると、目次にも出て、飛ばし読みができるようになります。
+//
+//   ### 1. 「28日は嘘だ」とは書けません
+//   見つからなかったのは「28日を裏付ける論文」であって……
+//
+// ★ 格上げするのは「**数字. …**」で始まる段落だけ。
+//   ふつうの強調（文の途中の **これは大事です**）には触りません。
+
+const promoteHeadings = (text) =>
+  text
+    .split(/\n\n+/)
+    .map((p) => {
+      const b = p.trim();
+      // 「**1. …。**」または「**1. …。** 続きの文」の形
+      const m = b.match(/^\*\*(\d+[.．]\s*[^*]+?)\*\*\s*([\s\S]*)$/);
+      if (!m) return b;
+
+      // 見出しの末尾の「。」は落とす（見出しに句点は要らない）
+      const head = m[1].trim().replace(/[。.]$/, '');
+      const rest = m[2].trim();
+
+      // 見出しが長すぎるなら、格上げしない（見出しは短くないと読めない）
+      if (head.length > 85) return b;
+
+      return rest ? `### ${head}\n\n${rest}` : `### ${head}`;
+    })
+    .join('\n\n');
+
 const MAX_PARA = 110; // 1段落の目安（全角）
 
 const breakParagraphs = (text) => {
@@ -147,7 +185,8 @@ const breakParagraphs = (text) => {
     if (acc.trim()) out.push(acc.trim());
   }
 
-  return out.join('\n\n');
+  // 改行を入れてから、太字の番号つき項目を小見出しに格上げする（順番が大事）
+  return promoteHeadings(out.join('\n\n'));
 };
 
 // 長すぎる節を、段落の切れ目で切る。
@@ -204,7 +243,17 @@ for (const a of meta) {
           return `- **${r.label}** … ${v ?? ''}`;
         })
         .join('\n') +
-      (fig.unit ? `\n\n${fig.unit}` : '') +
+      // unit は「日（「28日」を実測した論文は…）」のように、単位＋注記が混ざっている。
+      // そのまま出すと「日（…）」で始まって意味が通らないので、分けて出す。
+      (fig.unit
+        ? (() => {
+            const i = fig.unit.indexOf('（');
+            if (i <= 0) return `\n\n※ 単位: ${fig.unit}`;
+            const u = fig.unit.slice(0, i);
+            const note = fig.unit.slice(i + 1).replace(/）\s*$/, '');
+            return `\n\n※ 単位: ${u}\n\n※ ${note}`;
+          })()
+        : '') +
       '\n'
     : '';
 
@@ -233,10 +282,12 @@ for (const a of meta) {
 
 ${s
   .map(
-    (x) =>
-      `**${x.searchedOn} 時点で ${x.count} 件**\n\n` +
+    (x, i) =>
+      `### 検索 ${i + 1}（${x.searchedOn} 時点で **${x.count} 件**）\n\n` +
       `\`\`\`\n${x.query}\n\`\`\`\n\n` +
-      `→ https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(x.query)}\n`
+      // ★ 長いURLをそのまま出すと、読者の画面が壊れます（1行が数百字になる）。
+      //   リンクの形にすれば、文字は「この検索を PubMed で開く」だけです。
+      `**→ [この検索を PubMed で開く](https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(x.query)})**\n`
   )
   .join('\n')}
 件数は、いま押すと変わっているかもしれません。**論文は毎日増えるからです。**

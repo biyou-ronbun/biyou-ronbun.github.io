@@ -176,12 +176,23 @@ if (!res.ok) {
 
 const link = text.match(/<link rel="alternate" type="text\/html" href="([^"]+)"/)?.[1] ?? '（URLを取得できませんでした）';
 
+// ★ 編集用のURL。**下書きは、これでしか直接開けません。**
+//   下書きはブログ本体にも、記事一覧のAPIにも出てきません。
+//   管理画面の中で迷わないよう、ここを記録して直接渡します。
+const editUrl = text.match(/<link rel="edit" href="([^"]+)"/)?.[1] ?? '';
+const entryId = editUrl.split('/').pop() ?? '';
+const openUrl = entryId
+  ? `https://blog.hatena.ne.jp/${HATENA_ID}/${HATENA_BLOG_ID}/edit?entry=${entryId}`
+  : '';
+
 posted.items.push({
   slug,
   title,
   postedAt: new Date().toISOString().slice(0, 10),
   draft: !PUBLISH,
   url: link,
+  editUrl,
+  openUrl,
 });
 writeFileSync(LEDGER, JSON.stringify(posted, null, 2) + '\n', 'utf8');
 
@@ -194,11 +205,11 @@ if (!PUBLISH) {
   //   はてなの仕様で、**下書きはブログ本体にも、記事一覧のAPIにも出てきません。**
   //   管理画面の「記事の管理」を開かないと、見つかりません。
   //   （実際に「入ってないよ」と言われました。案内不足でした）
-  console.log('  ★ まだ下書きです。**ブログを見ても出てきません。** ここで読んでください:');
+  console.log('  ★ まだ下書きです。**ブログを見ても出てきません。**');
   console.log('');
-  console.log(`     https://blog.hatena.ne.jp/${HATENA_ID}/${HATENA_BLOG_ID}/entries`);
+  console.log('  この下書きを直接ひらく:');
   console.log('');
-  console.log('     （管理画面 → 記事の管理 → 「下書き」）');
+  console.log(`     ${openUrl || '（編集URLを取得できませんでした）'}`);
   console.log('');
   console.log('    読んで問題なければ、その画面から公開してください。');
   console.log('    1本目を確認したら、以降は --publish で自動公開に切り替えられます。');
