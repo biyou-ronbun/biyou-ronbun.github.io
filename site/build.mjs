@@ -2560,66 +2560,7 @@ if (memberToken && memOn) {
 
   const queued = topics.filter((t) => t.status === 'queued');
 
-  // ① 先出し。公開日がまだ来ていない記事を、本文ごとメンバーにだけ出す。
-  const upcoming = heldBack
-    .map((slug) => meta.find((m) => m.slug === slug))
-    .filter((a) => a && a.published && a.date > today)
-    .sort((a, b) => (a.date < b.date ? -1 : 1));
-
-  for (const a of upcoming) {
-    const { body, toc } = withToc(markdownToHtml(read(join(ROOT, 'articles', `${a.slug}.md`))));
-    const page = fill(tpl.article, {
-      BODY: body,
-      TOC: toc,
-      TITLE: escapeHtml(a.title),
-      SUBTITLE: escapeHtml(a.subtitle),
-      CATEGORY: escapeHtml(a.category),
-      CATEGORY_SLUG: catSlug(a.category),
-      DATE: a.date,
-      DATE_LABEL: `${a.date.replace(/-/g, '.')} 公開予定`,
-      PR_BANNER: '',
-      SHARE: '',
-      CORRECTIONS: correctionLog(a.slug),
-      SERIES: '',
-      REDO: searchBlock(a.slug),
-      RECEIPT: receiptFor(a.slug),
-      PRODUCTS: '',
-      TAG_LINKS: '',
-      RELATED: '',
-      BOOK: '',
-      CTA: '',
-      ADSLOT: '',
-      ROOT: '../../',
-    });
-    write(
-      join(DIST, 'm', memberToken, `${a.slug}.html`),
-      renderPage({
-        content: page,
-        headTitle: `${a.title} | ${cfg.title}`,
-        metaDesc: a.summary,
-        canonical: `${baseUrl}/articles/${a.slug}.html`,
-        ogType: 'article',
-        rootPath: '../../',
-        ogSlug: '_home',
-        noindex: true,
-      })
-    );
-  }
-
-  const preview = upcoming.length
-    ? `<ol class="mem-list">
-${upcoming
-  .map(
-    (a) => `    <li><a href="${a.slug}.html"><strong>${escapeHtml(a.title)}</strong></a>${
-      a.subtitle ? `<br><span class="mem-sub">${escapeHtml(a.subtitle)}</span>` : ''
-    }<br><span class="mem-sub">${a.date.replace(/-/g, '.')} 公開予定</span></li>`
-  )
-  .join('\n')}
-</ol>
-<p class="mem-note">公開日が来たら、この記事は自動で全員に出ます。読めるのが数日早いだけです。それ以上のことは約束していません。</p>`
-    : `<p class="mem-empty">いまはありません。書き上がった記事は、そのまま公開しています。溜めていません。</p>`;
-
-  // ② 記事にならなかった検証メモ
+  // ① 記事にならなかった検証メモ
   const memoList = memos.length
     ? memos
         .map(
@@ -2633,7 +2574,7 @@ ${upcoming
         .join('\n')
     : `  <li class="mem-empty">まだありません。空振りが出たら、ここに正直に積んでいきます。</li>`;
 
-  // ③ 舞台裏の数字（すべて機械が数えたもの。手で書かない）
+  // ② 舞台裏の数字（すべて機械が数えたもの。手で書かない）
   const backstage = `<table class="mem-table">
   <tbody>
     <tr><th>公開した記事</th><td>${published.length} 本</td></tr>
@@ -2656,9 +2597,6 @@ ${upcoming
   <p class="mem-honest-url">なお、このページのURLは、他の人に転送できてしまいます。<strong>技術的に防いでいません。</strong>共有しないでください、とだけお願いします。</p>
 </section>
 
-<h2>次に出る記事</h2>
-${preview}
-
 <h2>記事にならなかったもの</h2>
 <p class="mem-lead">調べたけれど、記事にしなかったテーマです。<strong>空振りを隠すと、当たりの信用が無くなります。</strong>だから残します。</p>
 <ul class="memos">
@@ -2666,17 +2604,13 @@ ${memoList}
 </ul>
 
 <h2>これから調べること</h2>
+<p class="mem-lead">いま予定しているテーマです。<strong>これは予告であって、約束ではありません。</strong>順番も、やるかどうかも、変わることがあります。</p>
 ${
   queued.length
     ? `<ol class="mem-list">
 ${queued.map((q) => `    <li>${escapeHtml(q.theme)}</li>`).join('\n')}
 </ol>`
     : '<p class="mem-empty">いまは空です。</p>'
-}
-${
-  mem.voteUrl
-    ? `<p class="mem-vote"><a class="plan-button" href="${escapeAttr(mem.voteUrl)}" target="_blank" rel="noopener">次に調べるテーマに投票する</a></p>`
-    : '<p class="mem-empty">投票の受付は準備中です。</p>'
 }
 
 <h2>舞台裏の数字</h2>
@@ -2936,7 +2870,7 @@ if (heldBack.length) {
   const sleeping = heldBack.filter((s) => !meta.find((m) => m.slug === s)?.published);
   const upcoming = heldBack.filter((s) => meta.find((m) => m.slug === s)?.published);
   if (upcoming.length) {
-    console.log(`公開待ち（日付が来たら自動で出ます・いまはメンバーのページのみ）: ${upcoming.join(', ')}`);
+    console.log(`公開待ち（日付が来たら自動で全員に出ます・それまでは非公開）: ${upcoming.join(', ')}`);
   }
   if (sleeping.length) {
     console.log(`寝かせ中（articles.json の published:false）: ${sleeping.join(', ')}`);

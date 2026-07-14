@@ -313,35 +313,52 @@ for (const [key, p] of ledger) {
     const sellsPage = paidPlans.some((p) => /メンバーのページ|メンバーページ/.test(p.note ?? ''));
 
     if (sellsPage) {
-      // ① 公開前の記事
-      const preview = meta.filter((a) => a.published !== false && a.date > today);
-      if (preview.length === 0) {
-        failures.push(
-          `メンバーシップ: **「公開日の3日前から読めます」と売っているのに、公開前の記事が 0 本です。**\n` +
-            `      払った人が見るページの、この欄が空になります。\n` +
-            `      ★ 記事の輪が「今日の日付」で記事を出していると、先出しは一度も発生しません。\n` +
-            `      記事の date を未来にするか、membership.html からこの約束を消すこと`
-        );
+      // ★ メンバーページの文面を読み、**実際に売っているもの**だけを検査する。
+      //   （2026-07-14、オーナー判断で「先出し」と「投票」の約束を消した。
+      //    売っていないものを検査すると、関門が誤って公開を止める）
+      const memHtml = existsSync(join(SITE, 'templates', 'membership.html'))
+        ? readFileSync(join(SITE, 'templates', 'membership.html'), 'utf8')
+        : '';
+
+      // ① 記事にならなかった検証メモ（★ これは、いまも売っている）
+      if (/検証メモ/.test(memHtml)) {
+        const memoFile = join(SITE, 'memos.json');
+        const memos = existsSync(memoFile)
+          ? JSON.parse(readFileSync(memoFile, 'utf8')).memos ?? []
+          : [];
+        if (memos.length === 0) {
+          failures.push(
+            `メンバーシップ: **「記事にならなかった検証メモ」を売っているのに、site/memos.json が空です。**\n` +
+              `      払った人が見るページの、この欄が空になります。\n` +
+              `      メモを書くか、membership.html からこの約束を消すこと`
+          );
+        }
       }
 
-      // ② 記事にならなかった検証メモ
-      const memoFile = join(SITE, 'memos.json');
-      const memos = existsSync(memoFile)
-        ? JSON.parse(readFileSync(memoFile, 'utf8')).memos ?? []
-        : [];
-      if (memos.length === 0) {
-        failures.push(
-          `メンバーシップ: **「記事にならなかった検証メモ」を売っているのに、site/memos.json が空です。**\n` +
-            `      払った人が見るページの、この欄が空になります。\n` +
-            `      メモを書くか、membership.html からこの約束を消すこと`
-        );
+      // ★★ 打ち消しの文を、違反として拾わないこと。
+      //   membership.html には、こう書いてある:
+      //     「先出しや、投票の権利は**付けていません**」
+      //   これを「売っている」と拾うと、関門が誤って公開を止める。
+      //   （この壊れ方は、うちの関門で何度も起きている。行ごとに見て、否定語があれば見逃す）
+      const NEG = ['付けていません', 'ありません', '付きません', 'しません', '売りません', '消した'];
+      const sellsLine = (re) =>
+        memHtml.split(/\r?\n/).some((line) => re.test(line) && !NEG.some((n) => line.includes(n)));
+
+      // ② 公開前の記事（先出し）を、まだ売っていないか
+      if (sellsLine(/公開日の\s*\d+\s*日前|先出し|先に読め/)) {
+        const preview = meta.filter((a) => a.published !== false && a.date > today);
+        if (preview.length === 0) {
+          failures.push(
+            `メンバーシップ: **先出しを売っているのに、公開前の記事が 0 本です。**\n` +
+              `      記事の date を未来にするか、membership.html からこの約束を消すこと`
+          );
+        }
       }
 
-      // ③ 次に調べるテーマへの投票
-      if (!mem.voteUrl) {
+      // ③ 投票を、まだ売っていないか
+      if (sellsLine(/投票/) && !mem.voteUrl) {
         failures.push(
-          `メンバーシップ: **「次に調べるテーマへの投票」を売っているのに、voteUrl が空です。**\n` +
-            `      ページには「投票の受付は準備中です。」とだけ出ます。**準備中のものを売っています。**\n` +
+          `メンバーシップ: **投票を売っているのに、voteUrl が空です。**\n` +
             `      フォームを作るか、membership.html からこの約束を消すこと`
         );
       }
