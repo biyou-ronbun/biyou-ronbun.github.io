@@ -100,17 +100,32 @@ if (-not $beforeOk) {
   exit 1
 }
 
-# ---- 購読者を測る --------------------------------------------------
+# ---- ファンを測る --------------------------------------------------
+#
+# ★★ 再訪率は測れない。Cookie を使っていないので、同じ人が戻ったか原理的に分からない。
+#   **測れない数字を目標にすると、機械は必ず数字を捏造する。**
+#
+# ★ 測れるのは「フォロワー数」と「購読者数」。**これを目標にする。**
 
 Log ''
-Log '購読者を測ります（★ 再訪率は、Cookie を使っていないので測れません）'
+Log 'フォロワーを測ります（★ 再訪率は、Cookie を使っていないので測れません）'
+$xm = & node (Join-Path $Root 'auto\x-metrics.mjs') 2>&1 | Out-String
+foreach ($line in ($xm -split "`r?`n" | Where-Object { $_.Trim() })) { Log "  $line" }
+
+Log ''
+Log '購読者を測ります'
 $push = & node (Join-Path $Root 'auto\push-metrics.mjs') 2>&1 | Out-String
 foreach ($line in ($push -split "`r?`n" | Where-Object { $_.Trim() })) { Log "  $line" }
+
+Log ''
+Log 'PV・収益を測ります'
+$cm = & node (Join-Path $Root 'auto\collect-metrics.mjs') 2>&1 | Out-String
+foreach ($line in ($cm -split "`r?`n" | Where-Object { $_ -match 'PV|訪問|検索|売上|サブスク|取得失敗' })) { Log "  $line" }
 
 # ---- 調べさせる ---------------------------------------------------
 
 Log ''
-Log '調べさせます（配信の導線 / 次の疑問の導線）'
+Log '調べさせます（★ 人はなぜファンになるのか。実例で）'
 Log ''
 
 $prompt = Get-Content (Join-Path $Root 'auto\retention-prompt.md') -Raw -Encoding UTF8

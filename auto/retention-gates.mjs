@@ -236,7 +236,7 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('  診断・クイズの2個目を作っていない');
+console.log('  肌の状態を医学的に判定していない（医師法17条）');
 console.log('  ゲーミフィケーションを作っていない');
 console.log('  通知をねだっていない');
 console.log('  煽っていない');
