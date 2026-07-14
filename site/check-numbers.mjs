@@ -87,7 +87,7 @@ console.log('② 同じ企業について、記事・図・カード・台帳で
 console.log('─'.repeat(68));
 
 const RE =
-  /(\d+)\s*[人名](?:の)?(?:うち|中)\s*(\d+)\s*[人名][^。、]{0,24}?([ァ-ヴー]{3,12}|Kewpie|Contipro|Pharmarese|ISDIN|Monteloeder|Tosla|Bionap)/g;
+  /(\d+)\s*[人名](?:の)?(?:うち|中)\s*(\d+)\s*[人名][^。]{0,24}?([ァ-ヴー]{3,12}|Kewpie|Contipro|Pharmarese|ISDIN|Monteloeder|Tosla|Bionap)/g;
 
 // ★★ 「企業名」だけでまとめてはいけない。
 //

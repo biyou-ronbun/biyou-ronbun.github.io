@@ -1718,7 +1718,7 @@ for (const a of articles) {
   //     最初これを食い違いと判定した。**関門が、正しい記述を違反と判定した。**
   //   → 「企業名 + 著者の総数」でまとめ、**総数が同じなのに内訳が違う**ときだけ止める。
   const RE_COMPANY =
-    /(\d+)\s*[人名](?:の)?(?:うち|中)\s*(\d+)\s*[人名][^。、]{0,24}?([ァ-ヴー]{3,12}|Kewpie|Contipro|Pharmarese|ISDIN|Monteloeder|Tosla|Bionap)/g;
+    /(\d+)\s*[人名](?:の)?(?:うち|中)\s*(\d+)\s*[人名][^。]{0,24}?([ァ-ヴー]{3,12}|Kewpie|Contipro|Pharmarese|ISDIN|Monteloeder|Tosla|Bionap)/g;
 
   const byPaper = {};
   for (const [where, txt] of numSources) {

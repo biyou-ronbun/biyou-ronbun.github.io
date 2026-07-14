@@ -25,6 +25,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { assertsOverreach } from '../site/tone.mjs';
 import { checkEnglish } from '../site/tone-en.mjs';
+import { loadCorpus, checkPost } from './x-numbers.mjs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -159,6 +160,9 @@ const targets = queue.posts.filter(
 
 const failures = [];
 
+// 記事（＋その記事が埋め込んでいる図）を、投稿の数値と突き合わせるために読む
+const corpus = loadCorpus();
+
 for (const p of targets) {
   const where = `#${p.id} (${p.at})`;
   const t = p.text ?? '';
@@ -248,6 +252,27 @@ for (const p of targets) {
     if (!existsSync(img)) {
       failures.push(`${where}: 画像がありません: ${p.image}`);
     }
+  }
+
+  // ★★ 投稿に書かれた数値が、記事に実在すること
+  //
+  //   **この関門は、articles/ を一度も開いていなかった。**
+  //   x/queue.json しか読まないので、記事に無い数字を書いても通った。
+  //
+  //   2026-07-14、実際に出かけていた:
+  //       投稿「1本目: 著者7人中**5人**がメーカー社員」
+  //       記事「著者7人のうち**6人**が、キユーピー株式会社」
+  //   訂正が記事・カード・図に入って、**X の下書きだけが古いまま残っていた。**
+  //   投稿予定は 2026-07-16 15:00。**次の実行で出るところだった。**
+  const num = checkPost(t, corpus);
+  if (!num.ok) {
+    failures.push(
+      `${where}: **この投稿の数値が全部そろっている記事が、1本もありません**\n` +
+        `      投稿が主張している数値: ${num.tokens.join(' / ')}\n` +
+        `      いちばん惜しい記事: articles/${num.slug}.md（そこに無い: ${num.missing.join(' / ')}）\n` +
+        `      ★ ただし「いちばん惜しい記事」が正しい記事とは限りません。**投稿の全数値を、記事と突き合わせること。**\n` +
+        `      ★ 記事が訂正されて、投稿だけ古いままかもしれません。**記事のほうを先に確かめること。**`
+    );
   }
 }
 
