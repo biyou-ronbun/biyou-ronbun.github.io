@@ -1820,6 +1820,14 @@ console.log(`  built  evidence/ (${evidenceSheets.length} 個)`);
   const ranked = rankIngredients();
   const titleOf = new Map(meta.map((a) => [a.slug, a.title]));
 
+  // ★ 記事 → 成分辞典 の導線。**リンクが1本も無いページは、Google から見えない。**
+  //   （辞典を作っても、どこからも繋がなければ、無いのと同じ）
+  const { buildEntries: dicEntries } = await import('./dictionary.mjs');
+  const dicOf = new Map();
+  for (const e of dicEntries().made) {
+    for (const s of e.articles) dicOf.set(s, { slug: e.slug, topic: e.topic });
+  }
+
   const designRows = Object.entries(DESIGN_WEIGHT)
     .sort((a, b) => b[1] - a[1])
     .map(([k, v]) => `      <tr><td>${escapeHtml(DESIGN_LABEL[k] ?? k)}</td><td class="rk-n">${v}</td></tr>`)
@@ -1830,6 +1838,11 @@ console.log(`  built  evidence/ (${evidenceSheets.length} 個)`);
       (r, i) => `      <tr>
         <td class="rk-n">${i + 1}</td>
         <td><a href="articles/${escapeAttr(r.slug)}.html">${escapeHtml(titleOf.get(r.slug) ?? r.slug)}</a></td>
+        <td>${
+          dicOf.has(r.slug)
+            ? `<a href="ingredient/${escapeAttr(dicOf.get(r.slug).slug)}.html">${escapeHtml(dicOf.get(r.slug).topic)}</a>`
+            : '<span class="rk-sub">材料が足りず、作っていません</span>'
+        }</td>
         <td class="rk-n rk-total">${r.total}</td>
         <td class="rk-n">${r.best}<span class="rk-sub">${escapeHtml(DESIGN_LABEL[r.bestType] ?? '—')}</span></td>
         <td class="rk-n">${r.independent > 0 ? '+' + Math.min(INDEPENDENT_CAP, r.independent) : '0'}<span class="rk-sub">独立 ${r.independent} 本 / 企業 ${r.industry} 本</span></td>
@@ -1851,7 +1864,7 @@ console.log(`  built  evidence/ (${evidenceSheets.length} 個)`);
   <table class="rk-table">
     <thead>
       <tr>
-        <th>順位</th><th>成分（記事）</th><th>合計</th>
+        <th>順位</th><th>成分（記事）</th><th>効果・副作用・使い方</th><th>合計</th>
         <th>最も強い証拠</th><th>独立資金</th><th>撤回</th>
       </tr>
     </thead>
@@ -1931,6 +1944,105 @@ ${sortScript}
     })
   );
   console.log('  built  ingredients.html（成分ごとの証拠）');
+}
+
+let dictionarySlugs = [];
+
+// ---- 成分辞典（2026-07-14、オーナー判断で開けた） ---------------------------
+//
+// ★★ 解説は1行も書きません。**すでに検証済みのデータだけを並べます。**
+//   うちの言葉で成分を語れば、それは論文ではなく「意見」です。
+//
+// ★★ 材料が足りない成分の辞典は、作りません。
+//   薄いページの大量生成は、Google のスパムポリシーが明示的に禁じています。
+//   **このサイトを殺すのは、書かないことではなく、薄いものを書くこと。**
+//   **作らなかったものは、ログに出します。黙って落とさないこと。**
+
+{
+  const { buildEntries, TRACED_LABEL, MIN_CLAIMS, MIN_KINDS } = await import('./dictionary.mjs');
+  const { rankIngredients } = await import('./ranking.mjs');
+
+  const { made, skipped } = buildEntries();
+  const ranked = rankIngredients();
+  const rankOf = new Map(ranked.map((r, i) => [r.slug, { pos: i + 1, ...r }]));
+  const titleOf = new Map(meta.map((a) => [a.slug, a.title]));
+
+  mkdirSync(join(DIST, 'ingredient'), { recursive: true });
+
+  const claimRow = (c) => `    <li class="dic-claim">
+      <p class="dic-q">${escapeHtml(c.claim ?? c.question)}</p>
+      <p class="dic-t"><span class="dic-traced">${escapeHtml(TRACED_LABEL[c.traced] ?? c.traced)}</span></p>
+      <p class="dic-found">${escapeHtml(c.found ?? '')}</p>
+      ${c.note ? `<p class="dic-note">${escapeHtml(c.note)}</p>` : ''}
+      ${c.article ? `<p class="dic-src"><a href="../articles/${escapeAttr(c.article)}.html">記事を読む</a> ／ <a href="../evidence/${escapeAttr(c.article)}.html">この記事が使った論文の表</a></p>` : ''}
+    </li>`;
+
+  const section = (label, items) =>
+    items.length
+      ? `  <section class="dic-sec">
+    <h2 class="dic-h">${escapeHtml(label)}<span class="dic-n">${items.length} 件</span></h2>
+    <ul class="dic-list">
+${items.map(claimRow).join('\n')}
+    </ul>
+  </section>`
+      : `  <section class="dic-sec">
+    <h2 class="dic-h">${escapeHtml(label)}</h2>
+    <p class="dic-empty"><strong>調べましたが、この成分について「${escapeHtml(label)}」で書けることが見つかりませんでした。</strong>無いのではなく、<strong>まだ辿れていない</strong>という意味です。</p>
+  </section>`;
+
+  for (const e of made) {
+    // その成分の記事のうち、ランキングで最上位のもの
+    const best = e.articles
+      .map((s) => rankOf.get(s))
+      .filter(Boolean)
+      .sort((a, b) => a.pos - b.pos)[0];
+
+    const prodBlocks = e.articles.map((s) => productBlock(s)).filter(Boolean).join('\n');
+
+    const rankBox = best
+      ? `<section class="dic-rank">
+    <p class="dic-rank-p"><strong>成分のランキング: ${best.pos} 位</strong>（${best.total} 点）</p>
+    <p class="ev-note"><strong>★ この順位は、論文が決めたものではありません。私たちが決めた重みで計算したものです。</strong>重みは <a href="../ingredients.html">成分ごとの証拠</a> のページに全部書いてあります。</p>
+    <p class="ev-note"><strong>そして、順位は「効く順」ではありません。「調べられている順」です。</strong></p>
+  </section>`
+      : '';
+
+    const content = `<section class="hero is-narrow">
+  <p class="hero-lead">${escapeHtml(e.topic)}</p>
+  <p class="hero-body"><strong>解説は書いていません。</strong>私たちが論文をどこまで辿れたかを、<strong>効果 / 副作用 / 使い方</strong>の3つに分けて、そのまま並べています。</p>
+  <p class="hero-body"><strong>「出典が見つからなかった」は「効かない」ではありません。</strong>調べたけれど確かめられなかった、という意味です。</p>
+</section>
+
+${rankBox}
+
+${section('効果', e.byKind['効果'])}
+${section('副作用', e.byKind['副作用'])}
+${section('使い方', e.byKind['使い方'])}
+
+${prodBlocks}
+
+<p class="back-to-index"><a class="back-link" href="../ingredients.html">成分の一覧へ</a></p>`;
+
+    write(
+      join(DIST, 'ingredient', `${e.slug}.html`),
+      renderPage({
+        ad: true,
+        content,
+        headTitle: `${e.topic}｜効果・副作用・使い方は、どこまで論文で確かめられているか | ${cfg.title}`,
+        metaDesc: `${e.topic}について、私たちが論文をどこまで辿れたか。効果 ${e.byKind['効果'].length} 件 / 副作用 ${e.byKind['副作用'].length} 件 / 使い方 ${e.byKind['使い方'].length} 件。解説は書いていません。`,
+        canonical: `${baseUrl}/ingredient/${e.slug}.html`,
+        ogType: 'article',
+        rootPath: '../',
+        ogSlug: '_home',
+      })
+    );
+  }
+
+  dictionarySlugs = made.map((e) => e.slug); // ★ sitemap に載せるため
+  console.log(`  built  ingredient/*.html（成分辞典 ${made.length} 件）`);
+  for (const s of skipped) {
+    console.log(`    -- 作りませんでした: ${s.topic}（${s.n}件）… ${s.why}`);
+  }
 }
 
 // ---- 基準に合う商品（一覧） ---------------------------------------------
@@ -2709,6 +2821,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <url><loc>${baseUrl}/privacy.html</loc></url>
 <url><loc>${baseUrl}/ingredients.html</loc></url>
 <url><loc>${baseUrl}/products.html</loc></url>
+${dictionarySlugs.map((s) => `<url><loc>${baseUrl}/ingredient/${s}.html</loc></url>`).join('\n')}
 ${evidenceSheets.map(({ a }) => `<url><loc>${baseUrl}/evidence/${a.slug}.html</loc><lastmod>${a.date}</lastmod></url>`).join('\n')}
 ${categories.map((c) => `<url><loc>${baseUrl}/category/${catSlug(c)}.html</loc></url>`).join('\n')}
 ${tags.map(([t]) => `<url><loc>${baseUrl}/tag/${tagSlug(t)}.html</loc></url>`).join('\n')}

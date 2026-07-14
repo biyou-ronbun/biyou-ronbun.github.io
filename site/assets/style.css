@@ -3317,3 +3317,30 @@ a { color: var(--rose); }
   font-weight: 700;
   letter-spacing: .08em;
 }
+
+/* ---- 成分辞典（2026-07-14。★ 解説は1行も書かない。データだけ） ------------- */
+.dic-rank {
+  margin: 0 0 28px; padding: 14px 16px;
+  border: 1px solid var(--rule); border-left: 3px solid var(--rose-deep);
+  background: var(--bg-raised);
+}
+.dic-rank-p { margin: 0 0 8px; font-family: var(--serif); font-size: 16px; }
+.dic-sec { margin: 0 0 36px; }
+.dic-h {
+  font-family: var(--serif); font-size: 19px; margin: 0 0 14px;
+  padding-bottom: 8px; border-bottom: 2px solid var(--rose-deep);
+}
+.dic-n { float: right; font-size: 12px; color: var(--ink-soft); font-weight: 400; }
+.dic-list { list-style: none; margin: 0; padding: 0; }
+.dic-claim { padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.dic-q { margin: 0 0 6px; font-weight: 600; font-size: 15px; line-height: 1.7; }
+.dic-t { margin: 0 0 8px; }
+.dic-traced {
+  display: inline-block; padding: 2px 9px;
+  border: 1px solid var(--rule); background: var(--bg-raised);
+  font-size: 11.5px; color: var(--ink-soft);
+}
+.dic-found { margin: 0 0 6px; font-size: 13.5px; line-height: 1.95; }
+.dic-note { margin: 0 0 6px; font-size: 12.5px; color: var(--ink-soft); line-height: 1.9; }
+.dic-src { margin: 6px 0 0; font-size: 12px; }
+.dic-empty { font-size: 13.5px; line-height: 1.95; color: var(--ink-soft); }
