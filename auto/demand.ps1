@@ -82,6 +82,19 @@ Log '数字を取ります（Search Console / Cloudflare / Stripe）'
 $metrics = & node (Join-Path $Root 'auto\collect-metrics.mjs') 2>&1 | Out-String
 foreach ($line in ($metrics -split "`r?`n" | Where-Object { $_.Trim() })) { Log "  $line" }
 
+# ---- ★ 人は、どこから来ているのか（2026-07-14 追加）-------------------
+#
+#   それまで、**流入元を一度も測っていなかった。**
+#   「集客しろ」と命じられても、どこから来ているか知らずに直していた。
+#
+#   ★ サンプリングの罠に注意。内訳の1行は数件の観測から引き伸ばされている。
+#     **観測が数件しかない行から、大きな物語を作らないこと。**
+
+Log ''
+Log '人がどこから来ているかを測ります'
+$src = & node (Join-Path $Root 'auto\traffic-sources.mjs') 2>&1 | Out-String
+foreach ($line in ($src -split "`r?`n" | Where-Object { $_.Trim() })) { Log "  $line" }
+
 # ---- 2. 検索データが無ければ、Claude を呼ばない -------------------
 #
 # ★ ここが、この仕組みでいちばん大事な部分です。
@@ -162,7 +175,58 @@ Log '---------- 報告 ----------'
 foreach ($line in ($out -split "`r?`n")) { Log $line }
 Log '--------------------------'
 
-# ---- 4. 関門を通す -----------------------------------------------
+# ---- 4. ★★ この輪が、記事を書いていないか ---------------------------
+#
+#   「集客しろ」と命じられた機械は、**必ず記事を書き始める。**
+#   「この言葉で検索されているから、この記事を1本」——それが量産の始まり。
+#
+#   Google のスパムポリシーは「AIで価値を加えないページの大量生成」を禁じている。
+#   **このサイトを殺すのは、書かないことではなく、薄いものを書くこと。**
+#
+#   記事は researcher → 論文カード → writer で作る。記事の輪（run.ps1）だけが作る。
+
+Log ''
+Log '★ 記事を書いていないか、確かめます'
+
+$touched = git status --porcelain -- articles/ research/ 2>&1 | Where-Object { $_.Trim() }
+
+if ($touched) {
+  Log ''
+  Log '=========================================='
+  Log '★★ この輪が、記事を書きました。元に戻します。'
+  Log '=========================================='
+  Log ''
+  Log '  **集客の輪は、記事を書いてはいけません。**'
+  Log '  「この言葉で検索されているから、この記事を1本」——それが量産の始まりです。'
+  Log '  Google のスパムポリシーは「AIで価値を加えないページの大量生成」を禁じています。'
+  Log ''
+  Log '  記事は researcher → 論文カード → writer で作ります。'
+  Log '  作るのは、記事の輪（auto/run.ps1）だけです。'
+  Log ''
+  foreach ($line in $touched) { Log "  $line" }
+  & git checkout -- articles/ research/ 2>&1 | Out-Null
+  Log ''
+  Log '  元に戻しました: articles/ research/'
+  Log '  ★ この週の作業は、失敗として記録します。'
+  exit 1
+}
+Log '  記事は書かれていません'
+
+# ---- 5. 集客の関門 -----------------------------------------------
+
+Log ''
+Log '集客の関門を通します'
+$dg = & node (Join-Path $Root 'auto\demand-gates.mjs') 2>&1 | Out-String
+$dgCode = $LASTEXITCODE
+foreach ($line in ($dg -split "`r?`n" | Where-Object { $_.Trim() })) { Log "  $line" }
+
+if ($dgCode -ne 0) {
+  Log ''
+  Log '★ 集客の関門に落ちました。**薄いページ / カード無しの記事 / 詰め込み。**'
+  exit 1
+}
+
+# ---- 6. サイトの関門を通す -----------------------------------------
 
 Log ''
 Log '検査します'
