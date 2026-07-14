@@ -1987,20 +1987,46 @@ console.log('  built  search.json');
       return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
     });
 
+  // ★★ 二軸にする。**成分（topic）× ジャンル（kind）**
+  //
+  //   読者は「レチノール」で来るが、知りたいことは3つに割れる:
+  //     効くのか（効果）/ 危なくないか（副作用）/ どう使うのか（使い方）
+  //
+  //   ★ 語彙は site/verify.mjs が3つに固定している。**ここで勝手に増やさないこと。**
+  //     増やした瞬間、これは「成分辞典」になる（CLAUDE.md で却下済み）。
+  const KIND_ORDER = ['効果', '副作用', '使い方'];
+  const kindRank = (k) => {
+    const i = KIND_ORDER.indexOf(k ?? '');
+    return i < 0 ? 99 : i;
+  };
+
   const itemsHtml = groups
-    .map(
-      (g) => `  <fieldset class="check-group">
-    <legend>${escapeHtml(g.topic)}</legend>
-${g.items
-  .map(
-    (c) => `    <label class="check-row">
+    .map((g) => {
+      const sorted = [...g.items].sort((a, b) => kindRank(a.kind) - kindRank(b.kind));
+
+      let lastKind = null;
+      const rows = sorted
+        .map((c) => {
+          const head =
+            c.kind && c.kind !== lastKind
+              ? `    <p class="check-kind">${escapeHtml(c.kind)}</p>\n`
+              : '';
+          lastKind = c.kind ?? lastKind;
+          return (
+            head +
+            `    <label class="check-row">
       <input type="checkbox" value="${escapeAttr(c.id)}">
       <span>${escapeHtml(c.question)}</span>
     </label>`
-  )
-  .join('\n')}
-  </fieldset>`
-    )
+          );
+        })
+        .join('\n');
+
+      return `  <fieldset class="check-group">
+    <legend>${escapeHtml(g.topic)}</legend>
+${rows}
+  </fieldset>`;
+    })
     .join('\n');
 
   // JS に渡すデータ
@@ -2008,6 +2034,7 @@ ${g.items
     key: c.id,
     question: c.question,
     claim: c.claim,
+    kind: c.kind ?? '',
     traced: c.traced,
     found: c.found,
     note: c.note ?? '',

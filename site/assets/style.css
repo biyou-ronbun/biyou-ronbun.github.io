@@ -1038,6 +1038,19 @@ a { color: var(--rose); }
   color: var(--ink-soft);
 }
 
+/* 成分（legend）の中を、ジャンルで仕切る。効果 / 副作用 / 使い方 の3つだけ。
+   ★ 新しい色は足さない。いまある --ink-soft と --rule だけで組む。 */
+.check-kind {
+  margin: 18px 0 6px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--serif);
+  font-size: 12px;
+  letter-spacing: .12em;
+  color: var(--ink-soft);
+}
+.check-kind:first-child { margin-top: 4px; }
+
 .check-row {
   display: flex;
   align-items: flex-start;
