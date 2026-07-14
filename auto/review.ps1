@@ -60,6 +60,24 @@ if ($stashed) {
   git stash pop 2>&1 | ForEach-Object { Log "  git: $_" }
 }
 
+# ---- .ps1 の文字コードを点検する ------------------------------------
+#
+#   ★ Claude が書いた .ps1 には、BOM が付かない。
+#     Windows PowerShell 5.1 は、BOM の無い UTF-8 を **Shift-JIS として読む。**
+#     日本語が化け、化けたバイト列の中に ' が現れて、文字列が閉じられなくなる。
+#
+#     **輪が1本、黙って動かなくなる。** ログに出るのは文字化けなので、原因に辿り着きにくい。
+#     （2026-07-14 に、実際に踏んだ。register-*.ps1 が4本とも動かなかった）
+
+Log ''
+Log '.ps1 の文字コードを点検します'
+& node (Join-Path $Root 'auto\check-encoding.mjs') 2>&1 | ForEach-Object { Log "  $_" }
+if ($LASTEXITCODE -ne 0) {
+  Log ''
+  Log '★ 動かない .ps1 があります。**輪が1本、止まっています。**'
+  Log '  直すには: node auto/check-encoding.mjs --fix'
+}
+
 $prompt = Get-Content (Join-Path $Root 'auto\review-prompt.md') -Raw -Encoding UTF8
 
 Log '記事を点検させます（20〜40分かかります）'

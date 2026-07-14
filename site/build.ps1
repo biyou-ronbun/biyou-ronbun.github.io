@@ -1,4 +1,4 @@
-# サイトをビルドする。
+﻿# サイトをビルドする。
 #
 #   powershell -ExecutionPolicy Bypass -File site\build.ps1
 #
