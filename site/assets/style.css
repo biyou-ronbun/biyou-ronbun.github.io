@@ -3125,3 +3125,112 @@ a { color: var(--rose); }
   font-size: 11.5px;
   opacity: .7;
 }
+
+/* ================================================================
+   華やかにする（色数は増やさない。いまある色を、大胆に使う）
+
+   ★ 越えない線
+     ・色を足さない。ピンクのグラデも、キラキラも入れない
+       → 入れた瞬間、@cosme / LIPS と見分けがつかなくなる。
+         **「根拠がある」は、見た目でも伝わっている**
+     ・白文字を乗せる面には、コントラストを確保した濃いローズを使う
+       （いまの --rose は 3.60:1。**白文字が読めない**）
+     ・**「広告」の札は、墨のまま**（14.67:1）。法定の表示は、いちばん読めるものを使う
+   ================================================================ */
+
+:root {
+  --rose-deep: #8f544c;   /* 白文字が乗る面。白との比 5.93:1（AA 合格） */
+  --gold-line: #d9c3a3;   /* ヘアラインのゴールド。細い線にだけ使う */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --rose-deep: #c98d84;
+    --gold-line: #6b5b45;
+  }
+}
+
+/* ---- 見出しに、ローズの細い下線 ---- */
+.section-heading {
+  position: relative;
+  padding-bottom: 14px;
+}
+.section-heading::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 44px;
+  height: 2px;
+  background: var(--rose-deep);
+}
+
+/* ---- 記事の見出し（h2）に、ゴールドのヘアライン ---- */
+.post-body h2 {
+  border-bottom: 1px solid var(--gold-line);
+  padding-bottom: 10px;
+}
+
+/* ---- 引用に、ゴールドの縦線 ---- */
+.post-body blockquote {
+  border-left: 2px solid var(--gold-line);
+  background: var(--rose-wash);
+}
+
+/* ---- 記事カード：ホバーでローズの縁 ---- */
+.card {
+  transition: border-color .18s ease, transform .18s ease;
+}
+.card:hover {
+  border-color: var(--rose-deep);
+  transform: translateY(-2px);
+}
+
+/* ---- 商品欄：墨 → ローズ ---- */
+.products { border-top-color: var(--rose-deep); }
+.home-products { border-top-color: var(--rose-deep); }
+
+.prod-rank { background: var(--rose-deep); }
+
+.prod-go {
+  background: var(--rose-deep);
+  border-color: var(--rose-deep);
+}
+.prod-go:hover {
+  background: transparent;
+  color: var(--rose-deep);
+}
+
+.prod-price { border-left-color: var(--rose-deep); }
+.hp-price   { border-left-color: var(--rose-deep); }
+
+/* ★ 「広告」の札だけは、墨のまま。法定の表示は、いちばん読めるものを使う */
+.products-ad { background: var(--ink); }
+.hp-label    { background: var(--ink); }
+
+/* ---- 証拠シート・根拠の内訳：数字をローズに ---- */
+.ev-summary   { border-top-color: var(--rose-deep); }
+.ing-summary  { border-top-color: var(--rose-deep); }
+.evc          { border-left-color: var(--rose-deep); }
+.ev-warn      { border-left-color: var(--rose-deep); }
+.ing-norank   { border-left-color: var(--rose-deep); }
+
+.ev-n  { color: var(--rose-deep); }
+.evc-n { color: var(--rose-deep); }
+
+.evc-n.is-mark::after { background: var(--rose-deep); }
+.evc-bar-fill.is-mark { background: var(--rose-deep); }
+
+.ev-retracted { border-color: var(--rose-deep); color: var(--rose-deep); }
+
+/* ---- ニュースの絞り込み・もっと見る：ローズに ---- */
+.news-chip.is-on {
+  background: var(--rose-deep);
+  border-color: var(--rose-deep);
+}
+
+.list-more-btn { border-color: var(--rose-deep); color: var(--rose-deep); }
+.list-more-btn:hover { background: var(--rose-deep); color: var(--bg); }
+
+/* ---- 検証レシート：ゴールドの縁 ---- */
+.receipt { border-left: 2px solid var(--gold-line); }
