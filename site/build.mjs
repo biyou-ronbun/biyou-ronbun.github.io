@@ -210,16 +210,29 @@ const priceOf = (slug, name) => {
   return p;
 };
 
+// ★★ 2026-07-14、オーナー判断で「価格＋濃度」の合成スコアに変えました。
+//
+//   それまでは「円/mL の安い順」だけでした。**それは算術であって、判定ではありませんでした。**
+//   いまは濃度の点が入ります。**濃度の点は、私たちの判断です。**
+//
+//   ★ 重みの定義は site/ranking.mjs の1箇所だけ。**ここに書き直さないこと。**
+const { rankProducts, PRICE_MAX, CONC_MAX } = await import('./ranking.mjs');
+
 const itemsFor = (slug) => {
-  const items = (products[slug]?.items ?? []).filter((i) => i.url && i.name);
-  return items
-    .map((i) => ({ ...i, _price: priceOf(slug, i.name) }))
-    .sort((a, b) => {
-      // 価格が取れなかったものは、いちばん後ろ。**推測で順位を付けない。**
-      const x = a._price?.perMl ?? Infinity;
-      const y = b._price?.perMl ?? Infinity;
-      return x - y;
-    });
+  const r = rankProducts(slug);
+  if (!r) return [];
+  const byName = new Map((products[slug]?.items ?? []).map((i) => [i.name, i]));
+  return r.rows
+    .filter((x) => byName.get(x.name)?.url)
+    .map((x) => ({
+      ...byName.get(x.name),
+      _price: priceOf(slug, x.name),
+      _score: x.total,
+      _priceScore: x.priceScore,
+      _concScore: x.concScore,
+      _conc: x.conc,
+      _range: r.range,
+    }));
 };
 
 // 「1mLあたり◯円（YYYY-MM-DD時点）」の表示。取れなければ、何も書かない。
@@ -228,18 +241,28 @@ const perMlLabel = (i) =>
     ? `<span class="prod-price"><strong>1mLあたり ${i._price.perMl} 円</strong><span class="prod-price-at">${escapeHtml(i._price.at)} に機械が取得。<strong>価格は変わります</strong></span></span>`
     : '';
 
-// ★★ 番号。**「1位」とは書かない。**
+// ★★ 番号。**2026-07-14 から「1位」と書きます**（オーナー判断）。
 //
-//   「1位」と書けば、読者は「一番いい」と読みます。**この番号は、単価が安い順です。**
-//   だから番号の下に、必ず「安い順」と書きます。**番号と意味を、切り離せない形にします。**
+//   ★ ただし、番号の下に「私たちが決めた重み」への導線を必ず置きます。
+//     置かなければ、読者は「科学が1位だと言っている」と読みます。**それは嘘です。**
+//     site/verify.mjs が、重みの開示が無いページに順位が出ていたら、公開を止めます。
 //
-//   （「根拠の強さ」で順位を付けたら、1位はコラーゲンになりました。
-//     コラーゲンの記事の結論は「独立資金の試験は効果を支持していない」。
-//     **順位は、簡単に逆の意味で読まれます。**）
+//   ★ そして、番号の意味を、番号のすぐ横に書きます。
+//     **この順位は「効く順」ではありません。「価格と濃度で、私たちが並べた順」です。**
 const rankBadge = (n, total) =>
   total >= 3
-    ? `<span class="prod-rank"><span class="prod-rank-n">${n}</span><span class="prod-rank-l">安い順</span></span>`
+    ? `<span class="prod-rank"><span class="prod-rank-n">${n}</span><span class="prod-rank-l">位</span></span>`
     : '';
+
+// 点数の内訳。**何点が何から来たかを、そのまま見せる。**
+const scoreLabel = (i) => {
+  const parts = [];
+  if (i._priceScore != null) parts.push(`価格 ${i._priceScore.toFixed(1)}/${PRICE_MAX}`);
+  if (i._concScore != null) parts.push(`濃度 ${i._concScore}/${CONC_MAX}`);
+  else if (i._range === null || i._range === undefined) parts.push('濃度 該当なし');
+  if (!parts.length) return '';
+  return `<span class="prod-score"><strong>${i._score.toFixed(1)} 点</strong><span class="prod-score-b">${parts.join(' ＋ ')}</span></span>`;
+};
 
 // ★★ この表記は、外せません。
 //
@@ -254,10 +277,20 @@ const rankBadge = (n, total) =>
 //   ★ できるのは、文言を「警告」から「読者のための情報」に変えること。
 //     旧: 「この記事は広告（アフィリエイトリンク）を含みます。」← 事務的。身構える
 //     新: 記事の末尾に商品があること、**それがどう選ばれたか**を先に伝える
-const prBanner = (slug) =>
-  itemsFor(slug).length
+// ★★ タイアップの開示（2026-07-14、オーナー判断で開けた）
+//
+//   ★ 順番が大事。**タイアップの開示が、いちばん上。** アフィリエイトの案内はその下。
+//     景表法のステマ規制で罰せられるのは、**表示した側**です。**隠せません。**
+const { sponsorBanner, sponsorChip } = await import('./sponsor.mjs');
+
+const prBanner = (slug) => {
+  const a = meta.find((x) => x.slug === slug);
+  const sponsor = sponsorBanner(a?.sponsor, escapeHtml);
+  const affiliate = itemsFor(slug).length
     ? `<p class="pr-banner">記事の最後に、<strong>この記事の結論から導いた「選び方の基準」</strong>と、それに合う商品を置いています。<strong>広告（アフィリエイトリンク）です。</strong></p>`
     : '';
+  return sponsor + affiliate;
+};
 
 const productBlock = (slug) => {
   const items = itemsFor(slug);
@@ -278,6 +311,7 @@ const productBlock = (slug) => {
       <div class="prod-text">
         <a class="prod-name" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">${escapeHtml(i.name)}</a>
         <span class="prod-criterion">${escapeHtml(i.criterion)}</span>
+        ${scoreLabel(i)}
         ${perMlLabel(i)}
         <a class="prod-go" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">楽天で見る<span class="prod-go-note">広告</span></a>
       </div>
@@ -303,14 +337,22 @@ const productBlock = (slug) => {
   //     ・広告であること（見出しの中と、各ボタンの中）
   //     ・効果を保証しないこと
   //     ・「効く順」でも「人気順」でもないこと
-  //     ・並び順は単価の安い順で、順位ではないこと
+  //     ・★ 順位が、私たちが決めた重みで計算されたものであること（2026-07-14 追加）
   //     ・価格は変わること
   //     ・基準に合うものが無ければ、何も置かないこと
+  const range = items[0]?._range ?? null;
   return `<aside class="products">
   <h2 class="products-title">では、その基準に合うのは、どれか<span class="products-ad">広告</span></h2>
   <p class="products-lead">この記事が出した結論から、<strong>「選び方の基準」</strong>をつくりました。下は、<strong>その基準に合う商品</strong>です。<strong>ここから購入されると、このブログに収益が入ります。</strong></p>
-  <p class="products-lead"><strong>「効く順」でも「人気順」でもありません。効果を保証するものでもありません。</strong>並んでいるのは<strong>基準を全部満たした商品だけ</strong>で、上下は<strong>1mLあたりの価格が安い順</strong>——つまり<strong>順位ではなく、算数</strong>です。価格は公開のたびに機械が取り直していますが、<strong>変わります。</strong>楽天のページでご確認ください。</p>
-  <p class="products-lead"><strong>基準が導けなかった記事には、商品を置いていません。</strong>10本のうち5本が、それです。</p>
+  <p class="products-lead"><strong>★ この順位は、論文が決めたものではありません。私たちが決めた重みで計算したものです。</strong>点数の内訳は、各商品に書いてあります。</p>
+  <p class="products-lead"><strong>「効く順」でも「人気順」でもありません。効果を保証するものでもありません。</strong>点数は、<strong>価格（1mLあたりが安いほど高い。最大 ${PRICE_MAX} 点）</strong>${
+    range
+      ? ` と <strong>濃度（この記事の基準 ${range.min}〜${range.max}% に入っていれば ${CONC_MAX} 点、外れていれば 0 点）</strong>`
+      : ''
+  } の合計です。${range ? `<span class="prod-range-basis">濃度の基準の根拠: ${escapeHtml(range.basis)}</span>` : '<strong>この記事の商品には、濃度の概念がありません。</strong>だから濃度の点はつけていません。'}</p>
+  <p class="products-lead"><strong>なぜ価格が最大 ${PRICE_MAX} 点なのか。なぜ基準の外は 0 点なのか。私たちがそう決めたからです。</strong>納得できなければ、<strong>あなた自身の基準で選んでください。</strong>計算のコードは <code>site/ranking.mjs</code> にあり、リポジトリは公開しています。</p>
+  <p class="products-lead">価格は公開のたびに機械が取り直していますが、<strong>変わります。</strong>楽天のページでご確認ください。</p>
+  <p class="products-lead"><strong>基準が導けなかった記事には、商品を置いていません。</strong>11本のうち6本が、それです。</p>
   <ul class="products-list">
 ${rows}
   </ul>
@@ -1355,6 +1397,7 @@ const cards = published
   .map((a) =>
     fill(tpl.card, {
       SLUG: a.slug,
+        PR_CHIP: sponsorChip(a.sponsor),
         SERIES_LABEL: seriesLabel(a) ? `<span class="card-series">${escapeHtml(seriesLabel(a))}</span>` : '',
         ANSWER: escapeHtml(cardAnswer.get(a.slug) ?? ''),
         FIGURE: cardFig(a.slug),
@@ -1506,6 +1549,7 @@ for (const cat of categories) {
     .map((a) =>
       fill(tpl.card, {
         SLUG: a.slug,
+        PR_CHIP: sponsorChip(a.sponsor),
         SERIES_LABEL: seriesLabel(a) ? `<span class="card-series">${escapeHtml(seriesLabel(a))}</span>` : '',
         ANSWER: escapeHtml(cardAnswer.get(a.slug) ?? ''),
         FIGURE: cardFig(a.slug),
@@ -1763,17 +1807,98 @@ console.log(`  built  evidence/ (${evidenceSheets.length} 個)`);
 })();
 </script>`;
 
+  // ---- ランキング（2026-07-14、オーナー判断で開けた） ----------------------
+  //
+  // ★★ 順位は、論文が決めたものではない。**私たちが決めた重みで計算したもの。**
+  //   だから、**重みの表を、順位と同じページに必ず出す。**
+  //   site/verify.mjs が、重みの開示が無いページに順位が出ていたら、公開を止める。
+  //
+  // ★ 重みの定義は site/ranking.mjs の1箇所だけ。**2箇所に書かない。**
+  const { rankIngredients, DESIGN_WEIGHT, DESIGN_LABEL, INDEPENDENT_BONUS, INDEPENDENT_CAP, RETRACTION_PENALTY } =
+    await import('./ranking.mjs');
+
+  const ranked = rankIngredients();
+  const titleOf = new Map(meta.map((a) => [a.slug, a.title]));
+
+  // ★ 記事 → 成分辞典 の導線。**リンクが1本も無いページは、Google から見えない。**
+  //   （辞典を作っても、どこからも繋がなければ、無いのと同じ）
+  const { buildEntries: dicEntries } = await import('./dictionary.mjs');
+  const dicOf = new Map();
+  for (const e of dicEntries().made) {
+    for (const s of e.articles) dicOf.set(s, { slug: e.slug, topic: e.topic });
+  }
+
+  const designRows = Object.entries(DESIGN_WEIGHT)
+    .sort((a, b) => b[1] - a[1])
+    .map(([k, v]) => `      <tr><td>${escapeHtml(DESIGN_LABEL[k] ?? k)}</td><td class="rk-n">${v}</td></tr>`)
+    .join('\n');
+
+  const rankRows = ranked
+    .map(
+      (r, i) => `      <tr>
+        <td class="rk-n">${i + 1}</td>
+        <td><a href="articles/${escapeAttr(r.slug)}.html">${escapeHtml(titleOf.get(r.slug) ?? r.slug)}</a></td>
+        <td>${
+          dicOf.has(r.slug)
+            ? `<a href="ingredient/${escapeAttr(dicOf.get(r.slug).slug)}.html">${escapeHtml(dicOf.get(r.slug).topic)}</a>`
+            : '<span class="rk-sub">材料が足りず、作っていません</span>'
+        }</td>
+        <td class="rk-n rk-total">${r.total}</td>
+        <td class="rk-n">${r.best}<span class="rk-sub">${escapeHtml(DESIGN_LABEL[r.bestType] ?? '—')}</span></td>
+        <td class="rk-n">${r.independent > 0 ? '+' + Math.min(INDEPENDENT_CAP, r.independent) : '0'}<span class="rk-sub">独立 ${r.independent} 本 / 企業 ${r.industry} 本</span></td>
+        <td class="rk-n">${r.retracted > 0 ? RETRACTION_PENALTY * r.retracted : '0'}<span class="rk-sub">${r.retracted > 0 ? '撤回 ' + r.retracted + ' 本' : ''}</span></td>
+      </tr>`
+    )
+    .join('\n');
+
+  const rankingSection = `<section class="rk">
+  <h2 class="rk-h">成分のランキング</h2>
+
+  <div class="rk-warn">
+    <p><strong>★ この順位は、論文が決めたものではありません。私たちが決めた重みで計算したものです。</strong></p>
+    <p>なぜ「独立資金の試験」に +1 なのか。なぜ「撤回された論文」が −1 なのか。<strong>私たちがそう決めたからです。</strong>重みは下に全部書いてあります。<strong>納得できなければ、あなた自身の重みで並べ替えてください。</strong></p>
+    <p><strong>そして、順位は「効く順」ではありません。「調べられている順」です。</strong>1位の成分が、あなたに効くという意味ではありません。<strong>その成分について、質の高い研究が多く行われている、という意味です。</strong></p>
+  </div>
+
+  <div class="ev-tablewrap">
+  <table class="rk-table">
+    <thead>
+      <tr>
+        <th>順位</th><th>成分（記事）</th><th>効果・副作用・使い方</th><th>合計</th>
+        <th>最も強い証拠</th><th>独立資金</th><th>撤回</th>
+      </tr>
+    </thead>
+    <tbody>
+${rankRows}
+    </tbody>
+  </table>
+  </div>
+
+  <details class="rk-weights">
+    <summary><strong>私たちが決めた重み（全部）</strong></summary>
+
+    <p class="rk-formula"><code>合計 = 最も強い証拠 ＋ 独立資金のヒト試験（1本 +${INDEPENDENT_BONUS}、上限 ${INDEPENDENT_CAP}） − 撤回された論文（1本 ${RETRACTION_PENALTY}）</code></p>
+
+    <table class="rk-table rk-table-w">
+      <thead><tr><th>論文の種類</th><th>点</th></tr></thead>
+      <tbody>
+${designRows}
+      </tbody>
+    </table>
+
+    <p class="ev-note"><strong>論文の種類と資金源は、私たちの意見ではありません。</strong>論文にそう書いてあります。<strong>点数の付け方だけが、私たちの判断です。</strong></p>
+    <p class="ev-note"><strong>撤回された論文は、データの捏造とは限りません。</strong>ですが、その結果はもう根拠に使えません。だから引きます。</p>
+    <p class="ev-note">計算のコードは <code>site/ranking.mjs</code> にあります。<strong>リポジトリは公開しています。自分で確かめてください。</strong></p>
+  </details>
+</section>`;
+
   const content = `<section class="hero is-narrow">
   <p class="hero-lead">成分ごとの証拠</p>
   <p class="hero-body">記事ごとに、根拠にした論文を<strong>1本ずつ表にしています。</strong>何が測られ、どの濃度で試され、<strong>どんな副作用が報告されたか。</strong></p>
   <p class="hero-body"><strong>解説は1行も書いていません。数字だけです。</strong></p>
 </section>
 
-<section class="ing-norank">
-  <p><strong>★ 順位は付けていません。並べ替えは、あなたがしてください。</strong>見出しを押すと並び替わります。</p>
-  <p class="ev-note"><strong>「効く順」は、作れませんでした。</strong>比較できる効果量を持つ論文が、88本中<strong>7本</strong>しかありません。しかもその7本が測っているものはバラバラです（皮脂の量、紫外線で赤くなるまでの時間、シワの深さ、水分量）。<strong>1つの物差しに乗せる方法が、ありません。</strong>重みを決めれば順位は作れますが、<strong>その重みには何の根拠もありません。</strong></p>
-  <p class="ev-note"><strong>「根拠の強い順」も、作りませんでした。</strong>こちらは計算できます。実際に計算したら、<strong>1位はコラーゲンでした。</strong>コラーゲンの記事の結論は「<strong>独立資金の試験は、効果を支持していなかった</strong>」です。<strong>「1位」は「一番いい」ではなく「一番はっきり分かっている」でした。数字が、逆の意味に読まれます。</strong></p>
-</section>
+${rankingSection}
 
 <section class="ing-summary">
   <ul class="ev-stats">
@@ -1819,6 +1944,108 @@ ${sortScript}
     })
   );
   console.log('  built  ingredients.html（成分ごとの証拠）');
+}
+
+let dictionarySlugs = [];
+let dictionaryOf = new Map();
+
+// ---- 成分辞典（2026-07-14、オーナー判断で開けた） ---------------------------
+//
+// ★★ 解説は1行も書きません。**すでに検証済みのデータだけを並べます。**
+//   うちの言葉で成分を語れば、それは論文ではなく「意見」です。
+//
+// ★★ 材料が足りない成分の辞典は、作りません。
+//   薄いページの大量生成は、Google のスパムポリシーが明示的に禁じています。
+//   **このサイトを殺すのは、書かないことではなく、薄いものを書くこと。**
+//   **作らなかったものは、ログに出します。黙って落とさないこと。**
+
+{
+  const { buildEntries, TRACED_LABEL, MIN_CLAIMS, MIN_KINDS } = await import('./dictionary.mjs');
+  const { rankIngredients } = await import('./ranking.mjs');
+
+  const { made, skipped } = buildEntries();
+  const ranked = rankIngredients();
+  const rankOf = new Map(ranked.map((r, i) => [r.slug, { pos: i + 1, ...r }]));
+  const titleOf = new Map(meta.map((a) => [a.slug, a.title]));
+
+  mkdirSync(join(DIST, 'ingredient'), { recursive: true });
+
+  const claimRow = (c) => `    <li class="dic-claim">
+      <p class="dic-q">${escapeHtml(c.claim ?? c.question)}</p>
+      <p class="dic-t"><span class="dic-traced">${escapeHtml(TRACED_LABEL[c.traced] ?? c.traced)}</span></p>
+      <p class="dic-found">${escapeHtml(c.found ?? '')}</p>
+      ${c.note ? `<p class="dic-note">${escapeHtml(c.note)}</p>` : ''}
+      ${c.article ? `<p class="dic-src"><a href="../articles/${escapeAttr(c.article)}.html">記事を読む</a> ／ <a href="../evidence/${escapeAttr(c.article)}.html">この記事が使った論文の表</a></p>` : ''}
+    </li>`;
+
+  const section = (label, items) =>
+    items.length
+      ? `  <section class="dic-sec">
+    <h2 class="dic-h">${escapeHtml(label)}<span class="dic-n">${items.length} 件</span></h2>
+    <ul class="dic-list">
+${items.map(claimRow).join('\n')}
+    </ul>
+  </section>`
+      : `  <section class="dic-sec">
+    <h2 class="dic-h">${escapeHtml(label)}</h2>
+    <p class="dic-empty"><strong>調べましたが、この成分について「${escapeHtml(label)}」で書けることが見つかりませんでした。</strong>無いのではなく、<strong>まだ辿れていない</strong>という意味です。</p>
+  </section>`;
+
+  for (const e of made) {
+    // その成分の記事のうち、ランキングで最上位のもの
+    const best = e.articles
+      .map((s) => rankOf.get(s))
+      .filter(Boolean)
+      .sort((a, b) => a.pos - b.pos)[0];
+
+    const prodBlocks = e.articles.map((s) => productBlock(s)).filter(Boolean).join('\n');
+
+    const rankBox = best
+      ? `<section class="dic-rank">
+    <p class="dic-rank-p"><strong>成分のランキング: ${best.pos} 位</strong>（${best.total} 点）</p>
+    <p class="ev-note"><strong>★ この順位は、論文が決めたものではありません。私たちが決めた重みで計算したものです。</strong>重みは <a href="../ingredients.html">成分ごとの証拠</a> のページに全部書いてあります。</p>
+    <p class="ev-note"><strong>そして、順位は「効く順」ではありません。「調べられている順」です。</strong></p>
+  </section>`
+      : '';
+
+    const content = `<section class="hero is-narrow">
+  <p class="hero-lead">${escapeHtml(e.topic)}</p>
+  <p class="hero-body"><strong>解説は書いていません。</strong>私たちが論文をどこまで辿れたかを、<strong>効果 / 副作用 / 使い方</strong>の3つに分けて、そのまま並べています。</p>
+  <p class="hero-body"><strong>「出典が見つからなかった」は「効かない」ではありません。</strong>調べたけれど確かめられなかった、という意味です。</p>
+</section>
+
+${rankBox}
+
+${section('効果', e.byKind['効果'])}
+${section('副作用', e.byKind['副作用'])}
+${section('使い方', e.byKind['使い方'])}
+
+${prodBlocks}
+
+<p class="back-to-index"><a class="back-link" href="../ingredients.html">成分の一覧へ</a></p>`;
+
+    write(
+      join(DIST, 'ingredient', `${e.slug}.html`),
+      renderPage({
+        ad: true,
+        content,
+        headTitle: `${e.topic}｜効果・副作用・使い方は、どこまで論文で確かめられているか | ${cfg.title}`,
+        metaDesc: `${e.topic}について、私たちが論文をどこまで辿れたか。効果 ${e.byKind['効果'].length} 件 / 副作用 ${e.byKind['副作用'].length} 件 / 使い方 ${e.byKind['使い方'].length} 件。解説は書いていません。`,
+        canonical: `${baseUrl}/ingredient/${e.slug}.html`,
+        ogType: 'article',
+        rootPath: '../',
+        ogSlug: '_home',
+      })
+    );
+  }
+
+  dictionarySlugs = made.map((e) => e.slug); // ★ sitemap に載せるため
+  console.log(`  built  ingredient/*.html（成分辞典 ${made.length} 件）`);
+  dictionaryOf = new Map();
+  for (const e of made) for (const s of e.articles) dictionaryOf.set(s, e.slug);
+  for (const s of skipped) {
+    console.log(`    -- 作りませんでした: ${s.topic}（${s.n}件）… ${s.why}`);
+  }
 }
 
 // ---- 基準に合う商品（一覧） ---------------------------------------------
@@ -2064,12 +2291,88 @@ ${rows}
 // ---- 悩みから探す（タグページ） -------------------------------------------
 // 語彙・tagMap・tagLinks の定義は、記事ページより前（上）にある。
 
+// ---- 肌診断（悩み → 成分 → 商品）。2026-07-14、オーナー判断で開けた -------------
+//
+// ★★ この機能は、うちがいちばん強く却下していたものです。理由は実測でした。
+//
+//   ・「診断 → おすすめ成分 → 商品」が実際に効く商品を当てられるかを検証した
+//     臨床試験は、**PubMed で 0 件**（research/skin-type-questionnaire.md）
+//   ・質問票の答えと、機械で測った肌の状態は、**弱くしか一致しない**（r = 0.24〜0.30）
+//   ・Baumann の16タイプ診断は、**質問項目そのものが非公開**
+//
+//   **だから、この3つをページに書きます。書かなければ、**
+//   **検証されていない方法を「当たる」と売ることになります**（景表法・優良誤認）。
+//
+// ★★ そして、**肌の状態を医学的に判定しません**（医師法17条）。
+//   「あなたの肌は敏感肌です」は、医師にしか言えません。
+//   **聞くのは「何に困っているか」だけ。** auto/retention-gates.mjs が、これを見張ります。
+//
+// ★ 読者の入力は、どこにも送りません。全部ブラウザの中で動きます。
+//   （送れば、それは「肌データを集める装置」になります。作りません）
+
+{
+  const { rankIngredients: rankAll } = await import('./ranking.mjs');
+  const byTag = {};
+  const posOf = new Map(rankAll().map((r) => [r.slug, r]));
+
+  for (const [tag, items] of tags) {
+    byTag[tag] = items
+      .map((a) => {
+        const r = posOf.get(a.slug);
+        const prods = itemsFor(a.slug).map((i) => ({
+          name: i.name,
+          url: i.url,
+          score: Number(i._score.toFixed(1)),
+          perMl: i._price?.perMl ?? null,
+        }));
+        return {
+          slug: a.slug,
+          title: a.title,
+          answer: cardAnswer.get(a.slug) ?? a.summary ?? '',
+          score: r?.total ?? 0,
+          dict: dictionaryOf.get(a.slug) ?? null,
+          products: prods,
+        };
+      })
+      .sort((x, y) => y.score - x.score);
+  }
+
+  const tagBoxes = tags
+    .map(
+      ([t]) => `  <label class="dg-tag">
+    <input type="checkbox" value="${escapeAttr(t)}">
+    <span>${escapeHtml(t)}</span>
+  </label>`
+    )
+    .join('\n');
+
+  write(
+    join(DIST, 'diagnosis.html'),
+    renderPage({
+      ad: true,
+      content: fill(read(join(SITE, 'templates', 'diagnosis.html')), {
+        DIAGNOSIS_TAGS: tagBoxes,
+        DIAGNOSIS_JSON: JSON.stringify({ byTag }).replace(/</g, '\\u003c'),
+      }),
+      headTitle: `悩みから、成分を探す | ${cfg.title}`,
+      metaDesc:
+        '医学的な診断はしません。あなたの悩みに関係する成分について、私たちが論文をどこまで辿れたかを見せる索引です。この方法が効く商品を当てられるかを検証した臨床試験は、0件でした。',
+      canonical: `${baseUrl}/diagnosis.html`,
+      ogType: 'website',
+      rootPath: '',
+      ogSlug: '_home',
+    })
+  );
+  console.log(`  built  diagnosis.html（悩み ${tags.length} 種類 → 成分 → 商品）`);
+}
+
 for (const [tag, items] of tags) {
   const cards = items
     .sort((a, b) => (a.date < b.date ? 1 : -1))
     .map((a) =>
       fill(tpl.card, {
         SLUG: a.slug,
+        PR_CHIP: sponsorChip(a.sponsor),
         SERIES_LABEL: seriesLabel(a) ? `<span class="card-series">${escapeHtml(seriesLabel(a))}</span>` : '',
         ANSWER: escapeHtml(cardAnswer.get(a.slug) ?? ''),
         FIGURE: cardFig(a.slug),
@@ -2591,11 +2894,13 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <url><loc>${baseUrl}/about.html</loc></url>
 <url><loc>${baseUrl}/news.html</loc></url>
 <url><loc>${baseUrl}/check.html</loc></url>
+<url><loc>${baseUrl}/diagnosis.html</loc></url>
 <url><loc>${baseUrl}/verified.html</loc></url>
 <url><loc>${baseUrl}/contact.html</loc></url>
 <url><loc>${baseUrl}/privacy.html</loc></url>
 <url><loc>${baseUrl}/ingredients.html</loc></url>
 <url><loc>${baseUrl}/products.html</loc></url>
+${dictionarySlugs.map((s) => `<url><loc>${baseUrl}/ingredient/${s}.html</loc></url>`).join('\n')}
 ${evidenceSheets.map(({ a }) => `<url><loc>${baseUrl}/evidence/${a.slug}.html</loc><lastmod>${a.date}</lastmod></url>`).join('\n')}
 ${categories.map((c) => `<url><loc>${baseUrl}/category/${catSlug(c)}.html</loc></url>`).join('\n')}
 ${tags.map(([t]) => `<url><loc>${baseUrl}/tag/${tagSlug(t)}.html</loc></url>`).join('\n')}
