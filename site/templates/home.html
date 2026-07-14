@@ -22,6 +22,8 @@
 
 <p class="finder-empty" id="empty" hidden>見つかりませんでした。<br>「見つからない」と書くのがこのブログの流儀なので、ここでも正直に書きます。</p>
 
+<p class="list-more" id="more" hidden><button type="button" id="more-btn" class="list-more-btn">記事をすべて見る<span id="more-n"></span></button></p>
+
 <script>
 // サーバーが無いので、検索は読者のブラウザの中で行う。
 // 記事が増えても、build が search.json を作り直すので、ここは触らなくていい。
@@ -68,8 +70,33 @@
     return [a.title, a.subtitle, a.summary, a.category].join(' ').toLowerCase();
   }
 
+  // ★ 最初は数本だけ出す。検索と絞り込みがあるので、全部並べる必要はない。
+  //
+  //   ★★ ただし、**カードは全部 HTML に出したまま隠す。**
+  //     消してしまうと:
+  //       ・**検索に引っかからなくなる**（検索はこのカードを show/hide しているだけ）
+  //       ・**Google に見えなくなる**（記事へのリンクが1本も無いページになる）
+  //
+  //   ★ そして、**検索・絞り込みの最中は、上限を外す。**
+  //     絞り込んだ結果が「もっと見る」の下に隠れていたら、探す機能が壊れます。
+  var LIMIT = 6;
+  var showAll = false;
+  var more = document.getElementById('more');
+  var moreBtn = document.getElementById('more-btn');
+  var moreN = document.getElementById('more-n');
+
+  if (moreBtn) {
+    moreBtn.addEventListener('click', function () {
+      showAll = true;
+      more.hidden = true;
+      apply();
+    });
+  }
+
   function apply() {
     var q = input.value.trim().toLowerCase();
+    var filtering = Boolean(q || activeCat);
+    var matched = 0;
     var shown = 0;
 
     cards.forEach(function (card) {
@@ -79,17 +106,31 @@
 
       var okCat = !activeCat || (rec && rec.category === activeCat);
       var okQ = !q || haystack(slug).indexOf(q) >= 0;
+      var ok = okCat && okQ;
 
-      var show = okCat && okQ;
+      if (ok) matched++;
+
+      // ★ 検索・絞り込み中は、上限を外す（探した結果が隠れたら、探す機能が壊れる）
+      var withinLimit = filtering || showAll || matched <= LIMIT;
+      var show = ok && withinLimit;
+
       card.hidden = !show;
       if (show) shown++;
     });
 
-    empty.hidden = shown > 0;
-    count.textContent = (q || activeCat) ? shown + ' 本' : '';
+    empty.hidden = matched > 0;
+    count.textContent = filtering ? matched + ' 本' : '';
+
+    // 「もっと見る」は、絞り込んでいないときで、まだ隠れているカードがあるときだけ
+    if (more) {
+      var hiddenCount = matched - shown;
+      more.hidden = filtering || showAll || hiddenCount <= 0;
+      if (moreN) moreN.textContent = hiddenCount > 0 ? '（あと ' + hiddenCount + ' 本）' : '';
+    }
   }
 
   input.addEventListener('input', apply);
+  apply();
 })();
 </script>
 

@@ -3094,3 +3094,34 @@ a { color: var(--rose); }
   color: var(--ink-mute);
 }
 .pr-banner strong { color: var(--ink-soft); font-weight: 500; }
+
+/* ★ 記事は最初6本だけ。検索と絞り込みがあるので、全部並べる必要はない。
+   ただしカードは全部 HTML に出したまま隠す（消すと検索にも Google にも見えなくなる）。 */
+.list-more {
+  margin: 40px 0 0;
+  text-align: center;
+}
+
+.list-more-btn {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 13px 32px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 13.5px;
+  letter-spacing: .08em;
+  cursor: pointer;
+}
+
+.list-more-btn:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.list-more-btn span {
+  font-size: 11.5px;
+  opacity: .7;
+}
