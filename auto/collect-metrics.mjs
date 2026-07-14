@@ -155,6 +155,16 @@ async function cfPageviews() {
   const hasVisits = Array.isArray(available) && available.includes('sum_visits');
   const visitsPart = hasVisits ? 'sum { visits }' : '';
 
+  // ★★ count は「実際に数えた件数」ではない。**サンプリングされた推定値**。
+  //
+  //   Cloudflare Web Analytics は、10件に1件しかビーコンを記録しないことがある
+  //   （sampleInterval = 10）。そのとき count は 22 件を観測して「220」と返す。
+  //
+  //   2026-07-14、実際にそうなっていた:
+  //       推定 220 PV  ←  実際に観測できたのは 22 件
+  //
+  //   **これを「実測値」として ops/auto-metrics.md に書いていた**（CLAUDE.md ルール4違反）。
+  //   推定値だと分かる形で書かないと、読む人間も機械も、22 を 220 だと信じる。
   const data = await cfQuery(
     `query($accountTag: string!, $siteTag: string!, $from: Time!, $to: Time!) {
        viewer {
@@ -164,6 +174,7 @@ async function cfPageviews() {
              limit: 1
            ) {
              count
+             avg { sampleInterval }
              ${visitsPart}
            }
          }
@@ -173,12 +184,29 @@ async function cfPageviews() {
   );
 
   const g = data?.viewer?.accounts?.[0]?.rumPageloadEventsAdaptiveGroups?.[0];
-  if (!g) return { pv: 0, visits: null, note: '期間内にデータがありません（＝本当に0）' };
+  if (!g) return { pv: 0, visits: null, sampleInterval: null, observed: 0, note: '期間内にデータがありません（＝本当に0）' };
+
+  const si = g.avg?.sampleInterval ?? 1;
+  const observed = si > 0 ? Math.round((g.count ?? 0) / si) : (g.count ?? 0);
+
+  const notes = [];
+  // ★ サンプリングが効いているときだけ言う。
+  //   si がほぼ 1 なら、count は実際に数えた件数とほぼ同じ。毎回「推定です」と騒ぐと、
+  //   本当に薄めた数字が出たときに、誰も読まなくなる。
+  if (si >= 1.5) {
+    notes.push(
+      `★ PV ${g.count} は**推定値**です。Cloudflare が実際に記録したのは ${observed} 件` +
+        `（${si.toFixed(1)} 件に1件のサンプリング）。**実測値ではありません。**`
+    );
+  }
+  if (!hasVisits) notes.push('訪問数は取得していません（Cloudflare が visits を持っていると答えなかった）');
 
   return {
     pv: g.count ?? null,
     visits: hasVisits ? (g.sum?.visits ?? null) : null,
-    note: hasVisits ? '' : '訪問数は取得していません（Cloudflare が visits を持っていると答えなかった）',
+    sampleInterval: Math.round(si * 100) / 100,
+    observed,
+    note: notes.join(' / '),
   };
 }
 
@@ -291,12 +319,46 @@ async function gscQuery(token, body) {
   return json.rows ?? [];
 }
 
+// ★★ サイトが生まれた日（初コミット 2026-07-12。git log --reverse で確認）
+//
+//   **これより前を問い合わせると、Search Console は当然 0 を返す。**
+//   実際に、それをやっていた:
+//
+//       2026-07-14 に実行 → 問い合わせ期間 2026-07-04 〜 2026-07-11
+//       サイトが生まれたのは 2026-07-12
+//       ────────────────────────────────────────────
+//       **サイトが存在しない期間を問い合わせて、「検索表示 0」と記録していた。**
+//
+//   「0だった」と「その頃サイトが無かった」は、別の事実です（CLAUDE.md ルール4）。
+const SITE_BORN = new Date('2026-07-12T00:00:00Z');
+
 async function gscSearch() {
   const token = await gscToken();
 
   // Search Console は 2〜3日遅れる。確定しているところだけを見る。
   const end = new Date(now.getTime() - 3 * 86400_000);
-  const start = new Date(end.getTime() - 7 * 86400_000);
+  let start = new Date(end.getTime() - 7 * 86400_000);
+
+  // ★ サイトが生まれる前は、問い合わせない
+  if (start < SITE_BORN) start = SITE_BORN;
+
+  // ★ 確定している期間が、まだサイトの誕生日に届いていない
+  if (end < SITE_BORN) {
+    return {
+      from: day(SITE_BORN),
+      to: day(end),
+      pending: true, // ★ 「0」ではない。「まだ分からない」
+      impressions: null,
+      clicks: null,
+      position: null,
+      queries: [],
+      pages: [],
+      note:
+        `まだ期間が来ていません（サイトは ${day(SITE_BORN)} 生まれ。` +
+        `Search Console は2〜3日遅れるので、確定しているのは ${day(end)} まで）。` +
+        `**これは「検索表示 0」ではありません。**`,
+    };
+  }
 
   const [totals, queries, pages] = await Promise.all([
     gscQuery(token, { startDate: day(start), endDate: day(end), dimensions: [] }),
@@ -314,9 +376,20 @@ async function gscSearch() {
   return {
     from: day(start),
     to: day(end),
-    // rows が空なのは「まだデータが無い」。取得は成功している。だから 0 と書いてよい。
-    impressions: t?.impressions ?? 0,
-    clicks: t?.clicks ?? 0,
+    pending: !t, // ★ 行が返らなかった = まだ確定していない。**0 ではない**
+    // ★★ rows が空なのを 0 と書いてはいけない。
+    //
+    //   前のコードには、こう書いてあった:
+    //     「rows が空なのは『まだデータが無い』。取得は成功している。だから 0 と書いてよい。」
+    //
+    //   **違う。**
+    //   Search Console は、確定した日については「表示回数 0」の行を**返す**。
+    //   行を返さないのは、**まだ確定していない**という意味。
+    //
+    //   「0 だった」と「まだ分からない」は、別の事実（CLAUDE.md ルール4）。
+    //   0 と書くと、あとで読む人間も機械も「誰にも見られていない」と読む。
+    impressions: t ? t.impressions : null,
+    clicks: t ? t.clicks : null,
     position: t?.position != null ? Math.round(t.position * 10) / 10 : null,
     queries: queries.map((r) => ({
       q: r.keys[0],
@@ -329,7 +402,10 @@ async function gscSearch() {
       impressions: r.impressions,
       clicks: r.clicks,
     })),
-    note: t ? '' : 'まだデータがありません（登録直後は数週間かかります。取得は成功しています）',
+    note: t
+      ? ''
+      : `${day(start)} 〜 ${day(end)} について、Search Console は行を返しませんでした。` +
+        `**まだ確定していない**という意味です。**「表示回数 0」ではありません。**`,
   };
 }
 
@@ -391,11 +467,21 @@ if (GSC_EMAIL && GSC_KEY && GSC_SITE) {
 //
 // 取れなかったものは「取得失敗」と書く。0 と書かない。
 
+// ★★ 数値には、4つの状態がある。**混ぜないこと**（CLAUDE.md ルール4）。
+//
+//     0            … 数えた。0 だった
+//     **取得失敗**   … 聞きに行って、答えが返らなかった
+//     —（鍵なし）    … そもそも聞きに行っていない
+//     —（未確定）    … 聞きに行って、「まだ分からない」と返ってきた   ← これが抜けていた
+//
+//   「0 だった」と「まだ分からない」を同じ 0 と書くと、
+//   **読む人間も機械も「誰にも見られていない」と読む。**そして間違った打ち手を打つ。
 const cell = (r, pick) => {
   if (r.skipped) return '—（鍵なし）';
   if (r.error) return '**取得失敗**';
   const v = pick(r);
-  return v === null || v === undefined ? '**取得失敗**' : String(v);
+  if (v === null || v === undefined) return r.pending ? '—（未確定）' : '**取得失敗**';
+  return String(v);
 };
 
 const cf = results.cloudflare;
@@ -412,11 +498,23 @@ if (gs.error) notes.push(`- ${day(now)} Search Console: 取得失敗 — ${gs.er
 if (gs.note) notes.push(`- ${day(now)} Search Console: ${gs.note}`);
 if (gs.skipped) notes.push(`- ${day(now)} Search Console: ${gs.skipped}`);
 
+// ★ 推定値なら、推定値だと分かる形で出す。
+//
+//   ★★ ただし、**サンプリングはクエリごとに変わる**（2026-07-14 に、これで一度間違えた）。
+//     ・集計だけ聞く   → 生の表。sampleInterval ≒ 1（count は実際に数えた件数とほぼ同じ）
+//     ・日別・国別に割る → サンプリングされた表。sampleInterval = 10
+//     **どちらも count は正しく引き伸ばされている。** だが、内訳の1行1行は
+//     わずか数件の観測から作られているので、**「US が多い」のような読みは、ほぼ根拠にならない。**
+const pvCell =
+  cf.sampleInterval >= 1.5
+    ? `${cell(cf, (r) => r.pv)}（推定。実際に記録: ${cf.observed} 件 / ${cf.sampleInterval}件に1件）`
+    : cell(cf, (r) => r.pv);
+
 console.log('');
 console.log(`  期間: ${day(from)} 〜 ${day(now)}`);
-console.log(`  PV        : ${cell(cf, (r) => r.pv)}`);
+console.log(`  PV        : ${pvCell}`);
 console.log(`  訪問       : ${cell(cf, (r) => r.visits)}`);
-console.log(`  検索の表示回数 : ${cell(gs, (r) => r.impressions)}`);
+console.log(`  検索の表示回数 : ${cell(gs, (r) => r.impressions)}${gs.impressions == null ? '' : ''}`);
 console.log(`  検索のクリック : ${cell(gs, (r) => r.clicks)}`);
 console.log(`  売上(総額)  : ${cell(st, (r) => r.gross)} 円`);
 console.log(`  売上(手取り) : ${cell(st, (r) => r.net)} 円`);
