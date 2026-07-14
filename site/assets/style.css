@@ -3057,3 +3057,40 @@ a { color: var(--rose); }
   .evc-n { font-size: 26px; }
   .evc-bar-row { grid-template-columns: 96px 1fr 24px; font-size: 10.5px; }
 }
+
+/* ★ 商品欄は、記事の続きとして読ませる。
+   ただし「広告」の2文字は、見出しの中と各ボタンの中に必ず残す。
+   （景品表示法のステマ規制。外した瞬間、うちが批判している側と同じ媒体になる） */
+
+.products-title {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.products-ad {
+  display: inline-block;
+  padding: 3px 10px;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--sans, inherit);
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: .16em;
+  vertical-align: middle;
+}
+
+.pr-banner {
+  display: block;
+  max-width: none;
+  background: transparent;
+  border: 0;
+  border-left: 2px solid var(--rule);
+  padding: 0 0 0 14px;
+  font-size: 12.5px;
+  line-height: 1.9;
+  letter-spacing: 0;
+  color: var(--ink-mute);
+}
+.pr-banner strong { color: var(--ink-soft); font-weight: 500; }
