@@ -263,6 +263,18 @@
         "count": 11,
         "searchedOn": "2026-07-14"
       }
+    ],
+    "2026-07-14-microneedle-patch": [
+      {
+        "query": "(\"microneedle patch\"[tiab] OR \"dissolving microneedle\"[tiab]) AND (wrinkle*[tiab] OR \"skin hydration\"[tiab] OR periorbital[tiab]) AND humans[mh]",
+        "count": 17,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "(microneedle*[tiab]) AND (wrinkle*[tiab] OR \"skin aging\"[tiab] OR cosmetic*[tiab]) AND (\"systematic review\"[pt] OR meta-analysis[pt] OR review[pt])",
+        "count": 80,
+        "searchedOn": "2026-07-14"
+      }
     ]
   }
 }
