@@ -38,6 +38,9 @@ const baseline = existsSync(join(SITE, 'article-baseline.json'))
 const { countWeapons, withFigures, WEAPON_KEYS, WEAPON_LABEL, WEAPON_WHY } = await import(
   './article-metrics.mjs'
 );
+// 数値の照合は auto/x-numbers.mjs に1つだけ置いてある。**2箇所に書かない。**
+const { loadCorpus, missingNumbers } = await import('../auto/x-numbers.mjs');
+
 const papersData = JSON.parse(readFileSync(join(SITE, 'papers.json'), 'utf8'));
 
 // 論文台帳に載っている PMID
@@ -202,6 +205,30 @@ for (const [key, p] of ledger) {
       '買うべき', '不要です',
     ];
 
+    // ★★ 診断の「ジャンル」。**ここも語彙を固定する。**
+    //
+    //   固定しないと、機械は必ず「おすすめの成分」「相性」「あなたに合う」を足す。
+    //   足した瞬間、それは**成分辞典**になる（CLAUDE.md で却下済み）。
+    //
+    //   ★ 3つだけ。増やしたくなったら、勝手に足さずオーナーに聞くこと。
+    const KIND_VOCAB = ['効果', '副作用', '使い方'];
+
+    // ★★ 診断が引く論文は、台帳（PubMed 照会済み）に実在すること。
+    //
+    //   2026-07-14、これが無かった。実際に攻撃して確かめた:
+    //
+    //       存在しない PMID 99999999 を引き、
+    //       「12週間のRCTで、毎日群が有意に改善しました」と書いた項目を足したら、
+    //       **関門はそのまま通した。**
+    //
+    //   診断は51項目ある。**これから増やすなら、先にここを塞がないと、**
+    //   **捏造が増えるだけになる。**
+    // ★ articles.json は配列そのもの（{ articles: [...] } ではない）
+    const slugs = new Set(meta.map((a) => a.slug));
+
+    // 記事（＋その記事が載せている図）の全文。診断の数値を突き合わせるために読む
+    const claimCorpus = loadCorpus();
+
     let humanTrial = 0;
     let asked = 0;
 
@@ -210,6 +237,81 @@ for (const [key, p] of ledger) {
         failures.push(
           `診断 ${c.id}: traced が「${c.traced}」です。使えるのは ${TRACED_WORDS.join(' / ')} のみ`
         );
+      }
+
+      // ① ジャンルは、3つの語彙だけ
+      if (c.kind && !KIND_VOCAB.includes(c.kind)) {
+        failures.push(
+          `診断 ${c.id}: kind が「${c.kind}」です。使えるのは ${KIND_VOCAB.join(' / ')} のみ。\n` +
+            `      **語を増やすと、成分辞典になります**（却下済み）。増やすならオーナーに聞くこと`
+        );
+      }
+
+      // ② 引いている論文は、台帳（PubMed 照会済みの ${ledger.size} 本）に実在すること
+      for (const pmid of c.pmids ?? []) {
+        if (!ledger.has(String(pmid))) {
+          failures.push(
+            `診断 ${c.id}: **PMID ${pmid} は台帳（papers.json）にありません。**\n` +
+              `      台帳に無い論文は、PubMed で実在を確かめていません。**捏造かもしれません。**\n` +
+              `      先に researcher に論文カードを作らせ、台帳に載せること`
+          );
+        }
+      }
+
+      // ③ 紐づけた記事は、実在すること
+      if (c.article && !slugs.has(c.article)) {
+        failures.push(`診断 ${c.id}: 記事「${c.article}」がありません`);
+      }
+
+      // ④ ★ found / note に書いた数値が、**確かめた材料のどこかに**実在すること
+      //
+      //   PMID が実在し、記事も正しくても、**その論文が言っていないことを書ける。**
+      //   （今日、X で実際に起きたのと同じ形。記事は「7人中6人」、投稿は「7人中5人」）
+      //
+      //   ★ ただし、診断項目は「記事の要約」ではない。**論文カードまで辿った結果**。
+      //     記事に書かなかった論文の細部（p値・被験者数）を持っていて当然。
+      //     最初これを「記事に無い」と判定して、**正しい項目を15件、誤って止めた。**
+      //
+      //   だから照合先は、その項目が実際に依拠している材料:
+      //     記事（＋その図） ＋ 論文カード ＋ **その項目が引いている論文の台帳エントリ**
+      //
+      //   数値の照合は auto/x-numbers.mjs に1つだけ置く。**2箇所に書かない。**
+      if (c.article && slugs.has(c.article)) {
+        const cardPath = join(ROOT, 'research', `${c.article}.md`);
+        const card = existsSync(cardPath) ? readFileSync(cardPath, 'utf8') : '';
+        const cited = (c.pmids ?? [])
+          .map((p) => ledger.get(String(p)))
+          .filter(Boolean)
+          .map((p) => JSON.stringify(p))
+          .join(' ');
+
+        const material = `${claimCorpus[c.article] ?? ''} ${card} ${cited}`;
+        const said = `${c.found ?? ''} ${c.note ?? ''}`;
+        const bad = missingNumbers(material, said);
+        if (bad.length) {
+          failures.push(
+            `診断 ${c.id}: **確かめた材料のどこにも無い数値**を書いています: ${bad.join(' / ')}\n` +
+              `      探した先: articles/${c.article}.md（＋図）/ research/${c.article}.md / 引用した論文の台帳\n` +
+              `      **論文が実在しても、その論文が言っていないことは書けません。**`
+          );
+        }
+      }
+
+      // ⑤ ★ その論文を、その記事が実際に引用していること
+      //
+      //   これが無いと、「実在する論文」を「関係ない記事」に貼り付けられる。
+      //   台帳に載ってさえいれば、どの主張の根拠にもできてしまう。
+      if (c.article && slugs.has(c.article)) {
+        for (const pmid of c.pmids ?? []) {
+          const paper = ledger.get(String(pmid));
+          if (paper && Array.isArray(paper.articles) && !paper.articles.includes(c.article)) {
+            failures.push(
+              `診断 ${c.id}: PMID ${pmid} は台帳にありますが、**記事「${c.article}」は引用していません**\n` +
+                `      （この論文を引いているのは: ${paper.articles.join(' / ') || 'どの記事も引いていない'}）\n` +
+                `      **実在する論文を、関係ない主張の根拠に貼っていませんか。**`
+            );
+          }
+        }
       }
 
       // 診断に出す項目は、日常の言葉の質問文と、グループ名が要る

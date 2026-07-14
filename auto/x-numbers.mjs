@@ -120,13 +120,23 @@ const normalize = (s) => s.replace(/(\d),(?=\d{3}\b)/g, '$1');
 //   「7人のうち6人」は 7人 と 6人 の2つに分かれるので、これで拾える。
 const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-function corpusHas(hay, token) {
+function corpusHas(rawHay, token) {
+  // ★★ 干し草の側も、必ず正規化する。**片側だけ正規化すると、永久に一致しない。**
+  //
+  //   2026-07-14、これで正しい診断項目を3件、誤って止めた:
+  //     ・こちらは「.051」を「0.051」に直してから探す
+  //     ・材料（論文）は欧米誌の標準表記「**P = .051**」で書かれている
+  //     → **先頭の 0 が無いので、literal 検索が永久に外れる**
+  //   カンマも同じ。記事と図では外していたが、**論文カードと台帳では外していなかった。**
+  const hay = normalize(rawHay);
+
   if (!token.includes(SEP)) {
     // p値。**演算子まで一致すること**（p=0.001 と p<0.001 は、別の主張）
-    const m = token.match(/^p([=<>])(.+)$/);
+    // ただし先頭の 0 は有っても無くてもよい（P = .051 と p=0.051 は、同じ主張）
+    const m = token.match(/^p([=<>])0?\.(.+)$/);
     if (!m) return false;
     const ops = { '=': '[=＝]', '<': '[<＜]', '>': '[>＞]' }[m[1]];
-    return new RegExp(`p\\s*${ops}\\s*${escape(m[2])}`, 'i').test(hay);
+    return new RegExp(`p\\s*${ops}\\s*0?\\.${escape(m[2])}`, 'i').test(hay);
   }
   const [num, unit] = token.split(SEP);
   return new RegExp(`${escape(num)}\\s*${escape(unit)}`).test(hay);
@@ -173,6 +183,17 @@ export function loadCorpus() {
   corpus['__papers__'] = '';
 
   return corpus;
+}
+
+// ---- 「この文が書いている数値のうち、この記事に無いもの」を返す ----------------
+//
+// ★ X の投稿にも、診断（claims.json）にも、同じ照合が要る。
+//   **同じロジックを2箇所に書かない**（CLAUDE.md）。ここ1つだけに置く。
+export function missingNumbers(articleText, text) {
+  if (!articleText) return [];
+  return extractNumbers(text)
+    .filter((t) => !corpusHas(articleText, t))
+    .map(label);
 }
 
 // ---- 1つの投稿を調べる ------------------------------------------------
