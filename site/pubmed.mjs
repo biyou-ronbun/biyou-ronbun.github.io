@@ -258,7 +258,23 @@ if (cmd === 'search') {
     await getText(`${EUTILS}/esummary.fcgi?db=pubmed&retmode=json&id=${ids.join(',')}`)
   );
 
-  console.log(`「${query}」— ${ids.length} 件\n`);
+  // ★★ ここは以前 `${ids.length} 件` と表示していました。**画面がエージェントに嘘をつきます。**
+  //
+  //   retmax=20 なので、ids は最大20件しか返りません。
+  //   真の件数が 154 件でも、画面は「20 件」と表示していました。
+  //
+  //   記録（searches.json）のほうは total を使っていたので正しく、
+  //   **画面だけが嘘をついていた。** これがいちばん危ない形です:
+  //
+  //     エージェントは画面を見て、記事に「20件でした」と書く
+  //       → レシートのリンクは 154 件を表示する
+  //       → 読者は食い違いを見る。**「騙されてましたね」が、ここで生まれます。**
+  //
+  //   件数は必ず total（PubMed の Count）を出す。表示した本数とは別物だと明示する。
+  console.log(`「${query}」— ${total} 件（うち、関連度の高い ${ids.length} 件を表示します）\n`);
+  if (total > ids.length) {
+    console.log(`  ★ 記事に書く件数は ${total} 件です。下に並んでいる ${ids.length} 件ではありません。\n`);
+  }
   for (const id of ids) {
     const r = sum.result?.[id];
     if (!r) continue;
