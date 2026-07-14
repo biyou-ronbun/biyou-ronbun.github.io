@@ -3247,3 +3247,41 @@ a { color: var(--rose); }
 
 /* ---- 検証レシート：ゴールドの縁 ---- */
 .receipt { border-left: 2px solid var(--gold-line); }
+
+/* ---- ランキング（2026-07-14。オーナー判断で開けた） ----------------------
+   ★ 新しい色は足さない。いまある --ink / --ink-soft / --rule / --rose-deep だけで組む。
+   ★ 順位を目立たせすぎないこと。**重みを見せずに順位だけが目に入る形は、嘘に近づく。** */
+.rk { margin: 40px 0; }
+.rk-h { font-family: var(--serif); font-size: 20px; margin: 0 0 14px; }
+
+.rk-warn {
+  padding: 16px 18px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--rose-deep);
+  background: var(--bg-raised);
+  margin: 0 0 20px;
+}
+.rk-warn p { margin: 0 0 .8em; font-size: 13.5px; line-height: 1.9; }
+.rk-warn p:last-child { margin-bottom: 0; }
+
+.rk-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.rk-table th, .rk-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+}
+.rk-table th { font-weight: 600; color: var(--ink-soft); white-space: nowrap; }
+.rk-n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.rk-total { font-weight: 700; }
+.rk-sub { display: block; font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+
+.rk-weights { margin-top: 18px; }
+.rk-weights summary { cursor: pointer; font-size: 13.5px; padding: 8px 0; }
+.rk-formula { font-size: 12.5px; margin: 10px 0; }
+.rk-table-w { max-width: 420px; margin: 8px 0 12px; }
+
+/* 商品の点数の内訳 */
+.prod-score { display: block; margin: 6px 0 2px; font-size: 13px; }
+.prod-score-b { display: block; font-size: 11.5px; color: var(--ink-soft); margin-top: 1px; }
+.prod-range-basis { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 4px; }

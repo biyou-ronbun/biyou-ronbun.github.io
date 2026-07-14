@@ -210,16 +210,29 @@ const priceOf = (slug, name) => {
   return p;
 };
 
+// ★★ 2026-07-14、オーナー判断で「価格＋濃度」の合成スコアに変えました。
+//
+//   それまでは「円/mL の安い順」だけでした。**それは算術であって、判定ではありませんでした。**
+//   いまは濃度の点が入ります。**濃度の点は、私たちの判断です。**
+//
+//   ★ 重みの定義は site/ranking.mjs の1箇所だけ。**ここに書き直さないこと。**
+const { rankProducts, PRICE_MAX, CONC_MAX } = await import('./ranking.mjs');
+
 const itemsFor = (slug) => {
-  const items = (products[slug]?.items ?? []).filter((i) => i.url && i.name);
-  return items
-    .map((i) => ({ ...i, _price: priceOf(slug, i.name) }))
-    .sort((a, b) => {
-      // 価格が取れなかったものは、いちばん後ろ。**推測で順位を付けない。**
-      const x = a._price?.perMl ?? Infinity;
-      const y = b._price?.perMl ?? Infinity;
-      return x - y;
-    });
+  const r = rankProducts(slug);
+  if (!r) return [];
+  const byName = new Map((products[slug]?.items ?? []).map((i) => [i.name, i]));
+  return r.rows
+    .filter((x) => byName.get(x.name)?.url)
+    .map((x) => ({
+      ...byName.get(x.name),
+      _price: priceOf(slug, x.name),
+      _score: x.total,
+      _priceScore: x.priceScore,
+      _concScore: x.concScore,
+      _conc: x.conc,
+      _range: r.range,
+    }));
 };
 
 // 「1mLあたり◯円（YYYY-MM-DD時点）」の表示。取れなければ、何も書かない。
@@ -228,18 +241,28 @@ const perMlLabel = (i) =>
     ? `<span class="prod-price"><strong>1mLあたり ${i._price.perMl} 円</strong><span class="prod-price-at">${escapeHtml(i._price.at)} に機械が取得。<strong>価格は変わります</strong></span></span>`
     : '';
 
-// ★★ 番号。**「1位」とは書かない。**
+// ★★ 番号。**2026-07-14 から「1位」と書きます**（オーナー判断）。
 //
-//   「1位」と書けば、読者は「一番いい」と読みます。**この番号は、単価が安い順です。**
-//   だから番号の下に、必ず「安い順」と書きます。**番号と意味を、切り離せない形にします。**
+//   ★ ただし、番号の下に「私たちが決めた重み」への導線を必ず置きます。
+//     置かなければ、読者は「科学が1位だと言っている」と読みます。**それは嘘です。**
+//     site/verify.mjs が、重みの開示が無いページに順位が出ていたら、公開を止めます。
 //
-//   （「根拠の強さ」で順位を付けたら、1位はコラーゲンになりました。
-//     コラーゲンの記事の結論は「独立資金の試験は効果を支持していない」。
-//     **順位は、簡単に逆の意味で読まれます。**）
+//   ★ そして、番号の意味を、番号のすぐ横に書きます。
+//     **この順位は「効く順」ではありません。「価格と濃度で、私たちが並べた順」です。**
 const rankBadge = (n, total) =>
   total >= 3
-    ? `<span class="prod-rank"><span class="prod-rank-n">${n}</span><span class="prod-rank-l">安い順</span></span>`
+    ? `<span class="prod-rank"><span class="prod-rank-n">${n}</span><span class="prod-rank-l">位</span></span>`
     : '';
+
+// 点数の内訳。**何点が何から来たかを、そのまま見せる。**
+const scoreLabel = (i) => {
+  const parts = [];
+  if (i._priceScore != null) parts.push(`価格 ${i._priceScore.toFixed(1)}/${PRICE_MAX}`);
+  if (i._concScore != null) parts.push(`濃度 ${i._concScore}/${CONC_MAX}`);
+  else if (i._range === null || i._range === undefined) parts.push('濃度 該当なし');
+  if (!parts.length) return '';
+  return `<span class="prod-score"><strong>${i._score.toFixed(1)} 点</strong><span class="prod-score-b">${parts.join(' ＋ ')}</span></span>`;
+};
 
 // ★★ この表記は、外せません。
 //
@@ -278,6 +301,7 @@ const productBlock = (slug) => {
       <div class="prod-text">
         <a class="prod-name" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">${escapeHtml(i.name)}</a>
         <span class="prod-criterion">${escapeHtml(i.criterion)}</span>
+        ${scoreLabel(i)}
         ${perMlLabel(i)}
         <a class="prod-go" href="${escapeAttr(i.url)}" target="_blank" rel="sponsored nofollow noopener">楽天で見る<span class="prod-go-note">広告</span></a>
       </div>
@@ -303,14 +327,22 @@ const productBlock = (slug) => {
   //     ・広告であること（見出しの中と、各ボタンの中）
   //     ・効果を保証しないこと
   //     ・「効く順」でも「人気順」でもないこと
-  //     ・並び順は単価の安い順で、順位ではないこと
+  //     ・★ 順位が、私たちが決めた重みで計算されたものであること（2026-07-14 追加）
   //     ・価格は変わること
   //     ・基準に合うものが無ければ、何も置かないこと
+  const range = items[0]?._range ?? null;
   return `<aside class="products">
   <h2 class="products-title">では、その基準に合うのは、どれか<span class="products-ad">広告</span></h2>
   <p class="products-lead">この記事が出した結論から、<strong>「選び方の基準」</strong>をつくりました。下は、<strong>その基準に合う商品</strong>です。<strong>ここから購入されると、このブログに収益が入ります。</strong></p>
-  <p class="products-lead"><strong>「効く順」でも「人気順」でもありません。効果を保証するものでもありません。</strong>並んでいるのは<strong>基準を全部満たした商品だけ</strong>で、上下は<strong>1mLあたりの価格が安い順</strong>——つまり<strong>順位ではなく、算数</strong>です。価格は公開のたびに機械が取り直していますが、<strong>変わります。</strong>楽天のページでご確認ください。</p>
-  <p class="products-lead"><strong>基準が導けなかった記事には、商品を置いていません。</strong>10本のうち5本が、それです。</p>
+  <p class="products-lead"><strong>★ この順位は、論文が決めたものではありません。私たちが決めた重みで計算したものです。</strong>点数の内訳は、各商品に書いてあります。</p>
+  <p class="products-lead"><strong>「効く順」でも「人気順」でもありません。効果を保証するものでもありません。</strong>点数は、<strong>価格（1mLあたりが安いほど高い。最大 ${PRICE_MAX} 点）</strong>${
+    range
+      ? ` と <strong>濃度（この記事の基準 ${range.min}〜${range.max}% に入っていれば ${CONC_MAX} 点、外れていれば 0 点）</strong>`
+      : ''
+  } の合計です。${range ? `<span class="prod-range-basis">濃度の基準の根拠: ${escapeHtml(range.basis)}</span>` : '<strong>この記事の商品には、濃度の概念がありません。</strong>だから濃度の点はつけていません。'}</p>
+  <p class="products-lead"><strong>なぜ価格が最大 ${PRICE_MAX} 点なのか。なぜ基準の外は 0 点なのか。私たちがそう決めたからです。</strong>納得できなければ、<strong>あなた自身の基準で選んでください。</strong>計算のコードは <code>site/ranking.mjs</code> にあり、リポジトリは公開しています。</p>
+  <p class="products-lead">価格は公開のたびに機械が取り直していますが、<strong>変わります。</strong>楽天のページでご確認ください。</p>
+  <p class="products-lead"><strong>基準が導けなかった記事には、商品を置いていません。</strong>11本のうち6本が、それです。</p>
   <ul class="products-list">
 ${rows}
   </ul>
@@ -1763,17 +1795,85 @@ console.log(`  built  evidence/ (${evidenceSheets.length} 個)`);
 })();
 </script>`;
 
+  // ---- ランキング（2026-07-14、オーナー判断で開けた） ----------------------
+  //
+  // ★★ 順位は、論文が決めたものではない。**私たちが決めた重みで計算したもの。**
+  //   だから、**重みの表を、順位と同じページに必ず出す。**
+  //   site/verify.mjs が、重みの開示が無いページに順位が出ていたら、公開を止める。
+  //
+  // ★ 重みの定義は site/ranking.mjs の1箇所だけ。**2箇所に書かない。**
+  const { rankIngredients, DESIGN_WEIGHT, DESIGN_LABEL, INDEPENDENT_BONUS, INDEPENDENT_CAP, RETRACTION_PENALTY } =
+    await import('./ranking.mjs');
+
+  const ranked = rankIngredients();
+  const titleOf = new Map(meta.map((a) => [a.slug, a.title]));
+
+  const designRows = Object.entries(DESIGN_WEIGHT)
+    .sort((a, b) => b[1] - a[1])
+    .map(([k, v]) => `      <tr><td>${escapeHtml(DESIGN_LABEL[k] ?? k)}</td><td class="rk-n">${v}</td></tr>`)
+    .join('\n');
+
+  const rankRows = ranked
+    .map(
+      (r, i) => `      <tr>
+        <td class="rk-n">${i + 1}</td>
+        <td><a href="articles/${escapeAttr(r.slug)}.html">${escapeHtml(titleOf.get(r.slug) ?? r.slug)}</a></td>
+        <td class="rk-n rk-total">${r.total}</td>
+        <td class="rk-n">${r.best}<span class="rk-sub">${escapeHtml(DESIGN_LABEL[r.bestType] ?? '—')}</span></td>
+        <td class="rk-n">${r.independent > 0 ? '+' + Math.min(INDEPENDENT_CAP, r.independent) : '0'}<span class="rk-sub">独立 ${r.independent} 本 / 企業 ${r.industry} 本</span></td>
+        <td class="rk-n">${r.retracted > 0 ? RETRACTION_PENALTY * r.retracted : '0'}<span class="rk-sub">${r.retracted > 0 ? '撤回 ' + r.retracted + ' 本' : ''}</span></td>
+      </tr>`
+    )
+    .join('\n');
+
+  const rankingSection = `<section class="rk">
+  <h2 class="rk-h">成分のランキング</h2>
+
+  <div class="rk-warn">
+    <p><strong>★ この順位は、論文が決めたものではありません。私たちが決めた重みで計算したものです。</strong></p>
+    <p>なぜ「独立資金の試験」に +1 なのか。なぜ「撤回された論文」が −1 なのか。<strong>私たちがそう決めたからです。</strong>重みは下に全部書いてあります。<strong>納得できなければ、あなた自身の重みで並べ替えてください。</strong></p>
+    <p><strong>そして、順位は「効く順」ではありません。「調べられている順」です。</strong>1位の成分が、あなたに効くという意味ではありません。<strong>その成分について、質の高い研究が多く行われている、という意味です。</strong></p>
+  </div>
+
+  <div class="ev-tablewrap">
+  <table class="rk-table">
+    <thead>
+      <tr>
+        <th>順位</th><th>成分（記事）</th><th>合計</th>
+        <th>最も強い証拠</th><th>独立資金</th><th>撤回</th>
+      </tr>
+    </thead>
+    <tbody>
+${rankRows}
+    </tbody>
+  </table>
+  </div>
+
+  <details class="rk-weights">
+    <summary><strong>私たちが決めた重み（全部）</strong></summary>
+
+    <p class="rk-formula"><code>合計 = 最も強い証拠 ＋ 独立資金のヒト試験（1本 +${INDEPENDENT_BONUS}、上限 ${INDEPENDENT_CAP}） − 撤回された論文（1本 ${RETRACTION_PENALTY}）</code></p>
+
+    <table class="rk-table rk-table-w">
+      <thead><tr><th>論文の種類</th><th>点</th></tr></thead>
+      <tbody>
+${designRows}
+      </tbody>
+    </table>
+
+    <p class="ev-note"><strong>論文の種類と資金源は、私たちの意見ではありません。</strong>論文にそう書いてあります。<strong>点数の付け方だけが、私たちの判断です。</strong></p>
+    <p class="ev-note"><strong>撤回された論文は、データの捏造とは限りません。</strong>ですが、その結果はもう根拠に使えません。だから引きます。</p>
+    <p class="ev-note">計算のコードは <code>site/ranking.mjs</code> にあります。<strong>リポジトリは公開しています。自分で確かめてください。</strong></p>
+  </details>
+</section>`;
+
   const content = `<section class="hero is-narrow">
   <p class="hero-lead">成分ごとの証拠</p>
   <p class="hero-body">記事ごとに、根拠にした論文を<strong>1本ずつ表にしています。</strong>何が測られ、どの濃度で試され、<strong>どんな副作用が報告されたか。</strong></p>
   <p class="hero-body"><strong>解説は1行も書いていません。数字だけです。</strong></p>
 </section>
 
-<section class="ing-norank">
-  <p><strong>★ 順位は付けていません。並べ替えは、あなたがしてください。</strong>見出しを押すと並び替わります。</p>
-  <p class="ev-note"><strong>「効く順」は、作れませんでした。</strong>比較できる効果量を持つ論文が、88本中<strong>7本</strong>しかありません。しかもその7本が測っているものはバラバラです（皮脂の量、紫外線で赤くなるまでの時間、シワの深さ、水分量）。<strong>1つの物差しに乗せる方法が、ありません。</strong>重みを決めれば順位は作れますが、<strong>その重みには何の根拠もありません。</strong></p>
-  <p class="ev-note"><strong>「根拠の強い順」も、作りませんでした。</strong>こちらは計算できます。実際に計算したら、<strong>1位はコラーゲンでした。</strong>コラーゲンの記事の結論は「<strong>独立資金の試験は、効果を支持していなかった</strong>」です。<strong>「1位」は「一番いい」ではなく「一番はっきり分かっている」でした。数字が、逆の意味に読まれます。</strong></p>
-</section>
+${rankingSection}
 
 <section class="ing-summary">
   <ul class="ev-stats">

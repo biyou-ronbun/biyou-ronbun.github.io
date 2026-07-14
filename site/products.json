@@ -125,7 +125,9 @@
         "basis": "濃度を上げても見た目は変わらず、副作用だけがはっきり増えていました",
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bc5e25.d4bc4d77.55bc5e26.bf633cf3/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosrx-official%2Ftherx_retinolcream03%2F",
         "image": "https://shop.r10s.jp/cosrx-official/cabinet/08926095/10101955/imgrc0115565484.jpg?_ex=300x300",
-        "volume": 20
+        "volume": 20,
+        "concentration": 0.3,
+        "concentrationSource": "商品名に明記（COSRX RX ザ・レチノール 0.3 クリーム 20ml）"
       },
       {
         "name": "The Ordinary R0.2 フェイスセラム（レチノール 0.2%）30ml",
@@ -133,7 +135,9 @@
         "basis": "濃度を上げても見た目は変わらず、副作用だけがはっきり増えていました",
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bdbaa1.6e6c52e5.55bdbaa2.422918aa/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftheordinary%2For-42%2F",
         "image": "https://shop.r10s.jp/theordinary/cabinet/item_img/or-42.jpg?_ex=300x300",
-        "volume": 30
+        "volume": 30,
+        "concentration": 0.2,
+        "concentrationSource": "商品名に明記（The Ordinary R0.2 フェイスセラム（レチノール 0.2%）30ml）"
       },
       {
         "name": "KISO CARE 純粋レチノール 0.1%配合 美容液 30ml",
@@ -141,9 +145,17 @@
         "basis": "濃度を上げても見た目は変わらず、副作用だけがはっきり増えていました",
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bde0de.169e49c0.55bde0df.94fdc96f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkiso%2Fkiso-k35%2F",
         "image": "https://shop.r10s.jp/kiso/cabinet/raku/k35/00_k35.jpg?_ex=300x300",
-        "volume": 30
+        "volume": 30,
+        "concentration": 0.1,
+        "concentrationSource": "商品名に明記（KISO CARE 純粋レチノール 0.1%配合 美容液 30ml）"
       }
-    ]
+    ],
+    "concentrationRange": {
+      "min": 0.075,
+      "max": 0.3,
+      "basis": "「0.3%以下で十分そうだ」（記事より逐語）。効果が確認された最も低い濃度は 0.075%（日本人女性57人・26週間）",
+      "article": "retinol-concentration"
+    }
   },
   "vitamin-c-derivatives": {
     "items": [
@@ -157,7 +169,9 @@
         ],
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bc86fa.ff1bdfd5.55bc86fb.ba62e819/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpaulaschoicejapan%2F7770%2F",
         "image": "https://shop.r10s.jp/paulaschoicejapan/cabinet/serum/10620282/imgrc0117136129.jpg?_ex=300x300",
-        "volume": 20
+        "volume": 20,
+        "concentration": 15,
+        "concentrationSource": "商品名に明記（Paula's Choice C15 スーパーブースター 20ml）"
       },
       {
         "name": "モルバニー グロウピュアビタミンC 15% アンプル 15ml",
@@ -169,7 +183,9 @@
         ],
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bdbe08.c131495f.55bdbe09.8d5970de/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Felier%2Fmv011%2F",
         "image": "https://shop.r10s.jp/elier/cabinet/11173028/mv011.jpg?_ex=300x300",
-        "volume": 15
+        "volume": 15,
+        "concentration": 15,
+        "concentrationSource": "商品名に明記（モルバニー グロウピュアビタミンC 15% アンプル 15ml）"
       },
       {
         "name": "プラスキレイ プラスピュアVC10（ピュアビタミンC 10%配合）10mL",
@@ -181,9 +197,17 @@
         ],
         "url": "https://hb.afl.rakuten.co.jp/ichiba/55bde93d.bffb6698.55bde93e.80da8b6f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcbja%2Fpure-vc10%2F",
         "image": "https://shop.r10s.jp/cbja/cabinet/kirei/p-vc10.jpg?_ex=300x300",
-        "volume": 10
+        "volume": 10,
+        "concentration": 10,
+        "concentrationSource": "商品名に明記（プラスキレイ プラスピュアVC10（ピュアビタミンC 10%配合）10mL）"
       }
-    ]
+    ],
+    "concentrationRange": {
+      "min": 10,
+      "max": 20,
+      "basis": "「ピュアビタミンCを選ぶなら、濃度は10〜20%。」（記事より逐語）",
+      "article": "vitamin-c-derivatives"
+    }
   },
   "hyaluronic-acid": {
     "items": [
