@@ -138,6 +138,7 @@ const KNOWN_TEMPLATES = [
   '404.html', 'about.html', 'article.html', 'card.html', 'check.html',
   'contact.html', 'cta.html', 'home.html', 'layout.html', 'membership.html',
   'news.html', 'privacy.html', 'tokushoho.html', 'verified-en.html',
+  'diagnosis.html', // ★ 2026-07-14 オーナー判断で追加（悩み → 成分 → 商品）
 ];
 
 // ★ ランキング・点数・診断→おすすめ・メール登録・読者数の捏造は、

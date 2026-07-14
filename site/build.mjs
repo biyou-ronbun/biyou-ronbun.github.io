@@ -1947,6 +1947,7 @@ ${sortScript}
 }
 
 let dictionarySlugs = [];
+let dictionaryOf = new Map();
 
 // ---- 成分辞典（2026-07-14、オーナー判断で開けた） ---------------------------
 //
@@ -2040,6 +2041,8 @@ ${prodBlocks}
 
   dictionarySlugs = made.map((e) => e.slug); // ★ sitemap に載せるため
   console.log(`  built  ingredient/*.html（成分辞典 ${made.length} 件）`);
+  dictionaryOf = new Map();
+  for (const e of made) for (const s of e.articles) dictionaryOf.set(s, e.slug);
   for (const s of skipped) {
     console.log(`    -- 作りませんでした: ${s.topic}（${s.n}件）… ${s.why}`);
   }
@@ -2287,6 +2290,81 @@ ${rows}
 
 // ---- 悩みから探す（タグページ） -------------------------------------------
 // 語彙・tagMap・tagLinks の定義は、記事ページより前（上）にある。
+
+// ---- 肌診断（悩み → 成分 → 商品）。2026-07-14、オーナー判断で開けた -------------
+//
+// ★★ この機能は、うちがいちばん強く却下していたものです。理由は実測でした。
+//
+//   ・「診断 → おすすめ成分 → 商品」が実際に効く商品を当てられるかを検証した
+//     臨床試験は、**PubMed で 0 件**（research/skin-type-questionnaire.md）
+//   ・質問票の答えと、機械で測った肌の状態は、**弱くしか一致しない**（r = 0.24〜0.30）
+//   ・Baumann の16タイプ診断は、**質問項目そのものが非公開**
+//
+//   **だから、この3つをページに書きます。書かなければ、**
+//   **検証されていない方法を「当たる」と売ることになります**（景表法・優良誤認）。
+//
+// ★★ そして、**肌の状態を医学的に判定しません**（医師法17条）。
+//   「あなたの肌は敏感肌です」は、医師にしか言えません。
+//   **聞くのは「何に困っているか」だけ。** auto/retention-gates.mjs が、これを見張ります。
+//
+// ★ 読者の入力は、どこにも送りません。全部ブラウザの中で動きます。
+//   （送れば、それは「肌データを集める装置」になります。作りません）
+
+{
+  const { rankIngredients: rankAll } = await import('./ranking.mjs');
+  const byTag = {};
+  const posOf = new Map(rankAll().map((r) => [r.slug, r]));
+
+  for (const [tag, items] of tags) {
+    byTag[tag] = items
+      .map((a) => {
+        const r = posOf.get(a.slug);
+        const prods = itemsFor(a.slug).map((i) => ({
+          name: i.name,
+          url: i.url,
+          score: Number(i._score.toFixed(1)),
+          perMl: i._price?.perMl ?? null,
+        }));
+        return {
+          slug: a.slug,
+          title: a.title,
+          answer: cardAnswer.get(a.slug) ?? a.summary ?? '',
+          score: r?.total ?? 0,
+          dict: dictionaryOf.get(a.slug) ?? null,
+          products: prods,
+        };
+      })
+      .sort((x, y) => y.score - x.score);
+  }
+
+  const tagBoxes = tags
+    .map(
+      ([t]) => `  <label class="dg-tag">
+    <input type="checkbox" value="${escapeAttr(t)}">
+    <span>${escapeHtml(t)}</span>
+  </label>`
+    )
+    .join('\n');
+
+  write(
+    join(DIST, 'diagnosis.html'),
+    renderPage({
+      ad: true,
+      content: fill(read(join(SITE, 'templates', 'diagnosis.html')), {
+        DIAGNOSIS_TAGS: tagBoxes,
+        DIAGNOSIS_JSON: JSON.stringify({ byTag }).replace(/</g, '\\u003c'),
+      }),
+      headTitle: `悩みから、成分を探す | ${cfg.title}`,
+      metaDesc:
+        '医学的な診断はしません。あなたの悩みに関係する成分について、私たちが論文をどこまで辿れたかを見せる索引です。この方法が効く商品を当てられるかを検証した臨床試験は、0件でした。',
+      canonical: `${baseUrl}/diagnosis.html`,
+      ogType: 'website',
+      rootPath: '',
+      ogSlug: '_home',
+    })
+  );
+  console.log(`  built  diagnosis.html（悩み ${tags.length} 種類 → 成分 → 商品）`);
+}
 
 for (const [tag, items] of tags) {
   const cards = items
@@ -2816,6 +2894,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <url><loc>${baseUrl}/about.html</loc></url>
 <url><loc>${baseUrl}/news.html</loc></url>
 <url><loc>${baseUrl}/check.html</loc></url>
+<url><loc>${baseUrl}/diagnosis.html</loc></url>
 <url><loc>${baseUrl}/verified.html</loc></url>
 <url><loc>${baseUrl}/contact.html</loc></url>
 <url><loc>${baseUrl}/privacy.html</loc></url>

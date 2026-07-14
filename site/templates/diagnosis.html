@@ -1,0 +1,126 @@
+<article class="post">
+  <header class="post-header">
+    <h1 class="post-title">悩みから、成分を探す</h1>
+    <p class="post-subtitle">あなたの悩みに、どの成分がどこまで調べられているか。そして、その基準に合う商品</p>
+  </header>
+
+  <div class="post-body">
+
+<div class="check-warn">
+  <p><strong>先に、正直に書いておきます。</strong></p>
+
+  <p><strong>これは、医学的な診断ではありません。</strong>「あなたの肌は敏感肌です」のような判定はしません。<strong>それは医師の仕事です</strong>（医師法17条）。ここで聞くのは、<strong>あなたが何に困っているか</strong>だけです。</p>
+
+  <p><strong>そして、いちばん大事なこと。この「診断 → おすすめ成分 → 商品」という流れが、実際に効く商品を当てられるのかを検証した臨床試験を、私たちは PubMed で探しました。<span class="dg-zero">見つかったのは 0 件です。</span></strong></p>
+
+  <p><strong>質問票で肌質を判定する研究は存在します。</strong>ですが、<strong>質問票の答えと、機械で測った実際の肌の状態は、弱くしか一致しません</strong>（相関 r = 0.24〜0.30。<strong>ばらつきの1割弱しか説明できない、という意味です</strong>）。いちばん有名な Baumann の16タイプ診断は、<strong>質問項目そのものが公開されていません。</strong></p>
+
+  <p><strong>だから、この機能は「あなたに合う商品を当てる装置」ではありません。</strong>あなたの悩みに関係する成分について、<strong>私たちが論文をどこまで辿れたかを見せる索引</strong>です。<strong>選ぶのは、あなたです。</strong></p>
+
+  <p><strong>下に出てくる商品は、広告（アフィリエイトリンク）です。</strong>ここから購入されると、私たちに収益が入ります。</p>
+</div>
+
+<h2 class="section-heading">何に困っていますか</h2>
+
+<div class="dg-tags" id="dgTags">
+{{DIAGNOSIS_TAGS}}
+</div>
+
+<p class="check-actions">
+  <button type="button" class="cta-button" id="dgRun">探す</button>
+</p>
+
+<div id="dgResult" hidden></div>
+
+<script id="dg-data" type="application/json">{{DIAGNOSIS_JSON}}</script>
+<script>
+// ★ サーバーが無いので、全部ブラウザの中で動く。読者の入力はどこにも送らない。
+//   （どこにも送らないので、「あなたの肌データ」を集める装置にはならない）
+(function () {
+  var data = JSON.parse(document.getElementById('dg-data').textContent);
+  var tags = document.getElementById('dgTags');
+  var btn = document.getElementById('dgRun');
+  var out = document.getElementById('dgResult');
+  if (!tags || !btn || !out) return;
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  btn.addEventListener('click', function () {
+    var picked = Array.prototype.slice
+      .call(tags.querySelectorAll('input:checked'))
+      .map(function (i) { return i.value; });
+
+    if (!picked.length) {
+      out.hidden = false;
+      out.innerHTML = '<p class="dg-empty"><strong>1つ以上選んでください。</strong></p>';
+      return;
+    }
+
+    // 選んだ悩みに関係する記事を集め、**うちが決めた重み**の順位で並べる
+    var seen = {};
+    var hits = [];
+    picked.forEach(function (t) {
+      (data.byTag[t] || []).forEach(function (a) {
+        if (seen[a.slug]) return;
+        seen[a.slug] = 1;
+        hits.push(a);
+      });
+    });
+    hits.sort(function (x, y) { return y.score - x.score; });
+
+    if (!hits.length) {
+      out.hidden = false;
+      out.innerHTML =
+        '<p class="dg-empty"><strong>その悩みについて、まだ記事を書いていません。</strong><br>' +
+        '「見つからない」と書くのがこのブログの流儀なので、ここでも正直に書きます。</p>';
+      return;
+    }
+
+    var html = '<h2 class="section-heading">調べられている順に並べました</h2>';
+    html +=
+      '<p class="dg-note"><strong>★ この順番は、論文が決めたものではありません。私たちが決めた重みで計算したものです。</strong>' +
+      '重みは <a href="ingredients.html">成分ごとの証拠</a> のページに全部書いてあります。<strong>そして、これは「効く順」ではなく「調べられている順」です。</strong></p>';
+
+    hits.forEach(function (a, i) {
+      html += '<section class="dg-hit">';
+      html += '<p class="dg-rank">' + (i + 1) + '</p>';
+      html += '<h3 class="dg-title"><a href="articles/' + esc(a.slug) + '.html">' + esc(a.title) + '</a></h3>';
+      html += '<p class="dg-meta">私たちの重みでの点数: <strong>' + a.score + ' 点</strong>';
+      if (a.dict) {
+        html += ' ／ <a href="ingredient/' + esc(a.dict) + '.html">効果・副作用・使い方を見る</a>';
+      }
+      html += '</p>';
+      html += '<p class="dg-answer">' + esc(a.answer || '') + '</p>';
+
+      if (a.products && a.products.length) {
+        html += '<p class="dg-adnote"><strong>この記事の結論から導いた基準に合う商品です。広告（アフィリエイトリンク）です。</strong></p>';
+        html += '<ul class="dg-prods">';
+        a.products.forEach(function (p, n) {
+          html +=
+            '<li><span class="dg-pn">' + (n + 1) + '</span>' +
+            '<a href="' + esc(p.url) + '" target="_blank" rel="sponsored nofollow noopener">' + esc(p.name) + '</a>' +
+            '<span class="dg-pscore">' + p.score + ' 点' + (p.perMl != null ? '／' + p.perMl + ' 円/mL' : '') + '</span>' +
+            '<span class="dg-pad">広告</span></li>';
+        });
+        html += '</ul>';
+      } else {
+        html +=
+          '<p class="dg-noprod"><strong>この記事には、商品を置いていません。</strong>' +
+          '記事から「選び方の基準」が導けなかったからです。<strong>置かないことも、正しい結果です。</strong></p>';
+      }
+      html += '</section>';
+    });
+
+    out.hidden = false;
+    out.innerHTML = html;
+    out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
+
+  </div>
+</article>

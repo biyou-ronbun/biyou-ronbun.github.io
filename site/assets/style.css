@@ -3344,3 +3344,39 @@ a { color: var(--rose); }
 .dic-note { margin: 0 0 6px; font-size: 12.5px; color: var(--ink-soft); line-height: 1.9; }
 .dic-src { margin: 6px 0 0; font-size: 12px; }
 .dic-empty { font-size: 13.5px; line-height: 1.95; color: var(--ink-soft); }
+
+/* ---- 悩みから探す（2026-07-14。★ 医学的な診断はしない） ------------------- */
+.dg-zero { color: var(--rose-deep); }
+.dg-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
+.dg-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 14px; border: 1px solid var(--rule);
+  background: var(--bg-raised); cursor: pointer; font-size: 14px;
+}
+.dg-tag:has(input:checked) { border-color: var(--rose-deep); border-width: 2px; padding: 7px 13px; }
+.dg-note { font-size: 12.5px; color: var(--ink-soft); line-height: 1.9; margin: 0 0 20px; }
+.dg-hit {
+  margin: 0 0 24px; padding: 18px 20px;
+  border: 1px solid var(--rule); background: var(--bg-raised);
+}
+.dg-rank {
+  margin: 0 0 6px; font-family: var(--serif); font-size: 22px;
+  color: var(--rose-deep); line-height: 1;
+}
+.dg-title { margin: 0 0 8px; font-size: 17px; line-height: 1.6; }
+.dg-meta { margin: 0 0 10px; font-size: 12.5px; color: var(--ink-soft); }
+.dg-answer { margin: 0 0 14px; font-size: 14px; line-height: 1.9; }
+.dg-adnote { margin: 0 0 8px; font-size: 12px; color: var(--ink-soft); }
+.dg-prods { list-style: none; margin: 0; padding: 0; }
+.dg-prods li {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 9px 0; border-top: 1px solid var(--rule); font-size: 13.5px;
+}
+.dg-pn { font-weight: 700; color: var(--rose-deep); min-width: 1.2em; }
+.dg-pscore { font-size: 11.5px; color: var(--ink-soft); }
+.dg-pad {
+  padding: 1px 6px; border: 1px solid var(--rule);
+  font-size: 10.5px; color: var(--ink);
+}
+.dg-noprod { margin: 0; font-size: 12.5px; color: var(--ink-soft); line-height: 1.9; }
+.dg-empty { font-size: 14px; line-height: 1.9; }
