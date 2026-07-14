@@ -1792,6 +1792,206 @@
       "coiNote": "著者らは L Oreal、LVMH Research、Vivacy、Galderma、Merz、Fillmed などから謝礼・研究支援を受けていると申告している。顔の容積の減少や皮膚のたるみへの対処としてフィラー・生体刺激剤・機器・外科手術を挙げる立場の総説であり、そこに挙がる製品の企業と申告された関係が重なっている。要旨自身が「実証データの不足」を認めている",
       "confirmed": "abstract",
       "articles": []
+    },
+    {
+      "pmid": "37377400",
+      "title": "Efficacy of combined treatment with human adipose tissue stem cell-derived exosome-containing solution and microneedling for facial skin aging: A 12-week prospective, randomized, split-face study.",
+      "journal": "Journal of Cosmetic Dermatology",
+      "year": 2023,
+      "design": "ランダム化・split-face（顔の左右で比較）・12週",
+      "evidenceType": "rct",
+      "subjects": "28人。韓国。測定部位は顔",
+      "fundingType": "public",
+      "fundingNote": "韓国国立研究財団（NRF）／韓国政府（MSIT）。企業ではなく公的資金",
+      "coiNote": "利益相反の記載なし。著者の所属は韓国の大学病院・皮膚科クリニック（1名はグアム）",
+      "confirmed": "abstract",
+      "measured": "GAIS（総合的な見た目のスケール）、シワ・弾力・水分・色素沈着の機器測定",
+      "concentration": "記載なし（要旨に濃度の記載がない）",
+      "adverse": "著者は重篤な有害事象は観察されなかったと報告",
+      "duration": "12週間（3週間隔で3回施術、最終施術から6週追跡）",
+      "articles": [
+        "ingredient-trial-counts"
+      ]
+    },
+    {
+      "pmid": "42155421",
+      "title": "Clinical safety and regenerative potential of a purified exosome product in treating skin graft donor sites: A phase 1b trial.",
+      "journal": "Journal of Plastic, Reconstructive & Aesthetic Surgery",
+      "year": 2026,
+      "design": "第1b相・ランダム化・非盲検・対照あり（安全性が主目的）",
+      "evidenceType": "clinical-trial",
+      "subjects": "7人。平均49.3歳。米国 Mayo Clinic。皮膚移植の採皮部（開いた傷）。顔ではない",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供の記載がない。本文が有料のため一次情報で確認できていない",
+      "coiNote": "著者5名のうち2名が企業と関係。Behfar 氏はエクソソーム企業 RION 社の CEO、Moran 氏は同社のコンサルタント（論文のCOI欄に明記）。他の3名は利益相反なしと申告",
+      "confirmed": "abstract",
+      "measured": "有害事象・臨床検査値・バイタル、および創の治癒（Vancouver scar scale、PWAT、100%再上皮化までの日数）",
+      "concentration": "最大20%の用量（要旨に記載）",
+      "adverse": "著者は治療に関連する有害事象は無かったと報告",
+      "duration": "記載なし（再上皮化までの中央値は18.5日）",
+      "articles": [
+        "ingredient-trial-counts"
+      ]
+    },
+    {
+      "pmid": "41800727",
+      "title": "Preliminary Insights From a Split-Face Study on Skin Quality Changes After Needling Radiofrequency With or Without a Plant-Derived Exosome-Based Formulation Over 6 Months.",
+      "journal": "Aesthetic Surgery Journal",
+      "year": 2026,
+      "design": "ランダム化・split-face。著者自身が「preliminary（予備的）」と表題に明記",
+      "evidenceType": "rct",
+      "subjects": "6人。肌タイプ Fitzpatrick III〜IV。測定部位は顔。6か月追跡",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供の記載がない",
+      "coiNote": "利益相反の記載なし",
+      "confirmed": "abstract",
+      "measured": "シワ・キメ・毛穴（標準化写真と Vectra Sculptor による解析）",
+      "concentration": "記載なし（要旨に濃度の記載がない）",
+      "adverse": "記載なし",
+      "duration": "6か月",
+      "articles": [
+        "ingredient-trial-counts"
+      ]
+    },
+    {
+      "pmid": "41800726",
+      "title": "Clinical Advances in Exosome-Based Therapies for Aesthetic Medicine: A Systematic Review and Meta-analysis of Human Clinical Trials.",
+      "journal": "Aesthetic Surgery Journal",
+      "year": 2026,
+      "design": "システマティックレビュー / メタアナリシス（ヒト臨床試験のみを対象）",
+      "evidenceType": "meta-analysis",
+      "subjects": "ヒト試験39件（皮膚26件・毛髪13件）",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供の記載がない",
+      "coiNote": "利益相反の記載なし",
+      "confirmed": "abstract",
+      "measured": "シワ・色素沈着・弾力・キメ・赤み・総合的な見た目、毛髪の密度と太さ",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "該当なし（複数試験のとりまとめ）",
+      "articles": [
+        "ingredient-trial-counts"
+      ]
+    },
+    {
+      "pmid": "41013717",
+      "title": "Effectiveness of regenerative medicine for skin lightening and rejuvenation: a systematic review of extracellular vesicles and conditioned media.",
+      "journal": "Stem Cell Research & Therapy",
+      "year": 2025,
+      "design": "システマティックレビュー",
+      "evidenceType": "systematic-review",
+      "subjects": "19件・計624人。細胞外小胞（EVs）21%、培養液（CM）78%",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供の記載がない",
+      "coiNote": "著者全員が利益相反なしと申告。所属はイラン医科大学の皮膚科（企業の所属者がいない）",
+      "confirmed": "abstract",
+      "measured": "シワ・色素沈着・シミ・弾力・水分。投与方法は塗布・マイクロニードル・フラクショナルレーザーが混在すると論文が明記",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "著者は重篤な有害事象の報告はなく、一過性の紅斑など軽微な反応のみと報告",
+      "duration": "該当なし（複数試験のとりまとめ）",
+      "articles": [
+        "ingredient-trial-counts"
+      ]
+    },
+    {
+      "pmid": "40826297",
+      "title": "Air-Botulinum Neurotoxin and Polydeoxyribonucleotide Injections for Acne Scar Treatment.",
+      "journal": "Aesthetic Plastic Surgery",
+      "year": 2025,
+      "design": "前向き・非盲検・ランダム化（3群）。論文自身が Level of Evidence V と申告",
+      "evidenceType": "rct",
+      "subjects": "17人。グレード2〜5のニキビ跡。韓国・シンガポールの美容クリニック",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供の記載がない",
+      "coiNote": "著者は利益相反なしと申告",
+      "confirmed": "abstract",
+      "measured": "POSAS（患者と観察者による瘢痕評価スケール）と患者満足度",
+      "concentration": "記載なし（要旨に濃度の記載がない）",
+      "adverse": "著者は軽度の腫れと赤みなど軽微な副作用のみと報告",
+      "duration": "16週間（0・4・8週に注射）",
+      "articles": [
+        "ingredient-trial-counts"
+      ]
+    },
+    {
+      "pmid": "11759182",
+      "title": "Clinical evaluation of the trophic effect of polydeoxyribonucleotide (PDRN) in patients undergoing skin explants. A Pilot Study.",
+      "journal": "Current Medical Research and Opinion",
+      "year": 2001,
+      "design": "二重盲検・ランダム化・プラセボ対照",
+      "evidenceType": "rct",
+      "subjects": "26人（男性15人・女性11人）。平均68.2歳。イタリア（シエナ大学）。形成外科で皮膚を採取した部位（開いた傷）。顔ではない",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供の記載がない",
+      "coiNote": "利益相反の記載なし",
+      "confirmed": "abstract",
+      "measured": "採皮部の再上皮化率（創面積から算出）、痛み・かゆみ・紅斑・水疱",
+      "concentration": "PDRN 5625 mg/バイアル（筋注1日1回＋皮下注 2バイアルを3日ごと、10日間）",
+      "adverse": "著者は試験中に有害事象の報告はなかったと記載",
+      "duration": "10日間",
+      "articles": [
+        "ingredient-trial-counts"
+      ]
+    },
+    {
+      "pmid": "23368685",
+      "title": "Skin rejuvenation by microneedle fractional radiofrequency and a human stem cell conditioned medium in Asian skin: a randomized controlled investigator blinded split-face study.",
+      "journal": "Journal of Cosmetic and Laser Therapy",
+      "year": 2013,
+      "design": "ランダム化・評価者盲検・split-face。★2020年に撤回された論文（Statement of Retraction: J Cosmet Laser Ther. 2020;22(4-5):215. PMID 33739221）。撤回の理由は通知に記載がなく、確認できていない",
+      "evidenceType": "rct",
+      "subjects": "女性15人。韓国（CHA大学）。測定部位は顔",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供の記載がない",
+      "coiNote": "利益相反の記載なし",
+      "confirmed": "abstract",
+      "measured": "皮膚の粗さ・水分・メラニン指数・紅斑指数、組織所見",
+      "concentration": "記載なし（要旨に濃度の記載がない）",
+      "adverse": "著者は副作用は最小限だったと報告",
+      "duration": "4週間隔で3回施術",
+      "articles": [
+        "ingredient-trial-counts"
+      ]
+    },
+    {
+      "pmid": "7745043",
+      "title": "Sperm functional changes and fertilization in vitro in co-culture with human skin fibroblasts.",
+      "journal": "Human Reproduction",
+      "year": 1995,
+      "design": "ヒトの体外受精に関する試験。★この記事では根拠として引いていない。「ヒト幹細胞培養液のヒト試験6件」という検索結果に、肌と無関係な論文が混ざっていた実例として引いている",
+      "evidenceType": "clinical-trial",
+      "subjects": "記載を確認していない（検索結果の一覧でタイトル・掲載誌・年のみ確認）",
+      "fundingType": "unverified",
+      "fundingNote": "確認していない。この論文の中身は本記事の根拠ではなく、検索式に混入した実例として挙げているため",
+      "coiNote": "確認していない",
+      "confirmed": "bibliographic",
+      "measured": "精子の機能と体外受精。肌の測定はしていない",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "記載なし",
+      "articles": [
+        "ingredient-trial-counts"
+      ]
+    },
+    {
+      "pmid": "33739221",
+      "title": "Statement of Retraction: Skin rejuvenation by microneedle fractional radiofrequency and a human stem cell conditioned medium in Asian skin: a randomized controlled investigator blinded split-face study.",
+      "journal": "Journal of Cosmetic and Laser Therapy",
+      "year": 2020,
+      "design": "撤回の通知（Statement of Retraction）。PMID 23368685 を撤回したもの。★通知に要旨がなく、撤回の理由は記載されていない",
+      "evidenceType": "human-other",
+      "subjects": "該当なし（撤回通知）",
+      "fundingType": "unverified",
+      "fundingNote": "該当なし（撤回通知）",
+      "coiNote": "該当なし（撤回通知。著者名の記載もない）",
+      "confirmed": "bibliographic",
+      "measured": "該当なし（撤回通知）",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "該当なし",
+      "articles": [
+        "ingredient-trial-counts"
+      ]
     }
   ]
 }

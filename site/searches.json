@@ -141,6 +141,128 @@
         "count": 30,
         "searchedOn": "2026-07-13"
       }
+    ],
+    "ingredient-trial-counts": [
+      {
+        "query": "\"hyaluronic acid\"[tiab] AND skin[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 154,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "retinol[tiab] AND skin[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 65,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "ceramide[tiab] AND skin[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 64,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "niacinamide[tiab] AND skin[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 48,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "\"ascorbic acid\"[tiab] AND skin[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 46,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "polydeoxyribonucleotide[tiab] AND skin[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 2,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "exosome[tiab] AND skin[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 3,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "\"conditioned medium\"[tiab] AND skin[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 6,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "\"hyaluronic acid\"[tiab] AND skin[tiab] AND \"randomized controlled trial\"[pt] AND (filler[tiab] OR injection[tiab] OR injectable[tiab] OR intradermal[tiab])",
+        "count": 71,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "\"hyaluronic acid\"[tiab] AND skin[tiab] AND \"randomized controlled trial\"[pt] AND (oral[tiab] OR ingestion[tiab] OR dietary[tiab] OR supplementation[tiab])",
+        "count": 18,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "\"hyaluronic acid\"[tiab] AND skin[tiab] AND \"randomized controlled trial\"[pt] AND (topical[tiab] OR cream[tiab] OR serum[tiab] OR moisturizer[tiab] OR lotion[tiab])",
+        "count": 44,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "(polydeoxyribonucleotide[tiab] OR PDRN[tiab]) AND skin[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 2,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "(\"hyaluronic acid\"[tiab] OR hyaluronan[tiab]) AND skin[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 168,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "exosome[tiab] AND skin[tiab] AND (systematic[sb] OR \"meta-analysis\"[pt] OR review[pt])",
+        "count": 194,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "(polydeoxyribonucleotide[tiab] OR PDRN[tiab]) AND skin[tiab] AND (systematic[sb] OR \"meta-analysis\"[pt] OR review[pt])",
+        "count": 8,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "\"hyaluronic acid\"[tiab] AND skin[tiab] AND (systematic[sb] OR \"meta-analysis\"[pt] OR review[pt])",
+        "count": 483,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "retinol[tiab] AND skin[tiab] AND (systematic[sb] OR \"meta-analysis\"[pt] OR review[pt])",
+        "count": 90,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "ceramide[tiab] AND skin[tiab] AND (systematic[sb] OR \"meta-analysis\"[pt] OR review[pt])",
+        "count": 163,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "niacinamide[tiab] AND skin[tiab] AND (systematic[sb] OR \"meta-analysis\"[pt] OR review[pt])",
+        "count": 75,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "\"ascorbic acid\"[tiab] AND skin[tiab] AND (systematic[sb] OR \"meta-analysis\"[pt] OR review[pt])",
+        "count": 101,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "\"conditioned medium\"[tiab] AND skin[tiab] AND (systematic[sb] OR \"meta-analysis\"[pt] OR review[pt])",
+        "count": 37,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "exosome[tiab] AND skin[tiab] AND (topical[tiab] OR serum[tiab] OR cream[tiab] OR cosmetic[tiab]) AND \"randomized controlled trial\"[pt]",
+        "count": 0,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "exosome[tiab] AND (cosmetic[tiab] OR cosmeceutical[tiab]) AND \"randomized controlled trial\"[pt]",
+        "count": 0,
+        "searchedOn": "2026-07-14"
+      },
+      {
+        "query": "exosome[tiab] AND (rejuvenation[tiab] OR \"skin aging\"[tiab] OR antiaging[tiab] OR \"anti-aging\"[tiab]) AND (systematic[sb] OR \"meta-analysis\"[pt])",
+        "count": 11,
+        "searchedOn": "2026-07-14"
+      }
     ]
   }
 }
