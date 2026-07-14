@@ -17,7 +17,7 @@
 //    4. 「日常への生かし方」と参考文献のセクションがあるか
 // ---------------------------------------------------------------
 
-import { readFileSync, existsSync, writeFileSync } from 'node:fs';
+import { readFileSync, existsSync, writeFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { checkEnglish, EN_AFFILIATE_DISCLOSURE } from './tone-en.mjs';
@@ -1648,6 +1648,93 @@ for (const a of articles) {
     const surname = firstAuthor.split(' ')[0];
     if (surname && !refNorm.includes(normalize(surname))) {
       warnings.push(`${a.slug}: PMID ${pmid} の第一著者（${surname}）が参考文献の行に見当たりません`);
+    }
+  }
+}
+
+// ---- 記事・図・論文カード・台帳のあいだで、数字が食い違っていないか --------
+//
+// ★★ 2026-07-14、実際に食い違っていた。**そして公開されていた。**
+//
+//    記事      「著者7人のうち6人がキユーピー」   ← 一次情報どおり
+//    図        「著者7人のうち5人がキユーピー」   ← 誤り
+//    論文カード「著者7名のうち5名。残る1名は東邦大学」 ← 5+1=6 ≠ 7。算数が合わない
+//
+//  **誰も気づかなかった。**
+//  記事を短くする担当が「記事と図で数が違う」と報告して、初めて見つかった。
+//  **図を作らせなければ、気づいていない。偶然だった。**
+//
+//  ★ 偶然に頼るのをやめる。**公開のたびに、機械が数える。**
+//
+//  ★ 別のCIステップにすると、忘れられる。**関門の中に入れる。**
+//
+//  ★★ この検査は、記事を読み込んだ後（`articles` が埋まった後）でなければ動きません。
+//     最初これを台帳の検査の隣（500行目あたり）に置きました。**関門が起動時に落ちました。**
+//     `articles` は 800 行目で作られるからです。**関門が落ちている間、検査は 1 件も走りません。**
+//     置き場所を間違えると、検査は「甘くなる」のではなく「全部止まる」。ここから動かさないこと。
+
+{
+  const numSources = [];
+  for (const a of articles) numSources.push([`記事 ${a.slug}`, a.text]);
+  const researchDir = join(ROOT, 'research');
+  if (existsSync(researchDir)) {
+    for (const f of readdirSync(researchDir).filter((x) => x.endsWith('.md'))) {
+      numSources.push([`カード ${f.replace('.md', '')}`, readFileSync(join(researchDir, f), 'utf8')]);
+    }
+  }
+  if (existsSync(join(SITE, 'figures.json'))) {
+    numSources.push(['図', readFileSync(join(SITE, 'figures.json'), 'utf8')]);
+  }
+  numSources.push(['台帳', readFileSync(join(SITE, 'papers.json'), 'utf8')]);
+
+  // ① 算数（部分 > 全体 / 内訳の合計が全体と合わない）
+  for (const [where, txt] of numSources) {
+    for (const m of txt.matchAll(/(\d+)\s*[人名](?:の)?(?:うち|中)\s*(\d+)\s*[人名]/g)) {
+      if (Number(m[2]) > Number(m[1])) {
+        failures.push(
+          `${where}: 「${m[0].replace(/\s+/g, '')}」 ← **部分が全体より多い**\n` +
+            `      一次情報（PubMed）を開いて、正しい数を確かめてください。`
+        );
+      }
+    }
+    for (const m of txt.matchAll(
+      /(\d+)\s*[人名]のうち(\d+)\s*[人名][^。]{0,80}。[^。]{0,20}残る\s*(\d+)\s*[人名]/g
+    )) {
+      const [tot, a, b] = [Number(m[1]), Number(m[2]), Number(m[3])];
+      if (a + b !== tot) {
+        failures.push(
+          `${where}: **内訳の合計が合いません**（${a} + ${b} = ${a + b} ≠ ${tot}）\n` +
+            `      「${m[0].replace(/\s+/g, '').slice(0, 56)}…」\n` +
+            `      一次情報（PubMed）を開いて、正しい数を確かめてください。`
+        );
+      }
+    }
+  }
+
+  // ② 同じ論文について、記事・図・カード・台帳で数が一致しているか
+  //
+  //   ★ 「企業名」だけでまとめてはいけない。同じ企業でも、論文が違えば著者数は違う。
+  //     キユーピーの論文は「7名中6名」と「8名中7名」の2本ある。**どちらも正しい。**
+  //     最初これを食い違いと判定した。**関門が、正しい記述を違反と判定した。**
+  //   → 「企業名 + 著者の総数」でまとめ、**総数が同じなのに内訳が違う**ときだけ止める。
+  const RE_COMPANY =
+    /(\d+)\s*[人名](?:の)?(?:うち|中)\s*(\d+)\s*[人名][^。、]{0,24}?([ァ-ヴー]{3,12}|Kewpie|Contipro|Pharmarese|ISDIN|Monteloeder|Tosla|Bionap)/g;
+
+  const byPaper = {};
+  for (const [where, txt] of numSources) {
+    for (const m of txt.matchAll(RE_COMPANY)) {
+      (byPaper[`${m[3]}／著者${m[1]}名`] ??= []).push({ where, part: m[2], raw: m[0].replace(/\s+/g, '') });
+    }
+  }
+  for (const [key, list] of Object.entries(byPaper)) {
+    const parts = new Set(list.map((x) => x.part));
+    if (parts.size > 1) {
+      failures.push(
+        `${key}: **記事・図・カード・台帳で、内訳が食い違っています**\n` +
+          list.map((x) => `        ${x.where.padEnd(24)} ${x.raw}`).join('\n') +
+          `\n\n      **一次情報（PubMed）を開いて、どれが正しいかを確かめてください。**\n` +
+          `      **食い違っている全部を直すこと。** 1箇所だけ直すと、また食い違います。`
+      );
     }
   }
 }
