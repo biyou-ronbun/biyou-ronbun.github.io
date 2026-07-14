@@ -106,32 +106,79 @@ check(
     : 'メンバーシップの支払いリンク（1件も入っていない）'
 );
 
-// ---- ⑤ 判定を作っていないか ------------------------------------------
+// ---- ⑤ 判定 ------------------------------------------------------------
 //
-// スコア・ランキング・認証・お墨付き——**判定は資産になり、資産は換金圧力を持つ。**
-// うちが判定を1つも持たない理由は、意志ではなく構造です。
-// **持たなければ、売る対象が存在しません。**
+// ★★ 2026-07-14、オーナー判断で **判定を持つことを選びました。**
+//   スコア・ランキング・認証は、もう止めません。
+//
+// ★ ただし、代償を書いておきます（CLAUDE.md にも同じことが書いてあります）。
+//
+//   **Consumer Reports は1936年から広告を断り続けた消費者団体。**
+//   その CR が、いま「CR Recommended」の認証マークの掲示料を、**評価した企業から取っています。**
+//
+//   **「判定を持つ者は、最後に判定を売る」。** 判定は資産になり、資産は換金圧力を持つ。
+//   **86年の実績でも止まらなかった。意志では止まりません。**
+//
+//   うちは判定を持つことを選びました。**だから、いつか売りたくなります。**
+//
+// ★★ そのときに、1つだけ守ってほしいこと:
+//   **判定を売ったなら、読者にそう書くこと。隠さないこと。**
+//   （掲示料を取っているのに「独立した評価です」と書けば、それは景表法の問題になります）
+//
+//   ★ 元に戻したくなったら、git log で `open-doors` ブランチを見ること。
+//     ここで消したのは、判定フィールド（score / rating / rank / stars / grade /
+//     recommended / verdict）を claims.json・papers.json から検出して止める検査です。
+
+// ---- ⑥ 判定を「売って」いないか ------------------------------------------
+//
+// ★ 判定を持つことは開けた。**判定を売ることは、開けていない。**
+//   売るなら、それを読者に開示すること（景表法）。
+//   ここでは「掲載料・掲示料・認証料」を受け取った形跡が、**開示なしに**入っていないかを見る。
 
 const claims = read(join(SITE, 'claims.json'));
-const JUDGEMENT_FIELDS = ['score', 'rating', 'rank', 'stars', 'grade', 'recommended', 'verdict'];
+
+const PAID_PLACEMENT = /掲載料|掲示料|認証料|スポンサー料|paidPlacement|sponsoredRank|sponsored/i;
+
+// ★★ 開示は、**その1件ごと**に付いていること。
+//
+//   最初、ファイル全体を1つの文字列にして「広告」という語があるかを見た。
+//   **products.json のどこかに「広告」の2文字があるだけで、全部が開示済みと判定された。**
+//   （実際、攻撃したら素通りした）
+//
+//   **開示は、金を受け取った、その商品に付いていなければ意味がない。**
+const DISCLOSED_KEYS = ['pr', 'sponsored', 'disclosure', '開示', 'PR表記'];
 
 const judged = [];
-for (const c of claims?.claims ?? []) {
-  for (const f of JUDGEMENT_FIELDS) {
-    if (f in c) judged.push(`claims.json の ${c.id} に「${f}」があります`);
-  }
-}
-for (const p of read(join(SITE, 'papers.json'))?.papers ?? []) {
-  for (const f of JUDGEMENT_FIELDS) {
-    if (f in p) judged.push(`papers.json の PMID ${p.pmid} に「${f}」があります`);
+
+// 商品を1件ずつ見る
+for (const [slug, v] of Object.entries(products)) {
+  if (slug.startsWith('_')) continue;
+  for (const item of v.items ?? []) {
+    const raw = JSON.stringify(item);
+    if (!PAID_PLACEMENT.test(raw)) continue;
+    const disclosed = DISCLOSED_KEYS.some((k) => item[k]);
+    if (!disclosed) {
+      judged.push(
+        `${slug} の「${item.name ?? '?'}」に金銭（掲載料・掲示料等）の形跡があるのに、` +
+          `開示のフィールド（${DISCLOSED_KEYS.join(' / ')}）がありません`
+      );
+    }
   }
 }
 
-// ★ 判定は、承認しても通しません。承認できる項目に入れていません。
-//   判定は資産になり、資産は換金圧力を持ちます。**持たないことで止めます。**
+// 診断の項目も1件ずつ見る
+for (const c of claims?.claims ?? []) {
+  const raw = JSON.stringify(c);
+  if (!PAID_PLACEMENT.test(raw)) continue;
+  const disclosed = DISCLOSED_KEYS.some((k) => c[k]);
+  if (!disclosed) {
+    judged.push(`診断 ${c.id} に金銭の形跡があるのに、開示のフィールドがありません`);
+  }
+}
+
 if (judged.length) {
   open.push(
-    `判定（スコア・ランキング・お墨付き）が作られています【これは承認できません】\n      ${judged
+    `★★ 判定を、開示せずに売っています【景品表示法】\n      ${judged
       .slice(0, 5)
       .join('\n      ')}`
   );
