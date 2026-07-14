@@ -277,10 +277,20 @@ const scoreLabel = (i) => {
 //   ★ できるのは、文言を「警告」から「読者のための情報」に変えること。
 //     旧: 「この記事は広告（アフィリエイトリンク）を含みます。」← 事務的。身構える
 //     新: 記事の末尾に商品があること、**それがどう選ばれたか**を先に伝える
-const prBanner = (slug) =>
-  itemsFor(slug).length
+// ★★ タイアップの開示（2026-07-14、オーナー判断で開けた）
+//
+//   ★ 順番が大事。**タイアップの開示が、いちばん上。** アフィリエイトの案内はその下。
+//     景表法のステマ規制で罰せられるのは、**表示した側**です。**隠せません。**
+const { sponsorBanner, sponsorChip } = await import('./sponsor.mjs');
+
+const prBanner = (slug) => {
+  const a = meta.find((x) => x.slug === slug);
+  const sponsor = sponsorBanner(a?.sponsor, escapeHtml);
+  const affiliate = itemsFor(slug).length
     ? `<p class="pr-banner">記事の最後に、<strong>この記事の結論から導いた「選び方の基準」</strong>と、それに合う商品を置いています。<strong>広告（アフィリエイトリンク）です。</strong></p>`
     : '';
+  return sponsor + affiliate;
+};
 
 const productBlock = (slug) => {
   const items = itemsFor(slug);
@@ -1387,6 +1397,7 @@ const cards = published
   .map((a) =>
     fill(tpl.card, {
       SLUG: a.slug,
+        PR_CHIP: sponsorChip(a.sponsor),
         SERIES_LABEL: seriesLabel(a) ? `<span class="card-series">${escapeHtml(seriesLabel(a))}</span>` : '',
         ANSWER: escapeHtml(cardAnswer.get(a.slug) ?? ''),
         FIGURE: cardFig(a.slug),
@@ -1538,6 +1549,7 @@ for (const cat of categories) {
     .map((a) =>
       fill(tpl.card, {
         SLUG: a.slug,
+        PR_CHIP: sponsorChip(a.sponsor),
         SERIES_LABEL: seriesLabel(a) ? `<span class="card-series">${escapeHtml(seriesLabel(a))}</span>` : '',
         ANSWER: escapeHtml(cardAnswer.get(a.slug) ?? ''),
         FIGURE: cardFig(a.slug),
@@ -2170,6 +2182,7 @@ for (const [tag, items] of tags) {
     .map((a) =>
       fill(tpl.card, {
         SLUG: a.slug,
+        PR_CHIP: sponsorChip(a.sponsor),
         SERIES_LABEL: seriesLabel(a) ? `<span class="card-series">${escapeHtml(seriesLabel(a))}</span>` : '',
         ANSWER: escapeHtml(cardAnswer.get(a.slug) ?? ''),
         FIGURE: cardFig(a.slug),
