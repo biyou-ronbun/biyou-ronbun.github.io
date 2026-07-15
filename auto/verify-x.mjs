@@ -238,12 +238,16 @@ for (const p of targets) {
   const isEnglish = /[a-zA-Z]/.test(t) && (t.match(/[a-zA-Z]/g) ?? []).length > t.length * 0.5;
 
   if (isEnglish) {
-    for (const problem of checkEnglish(t)) {
-      // 「うちの記事であることを示す言葉が無い」は、X の投稿には求めない。
-      // 280字にそれを全部入れるのは無理で、入れさせると煽りに寄る。
-      if (problem.startsWith('この記事には')) continue;
-      failures.push(`${where} [英語]: ${problem}`);
-    }
+    // ★ 2026-07-15、オーナー判断で英語投稿を廃止。
+    //   このアカウントの読者は日本人女性。英語スレッドはこのアカウントの型ではない。
+    //   関門は playbook・生成側より上位。生成が英語を作っても、ここで必ず止める。
+    //   （英語の関門 checkEnglish / tone-en.mjs は、site の英語ページ verified.html で
+    //    まだ使うので消さない。ここでは「英語を通さない」だけにする）
+    failures.push(
+      `${where}: 英語の投稿です。**日本語で書くこと。**\n` +
+        `      このアカウントの読者は日本人女性です。英語投稿はオーナー判断で廃止しました（2026-07-15）。\n` +
+        `      ${t.split('\n')[0]}`
+    );
   }
 
   // 画像を指定しているなら、実在すること
