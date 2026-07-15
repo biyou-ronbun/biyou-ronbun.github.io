@@ -275,6 +275,28 @@
         "count": 80,
         "searchedOn": "2026-07-14"
       }
+    ],
+    "exosome-cosmetics": [
+      {
+        "query": "exosome[tiab] AND skin[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 3,
+        "searchedOn": "2026-07-15"
+      },
+      {
+        "query": "exosome[tiab] AND (topical[tiab] OR cosmetic[tiab] OR cream[tiab] OR serum[tiab]) AND skin[tiab]",
+        "count": 120,
+        "searchedOn": "2026-07-15"
+      },
+      {
+        "query": "exosome[tiab] AND topical[tiab] AND \"randomized controlled trial\"[pt]",
+        "count": 2,
+        "searchedOn": "2026-07-15"
+      },
+      {
+        "query": "exosome[tiab] AND skin[tiab] AND (\"systematic review\"[pt] OR \"meta-analysis\"[pt])",
+        "count": 13,
+        "searchedOn": "2026-07-15"
+      }
     ]
   }
 }

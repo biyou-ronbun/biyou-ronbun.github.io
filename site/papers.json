@@ -1810,7 +1810,8 @@
       "adverse": "著者は重篤な有害事象は観察されなかったと報告",
       "duration": "12週間（3週間隔で3回施術、最終施術から6週追跡）",
       "articles": [
-        "ingredient-trial-counts"
+        "ingredient-trial-counts",
+        "exosome-cosmetics"
       ]
     },
     {
@@ -1830,7 +1831,8 @@
       "adverse": "著者は治療に関連する有害事象は無かったと報告",
       "duration": "記載なし（再上皮化までの中央値は18.5日）",
       "articles": [
-        "ingredient-trial-counts"
+        "ingredient-trial-counts",
+        "exosome-cosmetics"
       ]
     },
     {
@@ -1850,7 +1852,8 @@
       "adverse": "記載なし",
       "duration": "6か月",
       "articles": [
-        "ingredient-trial-counts"
+        "ingredient-trial-counts",
+        "exosome-cosmetics"
       ]
     },
     {
@@ -1870,7 +1873,8 @@
       "adverse": "記載なし",
       "duration": "該当なし（複数試験のとりまとめ）",
       "articles": [
-        "ingredient-trial-counts"
+        "ingredient-trial-counts",
+        "exosome-cosmetics"
       ]
     },
     {
@@ -1992,6 +1996,66 @@
       "articles": [
         "ingredient-trial-counts"
       ]
+    },
+    {
+      "pmid": "35689936",
+      "title": "Efficacy and Tolerability of Topical Platelet Exosomes for Skin Rejuvenation: Six-Week Results",
+      "journal": "Aesthetic Surgery Journal",
+      "year": 2022,
+      "design": "前向き・単群・非ランダム化（対照群なし）",
+      "evidenceType": "before-after",
+      "subjects": "顔・ヒト。参加者数は要旨に記載なし・6週間",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供の記載がない",
+      "coiNote": "著者に、評価された製品の製造販売元 Rion Aesthetics, LLC の所属者が含まれる（Paradise CR・DeGrazia E）。関連会社 RION 社のCEO（Behfar A）も別論文で開示している",
+      "confirmed": "abstract",
+      "articles": [
+        "exosome-cosmetics"
+      ],
+      "measured": "機械（VISIA-CR）による撮影評価。赤み・シワ・メラニン・明るさ・色ムラ",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "著者は「安全で忍容性が高い」と報告（単群・非対照・6週間）",
+      "duration": "6週間"
+    },
+    {
+      "pmid": "39761139",
+      "title": "Exosomes in Cosmetic Dermatology: A Review of Benefits and Challenges",
+      "journal": "Journal of Drugs in Dermatology",
+      "year": 2025,
+      "design": "総説（文献レビュー・56文献）",
+      "evidenceType": "review",
+      "subjects": "該当なし（総説）",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供・COIの記載がない",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "articles": [
+        "exosome-cosmetics"
+      ],
+      "measured": "該当なし（総説）。「FDA承認のエクソソームは存在しない」と記述",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "該当なし（総説）"
+    },
+    {
+      "pmid": "40533901",
+      "title": "Exosomes in Dermatology: A Comprehensive Review of Current Applications, Clinical Evidence, and Future Directions",
+      "journal": "International Journal of Dermatology",
+      "year": 2025,
+      "design": "総説",
+      "evidenceType": "review",
+      "subjects": "該当なし（総説）",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供・COIの記載がない",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "articles": [
+        "exosome-cosmetics"
+      ],
+      "measured": "該当なし（総説）。単離法の標準化・送達系・規制枠組みの未整備を課題として記述",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "該当なし（総説）"
     }
   ]
 }
