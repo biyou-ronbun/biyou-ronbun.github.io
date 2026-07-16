@@ -9,7 +9,7 @@
     "**論文の内容が正しいかどうかは、機械には判定できません。** 医師の監修もありません。",
     "そう書いてあることが、この仕組みの価値です。"
   ],
-  "verifiedAt": "2026-07-16T05:05:37.185Z",
+  "verifiedAt": "2026-07-16T13:06:03.374Z",
   "prices": {
     "sunscreen-spf::スキンアクア スーパーモイスチャーUVジェル 110g": {
       "name": "スキンアクア スーパーモイスチャーUVジェル 110g",
@@ -34,9 +34,9 @@
     },
     "retinol-concentration::COSRX RX ザ・レチノール 0.3 クリーム 20ml": {
       "name": "COSRX RX ザ・レチノール 0.3 クリーム 20ml",
-      "price": 2800,
+      "price": 2380,
       "volume": 20,
-      "perMl": 140,
+      "perMl": 119,
       "at": "2026-07-16"
     },
     "retinol-concentration::The Ordinary R0.2 フェイスセラム（レチノール 0.2%）30ml": {
