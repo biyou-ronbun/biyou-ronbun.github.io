@@ -297,6 +297,33 @@
         "count": 13,
         "searchedOn": "2026-07-15"
       }
+    ],
+    "toner-3-layers": [
+      {
+        "query": "(\"toner\"[tiab] OR \"facial lotion\"[tiab]) AND (layering[tiab] OR \"multiple layers\"[tiab] OR \"layered application\"[tiab])",
+        "count": 1,
+        "searchedOn": "2026-07-16"
+      },
+      {
+        "query": "(\"facial toner\"[tiab] OR \"skin toner\"[tiab]) AND (review[pt] OR \"systematic review\"[pt] OR meta-analysis[pt])",
+        "count": 0,
+        "searchedOn": "2026-07-16"
+      },
+      {
+        "query": "\"toner\"[tiab] AND (hydration[tiab] OR moisturization[tiab] OR moisturizing[tiab]) AND \"randomized controlled trial\"[pt]",
+        "count": 3,
+        "searchedOn": "2026-07-16"
+      },
+      {
+        "query": "\"repeated application\"[tiab] AND moisturizer[tiab] AND (hydration[tiab] OR \"stratum corneum\"[tiab])",
+        "count": 1,
+        "searchedOn": "2026-07-16"
+      },
+      {
+        "query": "\"repeated application\"[tiab] AND (moisturizer[tiab] OR emollient[tiab]) AND \"stratum corneum\"[tiab]",
+        "count": 0,
+        "searchedOn": "2026-07-16"
+      }
     ]
   }
 }

@@ -2056,6 +2056,86 @@
       "concentration": "該当なし（濃度の概念がない研究）",
       "adverse": "記載なし",
       "duration": "該当なし（総説）"
+    },
+    {
+      "pmid": "29394018",
+      "title": "Comparison of skin hydration in combination and single use of common moisturizers (cream, toner, and spray water)",
+      "journal": "Journal of Cosmetic Science",
+      "year": 2016,
+      "design": "ランダム化比較試験（塗り方8群、塗布後2〜8時間の水分量変化）",
+      "evidenceType": "rct",
+      "subjects": "要旨に人数・年齢・国の記載なし。ベースライン水分量で通常肌/乾燥肌に層別",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供・COIの記載がない。著者所属も要旨・記録に出ていない。一次情報で資金源を確認できていない",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "articles": [
+        "toner-3-layers"
+      ],
+      "measured": "肌の水分量（角層の物理量）。塗り方の組み合わせ・順番・反復の比較",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "塗布後8時間（2/4/6/8時間で測定）"
+    },
+    {
+      "pmid": "2572123",
+      "title": "Effects of repeated application of a moisturizer",
+      "journal": "Acta Dermato-Venereologica",
+      "year": 1989,
+      "design": "前後比較（対照＝反対側前腕）",
+      "evidenceType": "before-after",
+      "subjects": "健康な女性16人。デンマーク（コペンハーゲン）。測定部位は前腕",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供・COIの記載がない。一次情報で確認できていない",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "articles": [
+        "toner-3-layers"
+      ],
+      "measured": "角層の水分量の指標（電気伝導度・静電容量）、経表皮水分蒸散量、皮膚血流、表面脂質",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし（経表皮水分蒸散量・血流に変化がなく、軽い刺激も起きていないと著者は記述）",
+      "duration": "1日2回・7日間、中止後7日まで追跡"
+    },
+    {
+      "pmid": "10894961",
+      "title": "Biophysical assessment of persistent effects of moisturizers after their daily applications: evaluation of corneotherapy",
+      "journal": "Dermatology",
+      "year": 2000,
+      "design": "ランダム化比較試験（前腕屈側に反復塗布、最終塗布後3/5/7日を測定）",
+      "evidenceType": "rct",
+      "subjects": "健康な人とアトピー性乾皮症の患者（要旨に人数・年齢の記載なし）。日本（東北大学）。測定部位は前腕屈側",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの種別は非企業支援（Research Support, Non-US Gov）だが、具体的な提供元は記録に無い。一次情報で提供元名を確認できていない",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "articles": [
+        "toner-3-layers"
+      ],
+      "measured": "高周波伝導度（肌表面の水分状態）、角層バリア機能、角層細胞の大きさ（ターンオーバーの指標）",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "1日2回・最初の5日間、最終塗布後3/5/7日に測定"
+    },
+    {
+      "pmid": "31840424",
+      "title": "Clinical evidences of benefits from an advanced skin care routine in comparison with a simple routine",
+      "journal": "Journal of Cosmetic Dermatology",
+      "year": 2020,
+      "design": "ランダム化比較試験（多段階ルーティン5品 vs シンプル2品、4週間）",
+      "evidenceType": "rct",
+      "subjects": "女性49人を2群にランダム割付、4週間。要旨に年齢・国の記載なし",
+      "fundingType": "industry",
+      "fundingNote": "著者9名全員が化粧品会社オリフレーム（Oriflame R&D／Oriflame Cosmetics AB）の社員。要旨冒頭で著者自身が『ルーティンを支持する臨床的根拠は乏しい』と記述。資金提供の明示欄は記載なしだが、全著者が製品販売企業の所属",
+      "coiNote": "COI申告文の記載はないが、著者全員が製品を販売する企業の社員",
+      "confirmed": "abstract",
+      "articles": [
+        "toner-3-layers"
+      ],
+      "measured": "肌の凹凸・色・浅い/深い水分量・毛穴面積・シワの深さ（多段階 vs シンプルのルーティン比較）",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "4週間"
     }
   ]
 }
