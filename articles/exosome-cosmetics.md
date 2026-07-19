@@ -133,4 +133,3 @@
 7. Nahm WJ, Nikas C, Goldust M, et al. Exosomes in Dermatology: A Comprehensive Review of Current Applications, Clinical Evidence, and Future Directions. Int J Dermatol. 2025;64(11):1995-2010.（PMID: 40533901）
 
 ※ 厚生労働省 医薬局監視指導・麻薬対策課「エクソソーム試薬に係る監視指導について」（令和6年7月31日事務連絡）。医療機関向けの試薬に関する通知であり、化粧品を対象としたものではありません。
-</content>
