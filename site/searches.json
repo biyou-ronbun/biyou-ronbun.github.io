@@ -324,6 +324,33 @@
         "count": 0,
         "searchedOn": "2026-07-16"
       }
+    ],
+    "2026-07-24-naris-terminalia-facial-muscle": [
+      {
+        "query": "Terminalia chebula skin",
+        "count": 42,
+        "searchedOn": "2026-07-24"
+      },
+      {
+        "query": "Terminalia chebula muscle myotube",
+        "count": 0,
+        "searchedOn": "2026-07-24"
+      },
+      {
+        "query": "fibroblast myoblast crosstalk skin muscle facial",
+        "count": 0,
+        "searchedOn": "2026-07-24"
+      },
+      {
+        "query": "facial muscle aging myoblast fusion sagging",
+        "count": 0,
+        "searchedOn": "2026-07-24"
+      },
+      {
+        "query": "Terminalia chebula collagen fibroblast",
+        "count": 3,
+        "searchedOn": "2026-07-24"
+      }
     ]
   }
 }
