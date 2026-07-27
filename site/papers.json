@@ -2136,6 +2136,86 @@
       "concentration": "該当なし（濃度の概念がない研究）",
       "adverse": "記載なし",
       "duration": "4週間"
+    },
+    {
+      "pmid": "16176768",
+      "title": "Review of photorejuvenation: devices, cosmeceuticals, or both?",
+      "journal": "Dermatologic Surgery",
+      "year": 2005,
+      "design": "総説（Review）",
+      "evidenceType": "review",
+      "subjects": "総説のため被験者なし",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供・COIの記載がない。全文未確認",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "articles": [
+        "retinol-vitc-together"
+      ],
+      "measured": "レチノイド・ビタミンC等のコスメシューティカルと非アブレイティブレーザーの併用について論じた総説。結論で、併用の利益は『理論的考察と逸話的報告に支えられているにすぎない（supported only by theoretic considerations and anecdotal reports）』と明記",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "該当なし"
+    },
+    {
+      "pmid": "15265552",
+      "title": "Topical delivery of retinyl ascorbate co-drug. 1. Synthesis, penetration into and permeation across human skin.",
+      "journal": "International Journal of Pharmaceutics",
+      "year": 2004,
+      "design": "合成・in vitro / ex vivo（切り出したヒト皮膚膜・テープストリッピング）",
+      "evidenceType": "invitro",
+      "subjects": "生きたヒトではなく、切り出したヒト皮膚を使用",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供・COIの記載がない。全文未確認",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "measured": "レチノールとL-アスコルビン酸を結合した共役体RA-AsAを合成。単体より安定で、切り出したヒト皮膚への送達量が市販の安定型エステルより多かったと報告。効能（シワ・シミ等）は測っていない",
+      "articles": [
+        "retinol-vitc-together"
+      ],
+      "concentration": "記載なし",
+      "adverse": "該当なし（ヒトに塗った効能・安全性試験ではない）",
+      "duration": "該当なし"
+    },
+    {
+      "pmid": "18804142",
+      "title": "Evaluation of dermatological effects of cosmetic formulations containing Saccharomyces cerevisiae extract and vitamins.",
+      "journal": "Food and Chemical Toxicology",
+      "year": 2008,
+      "design": "ランダム化比較試験（PubMed分類）。処方F1〜F4を比較",
+      "evidenceType": "rct",
+      "subjects": "ボランティア（人数・年齢は要旨に記載なし）。パッチテストは背中、有効性評価は前腕。顔ではない",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供・COIの記載がない（pubtypeにResearch Support, Non-U.S. Govt）。全文未確認。著者所属はブラジル・サンパウロ大学",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "measured": "ビタミンA・C・Eエステル配合処方などを比較。すべての処方で前腕の皮膚水分量が上昇。長期の皮膚微細構造改善は酵母エキス配合処方でのみ観察。F4で1名に軽度の紅斑",
+      "articles": [
+        "retinol-vitc-together"
+      ],
+      "concentration": "記載なし",
+      "adverse": "F4処方で1名に軽度の紅斑と報告。それ以外の有害事象の記載は要旨になし",
+      "duration": "塗布後3時間・15日・30日"
+    },
+    {
+      "pmid": "39365570",
+      "title": "Vitamin C and its derivatives in maintaining the good skin condition.",
+      "journal": "Postepy Biochemii",
+      "year": 2024,
+      "design": "総説（Review・英語要旨）",
+      "evidenceType": "review",
+      "subjects": "総説のため被験者なし",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供・COIの記載がない。全文未確認",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "measured": "ビタミンCの皮膚での役割を概説。化粧品での課題は角層の通過が限られること。より安定なアスコルビン酸化合物と新しい基剤による送達改善の研究が続いていると記述。pHの具体値やレチノールとの併用には要旨で触れていない",
+      "articles": [
+        "retinol-vitc-together"
+      ],
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "該当なし"
     }
   ]
 }
