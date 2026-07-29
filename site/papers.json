@@ -2216,6 +2216,166 @@
       "concentration": "該当なし（濃度の概念がない研究）",
       "adverse": "記載なし",
       "duration": "該当なし"
+    },
+    {
+      "pmid": "30026579",
+      "title": "Reversing wrinkled skin and hair loss in mice by restoring mitochondrial function",
+      "journal": "Cell Death & Disease",
+      "year": 2018,
+      "design": "動物実験（遺伝子操作マウス。POLG1にmtDNA枯渇を誘導し、変異発現をオフにして回復）",
+      "evidenceType": "animal",
+      "subjects": "マウス（ヒトではない）。誘導型mtDNA枯渇マウスを作製し、皮膚・毛の変化を観察",
+      "fundingType": "public",
+      "fundingNote": "資金は米国NIH（NIAMS / BLRD VA / NCI）。公的資金",
+      "coiNote": "本文では「利益相反なし」と申告。ただし筆頭著者 K.K. Singh は、2年後の総説（PMID 32518230）でミトコンドリア化粧品企業 Yuva Biosciences の創業者・株式保有と開示している",
+      "confirmed": "abstract",
+      "articles": [
+        "mitochondria-care"
+      ],
+      "measured": "マウス皮膚の表皮肥厚・角質増殖・MMP・TIMP1・毛包。クリームや化粧品は使っていない。「回復」は変異発現のオフによる",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "記載なし"
+    },
+    {
+      "pmid": "32518230",
+      "title": "Mitochondria in skin health, aging, and disease",
+      "journal": "Cell Death & Disease",
+      "year": 2020,
+      "design": "総説（Review）",
+      "evidenceType": "review",
+      "subjects": "総説のため被験者なし",
+      "fundingType": "public",
+      "fundingNote": "資金は米国NIH（NIDDK / NCI）。公的資金",
+      "coiNote": "筆頭格の K.K. Singh はミトコンドリア化粧品企業 Yuva Biosciences の科学的創業者・チーフサイエンティフィックアドバイザー。A.S.、L.A.-A.、K.K.S. の3名が同社の株式を保有と開示",
+      "confirmed": "abstract",
+      "articles": [
+        "mitochondria-care"
+      ],
+      "measured": "加齢・UV老化で最初に障害されるのはミトコンドリアで、光老化した肌にmtDNAの欠失が多いこと等の機序を概説",
+      "concentration": "該当なし（濃度の概念がない研究）",
+      "adverse": "記載なし",
+      "duration": "該当なし"
+    },
+    {
+      "pmid": "30215291",
+      "title": "Antiaging Effects of Urolithin A on Replicative Senescent Human Skin Fibroblasts",
+      "journal": "Rejuvenation Research",
+      "year": 2019,
+      "design": "in vitro（培養したヒト皮膚線維芽細胞）",
+      "evidenceType": "invitro",
+      "subjects": "培養したヒト皮膚線維芽細胞（HSF）。肌に塗った研究ではない",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供・COIの記載がない。全文未確認",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "articles": [
+        "mitochondria-care"
+      ],
+      "measured": "I型コラーゲン発現の上昇、MMP-1の低下、細胞内ROSの低下。50μMで細胞形態変化・G2/M停止・増殖抑制。要旨は「有望（promising）」と表現",
+      "concentration": "ウロリチンA 50μM等を細胞に添加（皮膚への塗布濃度ではない）",
+      "adverse": "記載なし",
+      "duration": "該当なし"
+    },
+    {
+      "pmid": "35567884",
+      "title": "Urolithin A protects human dermal fibroblasts from UVA-induced photoaging through NRF2 activation and mitophagy",
+      "journal": "Journal of Photochemistry and Photobiology B",
+      "year": 2022,
+      "design": "in vitro（培養したヒト真皮線維芽細胞にUVAを照射）",
+      "evidenceType": "invitro",
+      "subjects": "培養したヒト真皮線維芽細胞。肌に塗った研究ではない。中国・復旦大学附属華山医院",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供・COIの記載がない。全文未確認",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "articles": [
+        "mitochondria-care"
+      ],
+      "measured": "UVAによる細胞老化の表現型を軽減。ミトファジー（傷んだミトコンドリアの掃除）を誘導しミトコンドリア機能を回復。要旨は「可能性のある治療薬（potential therapeutic agent）」と表現",
+      "concentration": "細胞への添加濃度（皮膚への塗布濃度ではない）",
+      "adverse": "記載なし",
+      "duration": "該当なし"
+    },
+    {
+      "pmid": "26648450",
+      "title": "Topical treatment with coenzyme Q10-containing formulas improves skin's Q10 level and provides antioxidative effects",
+      "journal": "BioFactors",
+      "year": 2015,
+      "design": "ヒトへの塗布試験＋培養角化細胞",
+      "evidenceType": "human-other",
+      "subjects": "ヒトの皮膚（塗布）と培養ヒト角化細胞。要旨に人数・年齢・国・期間の記載なし",
+      "fundingType": "industry",
+      "fundingNote": "著者24名全員が Beiersdorf AG（NiveaやEucerinのCoQ10製品を販売するメーカー）の研究開発部門の所属",
+      "coiNote": "PubMedの記録にCOIの明示的な申告文はないが、全著者がメーカー社員",
+      "confirmed": "abstract",
+      "articles": [
+        "mitochondria-care"
+      ],
+      "measured": "塗布後の皮膚表面と表皮深部のQ10濃度の上昇、ユビキノールの上昇、ストレス肌でのフリーラジコル低下・抗酸化能の上昇。シワや老化の臨床アウトカムではない",
+      "concentration": "Q10配合品（要旨に配合濃度の記載なし）",
+      "adverse": "記載なし",
+      "duration": "記載なし"
+    },
+    {
+      "pmid": "39148958",
+      "title": "The Role of Coenzyme Q10 in Skin Aging and Opportunities for Topical Intervention: A Review",
+      "journal": "The Journal of Clinical and Aesthetic Dermatology",
+      "year": 2024,
+      "design": "総説（PubMedで36本を採用）",
+      "evidenceType": "review",
+      "subjects": "総説のため被験者なし",
+      "fundingType": "industry",
+      "fundingNote": "著者5名のうち Agrawal・Ruvolo・Weise の3名が Beiersdorf（CoQ10製品メーカー）社員。筆頭 Lain は多数の企業のコンサルタント・治験医、Callender も Beiersdorf を含む多数企業と関係",
+      "coiNote": "利益相反として多数の企業名が列挙されている。著者にメーカー社員を含む",
+      "confirmed": "abstract",
+      "articles": [
+        "mitochondria-care"
+      ],
+      "measured": "塗るCoQ10でQ10を補充し、臨床的にシワの深さを減らすと結論。総説であり、独立した検証をまとめたものではない",
+      "concentration": "記載なし",
+      "adverse": "記載なし",
+      "duration": "該当なし"
+    },
+    {
+      "pmid": "17432541",
+      "title": "Evaluation of an antioxidant and mitochondria-stimulating cream formula on the skin of patients with stable common vitiligo",
+      "journal": "Investigacion Clinica",
+      "year": 2007,
+      "design": "二重盲検ランダム化比較試験（英語要旨のみ）",
+      "evidenceType": "clinical-trial",
+      "subjects": "安定期の尋常性白斑（皮膚の色が抜ける疾患）の患者100人（男50・女50）、ベネズエラ。5群に分割。健康な肌の美容目的ではない",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供・COIの記載がない。全文未確認（英語要旨のみ）",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "articles": [
+        "mitochondria-care"
+      ],
+      "measured": "白斑部の再色素沈着（クリーム＋経口抗酸化/フェニルアラニン併用群で最良、p<0.001）。美容目的の老化指標ではなく、疾患の再色素沈着",
+      "concentration": "抗酸化・ミトコンドリア刺激クリーム（要旨に配合濃度の記載なし）",
+      "adverse": "記載なし",
+      "duration": "5か月（30日ごとに評価）"
+    },
+    {
+      "pmid": "34601077",
+      "title": "The effects of 6-month hydrogen-rich water intake on molecular and phenotypic biomarkers of aging in older adults aged 70 years and over: A randomized controlled pilot trial",
+      "journal": "Experimental Gerontology",
+      "year": 2021,
+      "design": "ランダム化比較パイロット試験",
+      "evidenceType": "rct",
+      "subjects": "70歳以上の高齢者40人（女20）、セルビア。平均76歳。飲用（0.5L/日を6か月）",
+      "fundingType": "unverified",
+      "fundingNote": "PubMedの記録に資金提供・COIの記載がない。全文未確認",
+      "coiNote": "",
+      "confirmed": "abstract",
+      "articles": [
+        "mitochondria-care"
+      ],
+      "measured": "テロメア長（p=0.049）、脳代謝、椅子立ち上がり（p=0.01）で差。顔の肌所見（facial skin features）を含むその他の項目は有意差なし。飲む介入で肌が主要評価ではない",
+      "concentration": "水素濃度15ppm（0.5L/日）",
+      "adverse": "記載なし",
+      "duration": "6か月"
     }
   ]
 }
